@@ -66,4 +66,4 @@ To help you get your feet wet with our contribution process, we have a list of [
 
 ## License
 
-This project is licensed under [Apache 2.0](LICENSE).
+This project is licensed under [AGPL 3](LICENSE).
