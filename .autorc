@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    [
+      "npm",
+      {
+        "setRcToken": false
+      }
+    ],
+    "released"
+  ],
+  "githubGraphqlApi": "https://github.com/api",
+  "githubApi": "https://github.com/api/v3"
+}

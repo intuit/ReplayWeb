@@ -1,0 +1,8 @@
+#This is used to automatically add reviewers to PR's. Developers can still manually add reviewers in addition to the below users.
+
+#This is the catch all. If no other pattern is matched, it will request a review from the following users
+* @cedgington @tclarkson @crutledge
+
+#Tim is being marked owner as this is where most community files are stored and should be involved in these changes
+/.github/ @tclarkson
+*README.md @tclarkson

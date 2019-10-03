@@ -1,0 +1,8 @@
+log
+lib
+node_modules
+errorShots
+target
+coverage
+.idea/
+replay-testrunner.iml

@@ -1,0 +1,4 @@
+export default {
+  get: () => {},
+  set: () => {}
+}

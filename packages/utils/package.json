@@ -1,0 +1,41 @@
+{
+  "name": "@replayweb/utils",
+  "version": "1.0.0",
+  "description": "Common utilities for ReplayWeb and the ReplayWeb Test Runner",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel --root-mode upward src --out-dir lib",
+    "prepublishOnly": "yarn build",
+    "prepublish": "yarn build",
+    "docs": "jsdoc2md --files src/*.js > src/README.md",
+    "test": "jest --coverage",
+    "lint": "eslint src/*.js test/*.js"
+  },
+  "author": "Harris Borawski",
+  "license": "AGPL",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com",
+    "access": "public"
+  },
+  "dependencies": {
+    "enumify": "~1.0.4",
+    "moment": "~2.20.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/intuit/replayweb.git"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "chai": "~4.1.2",
+    "es6-promise": "~4.2.4",
+    "fetch-mock": "~6.0.0",
+    "isomorphic-fetch": "~2.2.1",
+    "jsdoc-to-markdown": "~4.0.1",
+    "mocha": "~5.0.0"
+  }
+}

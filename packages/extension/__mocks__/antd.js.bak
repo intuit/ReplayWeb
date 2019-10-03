@@ -1,0 +1,18 @@
+/*
+    This file is disabled.
+
+    To enable, rename to 'antd.js'.
+
+    This file is disabled because it blocks the unit testing of components
+    that use imports from the 'antd' library. It's unclear what this mock
+    was originally solving for. If you find an instance where this mock
+    is needed in order to get tests to work, then you're free to explore
+    enabling this mock, but be aware that doing so without solving for other
+    imports will break a ton of component unit tests.
+*/
+
+const antd = jest.genMockFromModule('antd')
+antd.message = {}
+antd.message.success = () => Promise.resolve()
+antd.message.error = () => Promise.resolve()
+export default antd

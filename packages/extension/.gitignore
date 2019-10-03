@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+dist
+public/bundle.js
+coverage
+target
+.idea/
+replaykit-v2.iml

@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "standard",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "react",
+    "jest"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "jest/globals": true
+  },
+  "globals": {
+    "browser": true
+  },
+  "settings": {
+    "react": {
+      "version": "16"
+    }
+  },
+  "rules": {
+    "semi": [1, "never"]
+  }
+}

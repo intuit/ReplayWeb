@@ -1,0 +1,219 @@
+{
+  "commands": [
+    {
+      "command": "open",
+      "parameters": {
+        "url": "http://localhost:8080/"
+      }
+    },
+    {
+      "command": "deleteAllCookies",
+      "parameters": {}
+    },
+    {
+      "command": "assertTitle",
+      "parameters": {
+        "expected": "@replayweb/testrunner integration tests"
+      }
+    },
+    {
+      "command": "assertUrl",
+      "parameters": {
+        "expected": "http://localhost:8080/"
+      }
+    },
+    {
+      "command": "setSession",
+      "parameters": {
+        "key": "sessionKey",
+        "value": "someValue"
+      }
+    },
+    {
+      "command": "assertSessionStorage",
+      "parameters": {
+        "key": "sessionKey",
+        "expected": "someValue"
+      }
+    },
+    {
+      "command": "setLocalStorage",
+      "parameters": {
+        "key": "localKey",
+        "value": "someOtherValue"
+      }
+    },
+    {
+      "command": "assertLocalStorage",
+      "parameters": {
+        "key": "localKey",
+        "expected": "someOtherValue"
+      }
+    },
+    {
+      "command": "click",
+      "parameters": {
+        "target": "id=textInput"
+      }
+    },
+    {
+      "command": "type",
+      "parameters": {
+        "target": "id=textInput",
+        "value": "Hello World"
+      }
+    },
+    {
+      "command": "assertText",
+      "parameters": {
+        "target": "id=textOutput",
+        "expected": "Hello World"
+      }
+    },
+    {
+      "command": "clearValue",
+      "parameters": {
+        "target": "id=textInput"
+      }
+    },
+    {
+      "command": "assertText",
+      "parameters": {
+        "target": "id=textInput"
+      }
+    },
+    {
+      "command": "assertAttribute",
+      "parameters": {
+        "target": "id=textOutput",
+        "attribute": "someAttribute",
+        "expected": "someValue"
+      }
+    },
+    {
+      "command": "assertStyle",
+      "parameters": {
+        "target": "id=textOutput",
+        "property": "color",
+        "expected": "rgb(255, 0, 0)"
+      }
+    },
+    {
+      "command": "click",
+      "parameters": {
+        "target": "id=selectInput"
+      }
+    },
+    {
+      "command": "select",
+      "parameters": {
+        "target": "id=selectInput",
+        "value": "label=3"
+      }
+    },
+    {
+      "command": "assertText",
+      "parameters": {
+        "target": "id=selectOutput",
+        "expected": "3"
+      }
+    },
+    {
+      "command": "assertClassExists",
+      "parameters": {
+        "target": "id=selectOutput",
+        "class": "someClass"
+      }
+    },
+    {
+      "command": "assertClassDoesNotExist",
+      "parameters": {
+        "target": "id=selectOutput",
+        "class": "someOtherClass"
+      }
+    },
+    {
+      "command": "assertStyle",
+      "parameters": {
+        "target": "id=selectOutput",
+        "property": "font-size",
+        "expected": "18px"
+      }
+    },
+    {
+      "command": "assertElementPresent",
+      "parameters": {
+        "target": "id=invisibleElement",
+        "timeout": "2000"
+      }
+    },
+    {
+      "command": "assertElementNotPresent",
+      "parameters": {
+        "target": "id=fakeId",
+        "timeout": "2000"
+      }
+    },
+    {
+      "command": "assertElementVisible",
+      "parameters": {
+        "target": "id=textOutput",
+        "timeout": "2000"
+      }
+    },
+    {
+      "command": "assertElementNotVisible",
+      "parameters": {
+        "target": "id=invisibleElement",
+        "timeout": "2000"
+      }
+    },
+    {
+      "command": "selectFrame",
+      "parameters": {
+        "target": "id=someFrame",
+        "url": "http://localhost:8080/"
+      }
+    },
+    {
+      "command": "clickThreeTimes",
+      "parameters": {
+        "target": "id=textInput"
+      }
+    },
+    {
+      "command": "click",
+      "parameters": {
+        "target": "id=textInput"
+      }
+    },
+    {
+      "command": "type",
+      "parameters": {
+        "target": "id=textInput",
+        "value": "Hello iFrame"
+      }
+    },
+    {
+      "command": "assertText",
+      "parameters": {
+        "target": "id=textOutput",
+        "expected": "Hello iFrame"
+      }
+    },
+    {
+      "command": "selectFrame",
+      "parameters": {
+        "target": "relative=top",
+        "url": "http://localhost:8080/"
+      }
+    },
+    {
+      "command": "assertText",
+      "parameters": {
+        "target": "id=textOutput",
+        "expected": "Hello World"
+      }
+    }
+]
+}

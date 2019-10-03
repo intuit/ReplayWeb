@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "env", {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "rewire"
+      ]
+    }
+  }
+}

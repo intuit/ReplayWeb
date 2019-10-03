@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@replayweb/testrunner integration tests</title>
+        <style>
+            #textOutput {
+                color: red;
+            }
+            .someClass {
+                font-size: 18px;
+            }
+            #invisibleElement {
+                display: none;
+            }
+        </style>
+
+    </head>
+    <body>
+        <input id='textInput' type='text'/>
+        <p id='textOutput' someAttribute='someValue'>Initial Value</p>
+        <select id='selectInput' value='1'>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <p id='selectOutput' class='someClass'>Initial Value</p>
+        <p id='invisibleElement'>Invisible</p>
+        <iframe id='someFrame' src="/framed.html">
+        </iframe>
+        <script type="text/javascript">
+        window.onload = function () {
+            var textInput = document.querySelector('#textInput')
+            var textOutput = document.querySelector('#textOutput')
+            textInput.addEventListener('input', function(e) {
+                textOutput.innerHTML = textInput.value
+            })
+            var selectInput = document.querySelector('#selectInput')
+            var selectOutput = document.querySelector('#selectOutput')
+            selectInput.addEventListener('change', function(e) {
+                selectOutput.innerHTML = selectInput.value
+            })
+        }
+        </script>
+    </body>
+</html>

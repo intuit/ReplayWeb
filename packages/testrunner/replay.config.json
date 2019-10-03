@@ -1,0 +1,5 @@
+{
+  "testPath": "./test/integration/json",
+  "blockPath": "./test/integration/blocks",
+  "suites": {}
+}
