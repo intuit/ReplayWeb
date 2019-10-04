@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>framed.html</title>
-        <style>
-            #textOutput {
-                color: blue;
-            }
-        </style>
-
-    </head>
-    <body>
-        <input id='textInput' type='text'/>
-        <p id='textOutput' someAttribute='someValue'>Initial Values</p>
-        <script type="text/javascript">
-        window.onload = function () {
-            var textInput = document.querySelector('#textInput')
-            var textOutput = document.querySelector('#textOutput')
-            textInput.addEventListener('input', function(e) {
-                textOutput.innerHTML = textInput.value
-            })
-        }
-        </script>
-    </body>
+  <head>
+    <title>framed.html</title>
+    <style>
+      #textOutput {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <input id="textInput" type="text" />
+    <p id="textOutput" someAttribute="someValue">Initial Values</p>
+    <script type="text/javascript">
+      window.onload = function() {
+        var textInput = document.querySelector('#textInput')
+        var textOutput = document.querySelector('#textOutput')
+        textInput.addEventListener('input', function(e) {
+          textOutput.innerHTML = textInput.value
+        })
+      }
+    </script>
+  </body>
 </html>

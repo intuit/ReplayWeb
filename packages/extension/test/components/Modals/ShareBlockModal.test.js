@@ -12,21 +12,38 @@ afterEach(() => {
 describe('ShareBlockModal', () => {
   it('disables block sharing on invalid blockShareConfig', () => {
     const { getByText, queryByTestId, rerender } = render(
-      <ShareBlockModal visible={true} blockShareConfig={({})}
-        blockShareConfigError={true} blockShareConfigErrorMessage="This is an error"
+      <ShareBlockModal
+        visible={true}
+        blockShareConfig={{}}
+        blockShareConfigError={true}
+        blockShareConfigErrorMessage="This is an error"
         closeModal={() => {}}
         openDuplicate={() => {}}
-        shareEditingBlock={() => {}} />)
+        shareEditingBlock={() => {}}
+      />
+    )
 
     // This rerender is required with different props as the ShareBlockModal component uses
     // componentWillReceiveProps which only gets invoked when new props will be received. Forcing this new props
     // using rerender
-    rerender(<ShareBlockModal visible={true} blockShareConfig={({})}
-      blockShareConfigError={true} blockShareConfigErrorMessage="This is an error"
-      closeModal={() => {}}
-      editing={({ commands: [], filterCommands: [], meta: {}, shareEditing: false, isImported: false })}
-      openDuplicate={() => {}}
-      shareEditingBlock={() => {}} />)
+    rerender(
+      <ShareBlockModal
+        visible={true}
+        blockShareConfig={{}}
+        blockShareConfigError={true}
+        blockShareConfigErrorMessage="This is an error"
+        closeModal={() => {}}
+        editing={{
+          commands: [],
+          filterCommands: [],
+          meta: {},
+          shareEditing: false,
+          isImported: false
+        }}
+        openDuplicate={() => {}}
+        shareEditingBlock={() => {}}
+      />
+    )
     getByText('Unable to share block')
 
     // share block button is not present
@@ -41,21 +58,38 @@ describe('ShareBlockModal', () => {
 
   it('enables block sharing on valid blockShareConfig', () => {
     const { queryByText, getByTestId, queryByTestId, rerender } = render(
-      <ShareBlockModal visible={true} blockShareConfig={({})}
-        blockShareConfigError={false} blockShareConfigErrorMessage="" blockShareConfig={{}}
+      <ShareBlockModal
+        visible={true}
+        blockShareConfigError={false}
+        blockShareConfigErrorMessage=""
+        blockShareConfig={{}}
         closeModal={() => {}}
         openDuplicate={() => {}}
-        shareEditingBlock={() => {}} />)
+        shareEditingBlock={() => {}}
+      />
+    )
 
     // This rerender is required with different props as the ShareBlockModal component uses
     // componentWillReceiveProps which only gets invoked when new props will be received. Forcing this new props
     // using rerender
-    rerender(<ShareBlockModal visible={true} blockShareConfig={({})}
-      blockShareConfigError={false} blockShareConfigErrorMessage="" blockShareConfig={{}}
-      closeModal={() => {}}
-      editing={({ commands: [], filterCommands: [], meta: {}, shareEditing: false, isImported: false })}
-      openDuplicate={() => {}}
-      shareEditingBlock={() => {}} />)
+    rerender(
+      <ShareBlockModal
+        visible={true}
+        blockShareConfigError={false}
+        blockShareConfigErrorMessage=""
+        blockShareConfig={{}}
+        closeModal={() => {}}
+        editing={{
+          commands: [],
+          filterCommands: [],
+          meta: {},
+          shareEditing: false,
+          isImported: false
+        }}
+        openDuplicate={() => {}}
+        shareEditingBlock={() => {}}
+      />
+    )
 
     expect(queryByText('Unable to share block')).toBeNull()
 
@@ -70,21 +104,39 @@ describe('ShareBlockModal', () => {
 
   it('disables block re-sharing on invalid blockShareConfig', () => {
     const { getByText, queryByTestId, rerender } = render(
-      <ShareBlockModal visible={true} blockShareConfig={({})}
-        blockShareConfigError={true} blockShareConfigErrorMessage="This is an error"
+      <ShareBlockModal
+        visible={true}
+        blockShareConfig={{}}
+        blockShareConfigError={true}
+        blockShareConfigErrorMessage="This is an error"
         closeModal={() => {}}
         openDuplicate={() => {}}
-        shareEditingBlock={() => {}} />)
+        shareEditingBlock={() => {}}
+      />
+    )
 
     // This rerender is required with different props as the ShareBlockModal component uses
     // componentWillReceiveProps which only gets invoked when new props will be received. Forcing this new props
     // using rerender
-    rerender(<ShareBlockModal visible={true} blockShareConfig={({})}
-      blockShareConfigError={true} blockShareConfigErrorMessage="This is an error"
-      closeModal={() => {}}
-      editing={({ commands: [], filterCommands: [], meta: {}, shareEditing: false, isImported: false, shareLink: 'a_link' })}
-      openDuplicate={() => {}}
-      shareEditingBlock={() => {}} />)
+    rerender(
+      <ShareBlockModal
+        visible={true}
+        blockShareConfig={{}}
+        blockShareConfigError={true}
+        blockShareConfigErrorMessage="This is an error"
+        closeModal={() => {}}
+        editing={{
+          commands: [],
+          filterCommands: [],
+          meta: {},
+          shareEditing: false,
+          isImported: false,
+          shareLink: 'a_link'
+        }}
+        openDuplicate={() => {}}
+        shareEditingBlock={() => {}}
+      />
+    )
     getByText('Unable to re-share block')
 
     // share block button is not present
@@ -99,21 +151,39 @@ describe('ShareBlockModal', () => {
 
   it('enables block re-sharing on valid blockShareConfig', () => {
     const { queryByText, getByTestId, queryByTestId, rerender } = render(
-      <ShareBlockModal visible={true} blockShareConfig={({})}
-        blockShareConfigError={false} blockShareConfigErrorMessage="" blockShareConfig={{}}
+      <ShareBlockModal
+        visible={true}
+        blockShareConfigError={false}
+        blockShareConfigErrorMessage=""
+        blockShareConfig={{}}
         closeModal={() => {}}
         openDuplicate={() => {}}
-        shareEditingBlock={() => {}} />)
+        shareEditingBlock={() => {}}
+      />
+    )
 
     // This rerender is required with different props as the ShareBlockModal component uses
     // componentWillReceiveProps which only gets invoked when new props will be received. Forcing this new props
     // using rerender
-    rerender(<ShareBlockModal visible={true} blockShareConfig={({})}
-      blockShareConfigError={false} blockShareConfigErrorMessage="" blockShareConfig={{}}
-      closeModal={() => {}}
-      editing={({ commands: [], filterCommands: [], meta: {}, shareEditing: false, isImported: false, shareLink: 'a_link' })}
-      openDuplicate={() => {}}
-      shareEditingBlock={() => {}} />)
+    rerender(
+      <ShareBlockModal
+        visible={true}
+        blockShareConfigError={false}
+        blockShareConfigErrorMessage=""
+        blockShareConfig={{}}
+        closeModal={() => {}}
+        editing={{
+          commands: [],
+          filterCommands: [],
+          meta: {},
+          shareEditing: false,
+          isImported: false,
+          shareLink: 'a_link'
+        }}
+        openDuplicate={() => {}}
+        shareEditingBlock={() => {}}
+      />
+    )
 
     expect(queryByText('Unable to share block')).toBeNull()
 

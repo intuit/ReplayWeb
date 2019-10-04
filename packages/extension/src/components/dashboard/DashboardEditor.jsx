@@ -17,7 +17,7 @@ import CommandTable from '../../containers/dashboard/CommandTable'
 import SuiteEditor from '../../containers/dashboard/SuiteEditor'
 
 class DashboardEditor extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       activeTabForCommands: 'table_view',
@@ -32,17 +32,18 @@ class DashboardEditor extends React.Component {
     }
   }
 
-  getTestCaseName () {
+  getTestCaseName() {
     const { src } = this.props.editing.meta
     return src && src.name && src.name.length ? src.name : 'Untitled'
   }
 
-  editingToSourceText (editing) {
+  editingToSourceText(editing) {
     const { commands, meta } = editing
     const { src } = meta
     const toConvert = {
       commands: commands.filter(c => !!c),
-      name: src ? src.name : 'Untitled' }
+      name: src ? src.name : 'Untitled'
+    }
 
     const text = JSON.stringify(toConvert, null, 2)
 
@@ -53,11 +54,11 @@ class DashboardEditor extends React.Component {
     }
   }
 
-  onDetailChange (key, value) {
-    this.props.updateSelectedCommand({[key]: value})
+  onDetailChange(key, value) {
+    this.props.updateSelectedCommand({ [key]: value })
   }
 
-  onChangeCommandsView (type) {
+  onChangeCommandsView(type) {
     switch (type) {
       case 'table_view':
       case 'source_view': {
@@ -72,11 +73,11 @@ class DashboardEditor extends React.Component {
     }
   }
 
-  onSourceBlur () {
+  onSourceBlur() {
     try {
       const { sourceTextModified } = this.state
-      const {name, commands} = JSON.parse(sourceTextModified)
-      const obj = {name, data: {commands}}
+      const { name, commands } = JSON.parse(sourceTextModified)
+      const obj = { name, data: { commands } }
 
       this.setState({
         sourceErrMsg: null
@@ -96,26 +97,29 @@ class DashboardEditor extends React.Component {
     }
   }
 
-  onChangeEditSource (editor, data, text) {
+  onChangeEditSource(editor, data, text) {
     this.setState({
       sourceTextModified: text
     })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.bindContextMenuEvent()
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     // Note: update sourceText whenever editing changed
-    if (nextProps.editorStatus !== C.EDITOR_STATUS.SUITES && nextProps.editing !== this.props.editing) {
-      this.setState(
-        this.editingToSourceText(nextProps.editing)
-      )
+    if (
+      nextProps.editorStatus !== C.EDITOR_STATUS.SUITES &&
+      nextProps.editing !== this.props.editing
+    ) {
+      this.setState(this.editingToSourceText(nextProps.editing))
     }
 
-    if (nextProps.status === C.APP_STATUS.PLAYER &&
-        nextProps.player.nextCommandIndex !== this.props.player.nextCommandIndex) {
+    if (
+      nextProps.status === C.APP_STATUS.PLAYER &&
+      nextProps.player.nextCommandIndex !== this.props.player.nextCommandIndex
+    ) {
       const $tableBody = document.querySelector('.table-wrapper')
       const itemHeight = 45
 
@@ -124,31 +128,34 @@ class DashboardEditor extends React.Component {
       $tableBody.scrollTop = itemHeight * nextProps.player.nextCommandIndex
     }
 
-    if (nextProps.status === C.APP_STATUS.RECORDER &&
-        nextProps.editing.filterCommands.length > this.props.editing.filterCommands.length) {
+    if (
+      nextProps.status === C.APP_STATUS.RECORDER &&
+      nextProps.editing.filterCommands.length >
+        this.props.editing.filterCommands.length
+    ) {
       const $tableBody = document.querySelector('.table-wrapper')
       const itemHeight = 45
 
       if (!$tableBody) return
 
-      setTimeout(
-        () => { $tableBody.scrollTop = itemHeight * nextProps.editing.filterCommands.length * 2 },
-        100
-      )
+      setTimeout(() => {
+        $tableBody.scrollTop =
+          itemHeight * nextProps.editing.filterCommands.length * 2
+      }, 100)
     }
   }
 
-  bindContextMenuEvent () {
+  bindContextMenuEvent() {
     document.addEventListener('click', this.props.hideContextMenu)
   }
 
-  renderContextMenu () {
+  renderContextMenu() {
     const { clipboard, searchText, selectedCmds } = this.props
     const { contextMenu } = this.props
     const dw = document.documentElement.clientWidth
     const mw = 240
     let x = contextMenu.x + window.scrollX
-    let y = contextMenu.y + window.scrollY
+    const y = contextMenu.y + window.scrollY
     const inSearch = searchText !== ''
     const inSelection = selectedCmds.length !== 0
 
@@ -166,7 +173,7 @@ class DashboardEditor extends React.Component {
     }
 
     const { commandIndex } = contextMenu
-    const handleClick = (e) => {
+    const handleClick = e => {
       switch (e.key) {
         case 'cut':
           return this.props.cutCommand(commandIndex)
@@ -214,7 +221,7 @@ class DashboardEditor extends React.Component {
             partial: true
           })
         }
-        case 'save_as_new_block' : {
+        case 'save_as_new_block': {
           return this.props.changeModalState('multiselect', true)
         }
       }
@@ -222,63 +229,87 @@ class DashboardEditor extends React.Component {
 
     return (
       <div style={style} id="context_menu">
-        <Menu onClick={handleClick} style={menuStyle} mode="vertical" selectable={false}>
-          <Menu.Item key="cut" disabled={inSearch || inSelection}>Cut</Menu.Item>
-          <Menu.Item key="copy" disabled={inSearch || inSelection}>Copy</Menu.Item>
-          <Menu.Item key="paste" disabled={clipboard.commands.length === 0}>Paste</Menu.Item>
+        <Menu
+          onClick={handleClick}
+          style={menuStyle}
+          mode="vertical"
+          selectable={false}
+        >
+          <Menu.Item key="cut" disabled={inSearch || inSelection}>
+            Cut
+          </Menu.Item>
+          <Menu.Item key="copy" disabled={inSearch || inSelection}>
+            Copy
+          </Menu.Item>
+          <Menu.Item key="paste" disabled={clipboard.commands.length === 0}>
+            Paste
+          </Menu.Item>
           <Menu.Divider />
-          <Menu.Item key="insert" disabled={inSearch || inSelection}>Insert new line</Menu.Item>
+          <Menu.Item key="insert" disabled={inSearch || inSelection}>
+            Insert new line
+          </Menu.Item>
           <Menu.Divider />
-          <Menu.Item key="run_line" disabled={inSelection}>Execute this command</Menu.Item>
-          <Menu.Item key="run_from_here" disabled={inSearch || inSelection}>Run from here</Menu.Item>
-          <Menu.Item key="save_as_new_block" disabled={!inSelection}>Save As New Block</Menu.Item>
+          <Menu.Item key="run_line" disabled={inSelection}>
+            Execute this command
+          </Menu.Item>
+          <Menu.Item key="run_from_here" disabled={inSearch || inSelection}>
+            Run from here
+          </Menu.Item>
+          <Menu.Item key="save_as_new_block" disabled={!inSelection}>
+            Save As New Block
+          </Menu.Item>
         </Menu>
       </div>
     )
   }
 
-  render () {
+  render() {
     return (
       <div className="editor-wrapper">
-        {
-          this.props.editorStatus === C.EDITOR_STATUS.SUITES
-            ? <SuiteEditor/>
-            : <Tabs
-              type="card"
-              className="commands-view"
-              activeKey={this.state.activeTabForCommands}
-              onChange={this.onChangeCommandsView}
+        {this.props.editorStatus === C.EDITOR_STATUS.SUITES ? (
+          <SuiteEditor />
+        ) : (
+          <Tabs
+            type="card"
+            className="commands-view"
+            activeKey={this.state.activeTabForCommands}
+            onChange={this.onChangeCommandsView}
+          >
+            <Tabs.TabPane
+              tab="Table View"
+              key="table_view"
+              className="editor-tab-container"
             >
-              <Tabs.TabPane tab="Table View" key="table_view" className="editor-tab-container">
-                <div className="form-group table-wrapper">
-                  <CommandTable/>
-                </div>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Source View (JSON)"
-                className= "source-tab"
-                key="source_view"
-              >
-                <pre className="source-error">{this.state.sourceErrMsg}</pre>
-                {/*
+              <div className="form-group table-wrapper">
+                <CommandTable />
+              </div>
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="Source View (JSON)"
+              className="source-tab"
+              key="source_view"
+            >
+              <pre className="source-error">{this.state.sourceErrMsg}</pre>
+              {/*
                 Note: have to use UnControlled CodeMirror, and thus have to use two state :
                       sourceText and sourceTextModified
               */}
-                <CodeMirror
-                  className={this.state.sourceErrMsg ? 'has-error' : 'no-error'}
-                  value={this.state.sourceText}
-                  onChange={this.onChangeEditSource}
-                  onBlur={this.onSourceBlur}
-                  options={{
-                    mode: { name: 'javascript', json: true },
-                    theme: 'dracula',
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    autoCloseBrackets: true
-                  }}
-                />
-              </Tabs.TabPane>
-            </Tabs>
-        }
+              <CodeMirror
+                className={this.state.sourceErrMsg ? 'has-error' : 'no-error'}
+                value={this.state.sourceText}
+                onChange={this.onChangeEditSource}
+                onBlur={this.onSourceBlur}
+                options={{
+                  mode: { name: 'javascript', json: true },
+                  theme: 'dracula',
+                  lineNumbers: true,
+                  matchBrackets: true,
+                  autoCloseBrackets: true
+                }}
+              />
+            </Tabs.TabPane>
+          </Tabs>
+        )}
         {this.renderContextMenu()}
       </div>
     )

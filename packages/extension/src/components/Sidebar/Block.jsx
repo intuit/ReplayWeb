@@ -4,11 +4,7 @@ import PropTypes from 'prop-types'
 const Block = props => {
   const disabled = props.disabled ? 'disabled' : ''
   const status = props.status ? props.status.toLowerCase() : 'normal'
-  return (
-    <span className={`block ${disabled} ${status}`}>
-      {props.name}
-    </span>
-  )
+  return <span className={`block ${disabled} ${status}`}>{props.name}</span>
 }
 
 Block.propTypes = {

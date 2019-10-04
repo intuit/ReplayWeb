@@ -17,7 +17,8 @@ export const newCommand = {
 const availableCommands = [
   {
     name: 'assertAttribute',
-    description: 'Assert that a given element has an attribute of the expected value',
+    description:
+      'Assert that a given element has an attribute of the expected value',
     comment: '',
     parameters: [
       {
@@ -64,7 +65,8 @@ const availableCommands = [
   },
   {
     name: 'assertClassDoesNotExist',
-    description: 'Assert that a given element does not have a specific classname',
+    description:
+      'Assert that a given element does not have a specific classname',
     comment: '',
     parameters: [
       {
@@ -177,14 +179,16 @@ const availableCommands = [
       {
         name: 'timeout',
         type: 'string',
-        description: 'The maximum time to wait for the element to not be visible',
+        description:
+          'The maximum time to wait for the element to not be visible',
         example: 6000
       }
     ]
   },
   {
     name: 'assertLocalStorage',
-    description: 'Assert that a given key has an expected value in local storage',
+    description:
+      'Assert that a given key has an expected value in local storage',
     comment: '',
     parameters: [
       {
@@ -203,7 +207,8 @@ const availableCommands = [
   },
   {
     name: 'assertSessionStorage',
-    description: 'Assert that a given key has an expected value in session storage',
+    description:
+      'Assert that a given key has an expected value in session storage',
     comment: '',
     parameters: [
       {
@@ -262,7 +267,8 @@ const availableCommands = [
   },
   {
     name: 'assertText',
-    description: 'Assert that the text of a given element matches the expected value',
+    description:
+      'Assert that the text of a given element matches the expected value',
     comment: '',
     parameters: [
       {
@@ -275,14 +281,16 @@ const availableCommands = [
       {
         name: 'expected',
         type: 'string',
-        description: 'The expected value for the text, can also be a regular expression in the format: /regex/',
+        description:
+          'The expected value for the text, can also be a regular expression in the format: /regex/',
         example: '/example.*/'
       }
     ]
   },
   {
     name: 'assertTitle',
-    description: 'Assert that the title of the current page matches the expected value',
+    description:
+      'Assert that the title of the current page matches the expected value',
     comment: '',
     parameters: [
       {
@@ -295,7 +303,8 @@ const availableCommands = [
   },
   {
     name: 'assertUrl',
-    description: 'Assert that the URL of the current page matches the expected value',
+    description:
+      'Assert that the URL of the current page matches the expected value',
     comment: '',
     parameters: [
       {
@@ -309,7 +318,8 @@ const availableCommands = [
   {
     name: 'assertJsonInContext',
     description: 'Assert that JSON value in context matches the expected value',
-    comment: 'The expected value can be json or any left node value (e.g., string, boolean, etc.)',
+    comment:
+      'The expected value can be json or any left node value (e.g., string, boolean, etc.)',
     parameters: [
       {
         name: 'key',
@@ -375,7 +385,8 @@ const availableCommands = [
   },
   {
     name: 'debug',
-    description: '@replayweb/testrunner specific command to pause execution in selenium for debugging',
+    description:
+      '@replayweb/testrunner specific command to pause execution in selenium for debugging',
     comment: '',
     parameters: []
   },
@@ -409,7 +420,8 @@ const availableCommands = [
   {
     name: 'http',
     description: 'Makes an HTTP call and retrieves the result as JSON',
-    comment: 'Set the `key` property to put the response into the context for later user, set the text property to retrieve the result as plain text',
+    comment:
+      'Set the `key` property to put the response into the context for later user, set the text property to retrieve the result as plain text',
     parameters: [
       {
         name: 'url',
@@ -420,12 +432,7 @@ const availableCommands = [
       {
         name: 'method',
         type: 'select',
-        data: [
-          'GET',
-          'POST',
-          'PUT',
-          'DELETE'
-        ],
+        data: ['GET', 'POST', 'PUT', 'DELETE'],
         optional: true,
         description: 'The method to use for the request',
         example: 'POST'
@@ -434,7 +441,8 @@ const availableCommands = [
         name: 'body',
         type: 'object',
         optional: true,
-        description: 'A JSON object to send as the body for requests with a body',
+        description:
+          'A JSON object to send as the body for requests with a body',
         example: {
           exampleKey: 'value'
         }
@@ -445,7 +453,7 @@ const availableCommands = [
         optional: true,
         description: 'A JSON Object of headers to use for the request',
         example: {
-          'example_tid': 'XXXXX-XXXXX-XXXXX'
+          example_tid: 'XXXXX-XXXXX-XXXXX'
         }
       },
       {
@@ -468,7 +476,8 @@ const availableCommands = [
   },
   {
     name: 'mouseOver',
-    description: 'Moves the mouse over the given element to trigger hover events',
+    description:
+      'Moves the mouse over the given element to trigger hover events',
     comment: '',
     parameters: [
       {
@@ -482,7 +491,8 @@ const availableCommands = [
   },
   {
     name: 'mouseEvent',
-    description: 'Triggers the full mouseEvent sequence instead of just clicking',
+    description:
+      'Triggers the full mouseEvent sequence instead of just clicking',
     comment: '',
     parameters: [
       {
@@ -497,7 +507,8 @@ const availableCommands = [
   {
     name: 'open',
     description: 'Navigate to the provided URL',
-    comment: 'The open command supports environment variables, to make tests reusable across environments, and making URLs more dynamic To set this up, the target portion of the open command can have any parts replaced with braces, and in the braces, the name of the environment variable.',
+    comment:
+      'The open command supports environment variables, to make tests reusable across environments, and making URLs more dynamic To set this up, the target portion of the open command can have any parts replaced with braces, and in the braces, the name of the environment variable.',
     parameters: [
       {
         name: 'url',
@@ -549,7 +560,8 @@ const availableCommands = [
   {
     name: 'selectFrame',
     description: 'Selects an iFrame to interact with',
-    comment: 'This command is recorded automatically in most cases, it may need to be added when adding asserts',
+    comment:
+      'This command is recorded automatically in most cases, it may need to be added when adding asserts',
     parameters: [
       {
         name: 'target',
@@ -568,7 +580,8 @@ const availableCommands = [
   {
     name: 'setContext',
     description: 'Stores a value into the provided key for later use',
-    comment: 'This is processed at runtime, so text substitutions in the value parameter will be processed',
+    comment:
+      'This is processed at runtime, so text substitutions in the value parameter will be processed',
     parameters: [
       {
         name: 'key',
@@ -587,7 +600,8 @@ const availableCommands = [
   {
     name: 'filterJsonInContext',
     description: 'Filters JSON value in context variable',
-    comment: 'To pick sub-node in JSON pass property-chain in locateNode. Use deleteNodes (list of property-chain) to locate nodes that needs to be deleted',
+    comment:
+      'To pick sub-node in JSON pass property-chain in locateNode. Use deleteNodes (list of property-chain) to locate nodes that needs to be deleted',
     parameters: [
       {
         name: 'key',
@@ -620,7 +634,8 @@ const availableCommands = [
   {
     name: 'setCookie',
     description: 'Sets a cookie',
-    comment: 'In some cases, you will need to refresh the page for cookie changes to be picked up by your app',
+    comment:
+      'In some cases, you will need to refresh the page for cookie changes to be picked up by your app',
     parameters: [
       {
         name: 'name',
@@ -645,7 +660,8 @@ const availableCommands = [
   },
   {
     name: 'setEnvironment',
-    description: 'Set multiple variable values at once as a comma separated list',
+    description:
+      'Set multiple variable values at once as a comma separated list',
     comment: 'Ex: dev=dev.example.com,PROD=example.com',
     parameters: null
   },
@@ -689,7 +705,8 @@ const availableCommands = [
   },
   {
     name: 'storeValue',
-    description: 'Retrieves the text from an element, and stores it in a variable for later use',
+    description:
+      'Retrieves the text from an element, and stores it in a variable for later use',
     comment: '',
     parameters: [
       {
@@ -741,9 +758,11 @@ const availableCommands = [
       }
     ]
   }
-];
+]
 
 // Map commands array to Object with command names as keys, and the command objects as values
-export const commandsMap = availableCommands.map(c => ({[c.name]: c})).reduce((acc, cv) => ({...acc, ...cv}), {})
+export const commandsMap = availableCommands
+  .map(c => ({ [c.name]: c }))
+  .reduce((acc, cv) => ({ ...acc, ...cv }), {})
 
-export default availableCommands;
+export default availableCommands

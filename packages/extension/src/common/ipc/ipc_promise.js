@@ -1,6 +1,6 @@
 var TO_BE_REMOVED = false
 
-var transformError = function (err) {
+var transformError = function(err) {
   if (err instanceof Error) {
     return {
       isError: true,
@@ -35,7 +35,7 @@ var transformError = function (err) {
 //   onAnswer: function (fn) { ... },
 // })
 // ```
-function ipcPromise (options) {
+function ipcPromise(options) {
   var ask = options.ask
   var answer = options.answer
   var timeout = options.timeout
@@ -45,7 +45,7 @@ function ipcPromise (options) {
 
   var askCache = {}
   var unhandledAsk = []
-  var markUnhandled = function (uid, cmd, args) {
+  var markUnhandled = function(uid, cmd, args) {
     unhandledAsk.push({ uid: uid, cmd: cmd, args: args })
   }
   var handler = markUnhandled
@@ -53,7 +53,7 @@ function ipcPromise (options) {
   // both for ask and unhandledAsk
   timeout = timeout || 5000
 
-  onAnswer(function (uid, err, data) {
+  onAnswer(function(uid, err, data) {
     if (uid && askCache[uid] === TO_BE_REMOVED) {
       delete askCache[uid]
       return
@@ -76,15 +76,28 @@ function ipcPromise (options) {
     }
   })
 
-  onAsk(function (uid, cmd, args) {
-    setTimeout(function () {
-      var found = unhandledAsk && unhandledAsk.find(function (item) {
-        return item.uid === uid
-      })
+  onAsk(function(uid, cmd, args) {
+    setTimeout(function() {
+      var found =
+        unhandledAsk &&
+        unhandledAsk.find(function(item) {
+          return item.uid === uid
+        })
 
       if (!found) return
 
-      answer(uid, new Error('ipcPromise: answer timeout ' + timeout + ' for cmd "' + cmd + '", args "' + args + '"'))
+      answer(
+        uid,
+        new Error(
+          'ipcPromise: answer timeout ' +
+            timeout +
+            ' for cmd "' +
+            cmd +
+            '", args "' +
+            args +
+            '"'
+        )
+      )
     }, timeout)
 
     if (handler === markUnhandled) {
@@ -94,68 +107,78 @@ function ipcPromise (options) {
 
     return new Promise((resolve, reject) => {
       resolve(handler(cmd, args))
-    })
-      .then(
-        function (data) {
+    }).then(
+      function(data) {
         // note: handler doens't handle the cmd => return undefined, should wait for timeout
-          if (data === undefined) return markUnhandled(uid, cmd, args)
-          answer(uid, null, data)
-        },
-        function (err) { answer(uid, transformError(err), null) }
-      )
+        if (data === undefined) return markUnhandled(uid, cmd, args)
+        answer(uid, null, data)
+      },
+      function(err) {
+        answer(uid, transformError(err), null)
+      }
+    )
   })
 
-  var wrapAsk = function (cmd, args, timeoutToOverride) {
+  var wrapAsk = function(cmd, args, timeoutToOverride) {
     var uid = 'ipcp_' + new Date() * 1 + '_' + Math.round(Math.random() * 1000)
     var finalTimeout = timeoutToOverride || timeout
 
-    setTimeout(function () {
+    setTimeout(function() {
       var reject
 
       if (askCache && askCache[uid]) {
         reject = askCache[uid][1]
         askCache[uid] = TO_BE_REMOVED
-        reject(new Error('ipcPromise: onAsk timeout ' + finalTimeout + ' for cmd "' + cmd + '", args "' + JSON.stringify(args) + '"'))
+        reject(
+          new Error(
+            'ipcPromise: onAsk timeout ' +
+              finalTimeout +
+              ' for cmd "' +
+              cmd +
+              '", args "' +
+              JSON.stringify(args) +
+              '"'
+          )
+        )
       }
     }, finalTimeout)
 
     ask(uid, cmd, args || [])
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       askCache[uid] = [resolve, reject]
     })
   }
 
-  var wrapOnAsk = function (fn) {
+  var wrapOnAsk = function(fn) {
     handler = fn
 
-    var ps = unhandledAsk.map(function (task) {
+    var ps = unhandledAsk.map(function(task) {
       return new Promise((resolve, reject) => {
         resolve(handler(task.cmd, task.args))
-      })
-        .then(
-          function (data) {
+      }).then(
+        function(data) {
           // note: handler doens't handle the cmd => return undefined, should wait for timeout
-            if (data === undefined) {
-              return
-            }
-            answer(task.uid, null, data)
-            return task.uid
-          },
-          function (err) {
-            answer(task.uid, err, null)
-            return task.uid
+          if (data === undefined) {
+            return
           }
-        )
+          answer(task.uid, null, data)
+          return task.uid
+        },
+        function(err) {
+          answer(task.uid, err, null)
+          return task.uid
+        }
+      )
     })
 
-    Promise.all(ps).then(function (uids) {
+    Promise.all(ps).then(function(uids) {
       for (var uid of uids) {
         if (uid === undefined) {
           continue
         }
 
-        var index = unhandledAsk.findIndex(function (item) {
+        var index = unhandledAsk.findIndex(function(item) {
           return item.uid === uid
         })
 
@@ -164,7 +187,7 @@ function ipcPromise (options) {
     })
   }
 
-  var destroy = function () {
+  var destroy = function() {
     userDestroy && userDestroy()
 
     ask = null
@@ -173,7 +196,7 @@ function ipcPromise (options) {
     onAsk = null
     unhandledAsk = null
 
-    Object.keys(askCache).forEach(function (uid) {
+    Object.keys(askCache).forEach(function(uid) {
       var tuple = askCache[uid]
       var reject = tuple[1]
       reject && reject(new Error('IPC Promise has been Destroyed.'))
@@ -189,18 +212,18 @@ function ipcPromise (options) {
   }
 }
 
-ipcPromise.serialize = function (obj) {
+ipcPromise.serialize = function(obj) {
   return {
-    ask: function (cmd, args, timeout) {
+    ask: function(cmd, args, timeout) {
       return obj.ask(cmd, JSON.stringify(args), timeout)
     },
 
-    send: function (cmd, args, timeout) {
+    send: function(cmd, args, timeout) {
       return obj.send(cmd, JSON.stringify(args), timeout)
     },
 
-    onAsk: function (fn) {
-      return obj.onAsk(function (cmd, args) {
+    onAsk: function(fn) {
+      return obj.onAsk(function(cmd, args) {
         return fn(cmd, JSON.parse(args))
       })
     },

@@ -8,7 +8,7 @@ import mkdirp from 'mkdirp'
  * @param {string} filePath - The path to expand
  * @returns {string} - The expanded file path
  */
-export function expandHome (filePath) {
+export function expandHome(filePath) {
   if (filePath[0] === '~') {
     return path.join(process.env.HOME, filePath.slice(1))
   }
@@ -20,14 +20,15 @@ export function expandHome (filePath) {
  * @param {string} filePath - The directory to get contents for
  * @returns {Array<Object>} - The contents of the directory
  */
-export function getDirectoryContents (filePath) {
+export function getDirectoryContents(filePath) {
   const basePath = expandHome(filePath)
   const files = fs.readdirSync(basePath)
-  return files.map(f => ({
-    name: f,
-    isDirectory: fs.lstatSync(path.resolve(basePath, f)).isDirectory(),
-    fullpath: path.join(filePath, f)
-  }))
+  return files
+    .map(f => ({
+      name: f,
+      isDirectory: fs.lstatSync(path.resolve(basePath, f)).isDirectory(),
+      fullpath: path.join(filePath, f)
+    }))
     .filter(f => f.name[0] !== '.')
 }
 
@@ -37,7 +38,7 @@ export function getDirectoryContents (filePath) {
  * @param {string} filePath - The directory to create
  * @returns {Promise} - A promise that resolves on success
  */
-export function makeDirectory (filePath) {
+export function makeDirectory(filePath) {
   const fullpath = expandHome(filePath)
   return new Promise((resolve, reject) => {
     mkdirp(fullpath, err => {
@@ -56,7 +57,7 @@ export function makeDirectory (filePath) {
  * @returns {Object} - An object containing the parsed JSON data and the filename
  * @throws {SyntaxError} - Thrown if provided filepath is not a JSON file
  */
-export function readFile (filePath) {
+export function readFile(filePath) {
   const data = fs.readFileSync(expandHome(filePath), 'utf8')
   const JSONdata = JSON.parse(data)
   return {
@@ -72,7 +73,7 @@ export function readFile (filePath) {
  * @returns {Array<Object>} - Array containing parsed JSON
  * @throws {SyntaxError} - Thrown if provided filepath is not a JSON file
  */
-export function readFiles (filePaths) {
+export function readFiles(filePaths) {
   return filePaths
     .filter(fp => path.parse(fp).ext.toLowerCase() === '.json')
     .map(fp => readFile(fp))
@@ -86,11 +87,11 @@ export function readFiles (filePaths) {
  * @returns {Object} - Data about the resulting saved file
  * @throws {Error} - Thrown if there is a problem writing to the filesystem
  */
-export function saveFile (folder, fileName, data) {
+export function saveFile(folder, fileName, data) {
   const fullpath = path.resolve(expandHome(folder), `${fileName}.json`)
   const JSONdata = JSON.stringify(data, null, 2)
   fs.writeFileSync(fullpath, JSONdata)
-  return {fullpath, JSONdata}
+  return { fullpath, JSONdata }
 }
 
 /**

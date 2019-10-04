@@ -4,10 +4,8 @@ import OneField from '../../../../src/components/dashboard/fields/OneField.jsx'
 
 jest.mock('../../../../src/components/dashboard/fields/CommandButtons', () => {
   // eslint-disable-next-line react/display-name
-  return function () {
-    return (
-      <p>CommandButtons</p>
-    )
+  return function() {
+    return <p>CommandButtons</p>
   }
 })
 
@@ -19,7 +17,9 @@ afterEach(() => {
 describe('OneField', () => {
   it('renders', () => {
     const { queryByText } = render(<OneField />)
-    expect(queryByText('This parameter needs to be configured manually in the JSON.')).toBeNull()
+    expect(
+      queryByText('This parameter needs to be configured manually in the JSON.')
+    ).toBeNull()
   })
 
   // TODO more tests ...

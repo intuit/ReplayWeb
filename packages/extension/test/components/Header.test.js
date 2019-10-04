@@ -10,19 +10,21 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <Header
-    editNew={props.editNew || jest.fn()}
-    logMessage={props.logMessage || jest.fn()}
-    editing={props.editing || { meta: { src: {} } }}
-    saveEditingAsExisted={props.saveEditingAsExisted || jest.fn()}
-    editorType={props.editorType || {}}
-    changeModalState={props.changeModalState || jest.fn()}
-    status={props.status || ''}
-    stopRecording={props.stopRecording || jest.fn()}
-    normalizeCommands={props.normalizeCommands || jest.fn()}
-    startRecording={props.startRecording || jest.fn()}
-    player={props.player || {}}
-  />
+  return (
+    <Header
+      editNew={props.editNew || jest.fn()}
+      logMessage={props.logMessage || jest.fn()}
+      editing={props.editing || { meta: { src: {} } }}
+      saveEditingAsExisted={props.saveEditingAsExisted || jest.fn()}
+      editorType={props.editorType || {}}
+      changeModalState={props.changeModalState || jest.fn()}
+      status={props.status || ''}
+      stopRecording={props.stopRecording || jest.fn()}
+      normalizeCommands={props.normalizeCommands || jest.fn()}
+      startRecording={props.startRecording || jest.fn()}
+      player={props.player || {}}
+    />
+  )
   /* eslint-enable react/prop-types */
 }
 

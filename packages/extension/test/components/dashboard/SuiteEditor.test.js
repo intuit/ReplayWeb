@@ -9,14 +9,16 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <SuiteEditor
-    tests={props.tests || []}
-    selectedTests={props.selectedTests || []}
-    addTestToSuite={props.addTestToSuite || jest.fn()}
-    name={props.name || ''}
-    removeTestFromSuite={props.removeTestFromSuite || jest.fn()}
-    /* eslint-enable react/prop-types */
-  />
+  return (
+    <SuiteEditor
+      tests={props.tests || []}
+      selectedTests={props.selectedTests || []}
+      addTestToSuite={props.addTestToSuite || jest.fn()}
+      name={props.name || ''}
+      removeTestFromSuite={props.removeTestFromSuite || jest.fn()}
+      /* eslint-enable react/prop-types */
+    />
+  )
 }
 
 describe('SuiteEditor', () => {

@@ -15,5 +15,5 @@ export default connect(
     selectedCmds: state.editor.selectedCmds,
     selectedCommand: state.editor.editing.meta.selectedIndex
   }),
-  dispatch => bindActionCreators({...actions}, dispatch)
+  dispatch => bindActionCreators({ ...actions }, dispatch)
 )(CommandOptions)

@@ -26,24 +26,45 @@ polyfill()
  * @param {string[]|array[]} plugins - Array of plugins from config file to load
  * @returns {Promise} - A promise chain of webdriverio commands
  */
-export async function runCommands({ commands, metadata }, implicitWait = 7000, delay = null, plugins = []) {
-  const pause = (timeout) => () => new Promise(resolve => setTimeout(() => resolve(true), timeout))
+export async function runCommands(
+  { commands, metadata },
+  implicitWait = 7000,
+  delay = null,
+  plugins = []
+) {
+  const pause = timeout => () =>
+    new Promise(resolve => setTimeout(() => resolve(true), timeout))
   const context = {}
 
   const hooks = makeHooks(plugins)
 
   await hooks.beforeTest.promise(process.env.REPLAY_TEST_NAME || '', browser)
 
-  return commands.reduce(
-    (acc, cmd) => acc.then(() => runCommand(cmd, context, implicitWait, hooks).then(delay ? pause(delay) : Promise.resolve())),
-    Promise.resolve(true)
-  )
+  return commands
+    .reduce(
+      (acc, cmd) =>
+        acc.then(() =>
+          runCommand(cmd, context, implicitWait, hooks).then(
+            delay ? pause(delay) : Promise.resolve()
+          )
+        ),
+      Promise.resolve(true)
+    )
     .then(async r => {
-      await hooks.afterTest.promise(process.env.REPLAY_TEST_NAME || '', browser, context, metadata)
+      await hooks.afterTest.promise(
+        process.env.REPLAY_TEST_NAME || '',
+        browser,
+        context,
+        metadata
+      )
       return r
     })
     .catch(async e => {
-      await hooks.onError.promise(e, browser, process.env.REPLAY_TEST_NAME || '')
+      await hooks.onError.promise(
+        e,
+        browser,
+        process.env.REPLAY_TEST_NAME || ''
+      )
       // Rethrow error so test execution still halts
       // Plugins are able to view the error and do cleanup, but not prevent test from failing
       throw e
@@ -56,15 +77,30 @@ export async function runCommands({ commands, metadata }, implicitWait = 7000, d
  */
 export function makeHooks(pluginData = []) {
   const hooks = {
-    beforeTest: new AsyncParallelHook(["testName", "browser"]),
-    afterTest: new AsyncParallelHook(["testName", "browser", "context", "metadata"]),
-    beforeCommand: new AsyncParallelHook(["command", "context", "browser"]),
-    onElement: new AsyncParallelHook(["element", "browser", "command", "context", "testName"]),
-    onError: new AsyncParallelHook(["error", "browser", "testName"])
+    beforeTest: new AsyncParallelHook(['testName', 'browser']),
+    afterTest: new AsyncParallelHook([
+      'testName',
+      'browser',
+      'context',
+      'metadata'
+    ]),
+    beforeCommand: new AsyncParallelHook(['command', 'context', 'browser']),
+    onElement: new AsyncParallelHook([
+      'element',
+      'browser',
+      'command',
+      'context',
+      'testName'
+    ]),
+    onError: new AsyncParallelHook(['error', 'browser', 'testName'])
   }
   hooks.beforeCommand.tapPromise(
     'Running Command',
-    async ({ command, parameters }) => console.log(`${process.env.REPLAY_TEST_NAME || ''} - Running command: ${command} | ${JSON.stringify(parameters)}`)
+    async ({ command, parameters }) =>
+      console.log(
+        `${process.env.REPLAY_TEST_NAME ||
+          ''} - Running command: ${command} | ${JSON.stringify(parameters)}`
+      )
   )
   const plugins = pluginData.map(loadPlugin)
   plugins.forEach(p => p.apply(hooks))
@@ -101,17 +137,16 @@ export function removeTemporaryFiles() {
  + * @returns {Array<String>} - If directory exists, then returns an array of full path names to all JSON files found. Otherwise, returns an empty array.
  + */
 export function getJsonFiles(dir, callback) {
-  const filesList = new Array()
+  const filesList = []
   fs.readdirSync(dir).forEach(f => {
-    const dirEntry = path.join(dir, f);
+    const dirEntry = path.join(dir, f)
     if (fs.statSync(dirEntry).isDirectory()) {
       typeof callback === 'function' && callback(dirEntry)
       getJsonFiles(dirEntry, callback).map(thisItem => filesList.push(thisItem))
-    }
-    else {
+    } else {
       filesList.push(dirEntry)
     }
-  });
+  })
   return filesList.filter(f => path.parse(f).ext.toLowerCase() === '.json')
 }
 
@@ -122,8 +157,8 @@ export function getJsonFiles(dir, callback) {
  * @returns {Array<Object>} - An array of Objects that are the blocks
  */
 export function getAllBlockContents(blockPath) {
-  return getJsonFiles(blockPath, (dir) => {
-    log('index.getAllBlockContents; sub-directory found:\t' + dir, true);
+  return getJsonFiles(blockPath, dir => {
+    log('index.getAllBlockContents; sub-directory found:\t' + dir, true)
   }).map(fileName => ({
     name: path.parse(fileName).name,
     // parse it into json to validate that it is JSON
@@ -139,16 +174,18 @@ export function getAllBlockContents(blockPath) {
  * @returns {Array<string>} - An array of filenames to process as tests
  */
 export function getJsonTestFiles(testsPath) {
-  return getJsonFiles(testsPath, (dir) => {
-    log('index.getJsonTestFiles; sub-directory found:\t' + dir, true);
-  }).filter(f => {
-    if (argv.test) {
-      return path.parse(f).name === argv.test
-    } else if (argv.startsWith) {
-      return path.parse(f).name.startsWith(argv.startsWith)
-    }
-    return true
-  }).map(value => path.parse(value).base)
+  return getJsonFiles(testsPath, dir => {
+    log('index.getJsonTestFiles; sub-directory found:\t' + dir, true)
+  })
+    .filter(f => {
+      if (argv.test) {
+        return path.parse(f).name === argv.test
+      } else if (argv.startsWith) {
+        return path.parse(f).name.startsWith(argv.startsWith)
+      }
+      return true
+    })
+    .map(value => path.parse(value).base)
 }
 
 /**
@@ -165,15 +202,16 @@ export function getJsonTestFiles(testsPath) {
  * @returns {Array<string>} - Array of filepaths to the generated files
  */
 export function runInParallel(filePath, options = {}) {
-  const blocks = !options.blockPath ? [] : getAllBlockContents(options.blockPath)
+  const blocks = !options.blockPath
+    ? []
+    : getAllBlockContents(options.blockPath)
   // put back into a JSON string so it can be inserted into the test files
   const blocksAsString = JSON.stringify(blocks)
   const testsPath = path.resolve(process.cwd(), filePath)
   const tmpDir = fs.mkdtempSync(path.resolve(process.cwd(), '.replay-tests'))
-  const testFiles = getJsonTestFiles(testsPath)
-    .map(fileName => ({
-      path: path.resolve(tmpDir, `${path.parse(fileName).name}.js`),
-      contents: `
+  const testFiles = getJsonTestFiles(testsPath).map(fileName => ({
+    path: path.resolve(tmpDir, `${path.parse(fileName).name}.js`),
+    contents: `
 global.expect = require('chai').expect
 const replayRunner = require('@replayweb/testrunner');
 const baseCommands = require('${path.resolve(testsPath, fileName)}');
@@ -196,10 +234,12 @@ describe('replay', function() {
   });
 });
 `
-    }))
+  }))
 
   if (testFiles.length === 0) {
-    throw new Error(`No test files found in ${filePath}. Do the files end in '.json'?`)
+    throw new Error(
+      `No test files found in ${filePath}. Do the files end in '.json'?`
+    )
   }
 
   testFiles.forEach(f => {
@@ -223,33 +263,49 @@ describe('replay', function() {
  */
 export function runInParallelAllRegions(filePath, options = {}) {
   if (!options.loginBlockPath) {
-    throw new Error(`loginBlockPath is undefined in replay.config.json but runInAllRegions is true`)
+    throw new Error(
+      `loginBlockPath is undefined in replay.config.json but runInAllRegions is true`
+    )
   }
-  const fullLoginBlockPath = options.loginBlockPath ? path.resolve(process.cwd(), options.loginBlockPath) : undefined
+  const fullLoginBlockPath = options.loginBlockPath
+    ? path.resolve(process.cwd(), options.loginBlockPath)
+    : undefined
   const loginBlocksExist = fs.existsSync(fullLoginBlockPath)
 
   if (fullLoginBlockPath && !loginBlocksExist) {
-    throw new Error(`loginBlockPath is defined in replay.config.json but the path does not exist ${fullLoginBlockPath}`)
+    throw new Error(
+      `loginBlockPath is defined in replay.config.json but the path does not exist ${fullLoginBlockPath}`
+    )
   }
 
-  const loginBlocks = !fullLoginBlockPath ? [] : getAllBlockContents(fullLoginBlockPath)
+  const loginBlocks = !fullLoginBlockPath
+    ? []
+    : getAllBlockContents(fullLoginBlockPath)
 
   if (!loginBlocks || loginBlocks.length === 0) {
     throw new Error(`No login blocks found in path: ${options.loginBlockPath}`)
   }
 
-  const blocks = !options.blockPath ? [] : getAllBlockContents(options.blockPath)
+  const blocks = !options.blockPath
+    ? []
+    : getAllBlockContents(options.blockPath)
   const blocksAsString = JSON.stringify(blocks)
 
   const testsPath = path.resolve(process.cwd(), filePath)
   const tmpDir = fs.mkdtempSync(path.resolve(process.cwd(), '.replay-tests'))
 
-  const testFiles = getJsonTestFiles(testsPath).map(tmpTest => {
-    const fileContent = JSON.parse(fs.readFileSync(`${path.resolve(testsPath, tmpTest)}`))
-    const expandedCommands = expandLoginBlockForAllRegions(fileContent.commands, loginBlocks)
-    return expandedCommands.map(({ locale, commands }) => ({
-      path: path.resolve(tmpDir, `${path.parse(tmpTest).name}_${locale}.js`),
-      contents: `
+  const testFiles = getJsonTestFiles(testsPath)
+    .map(tmpTest => {
+      const fileContent = JSON.parse(
+        fs.readFileSync(`${path.resolve(testsPath, tmpTest)}`)
+      )
+      const expandedCommands = expandLoginBlockForAllRegions(
+        fileContent.commands,
+        loginBlocks
+      )
+      return expandedCommands.map(({ locale, commands }) => ({
+        path: path.resolve(tmpDir, `${path.parse(tmpTest).name}_${locale}.js`),
+        contents: `
       global.expect = require('chai').expect
       const replayRunner = require('@replayweb/testrunner');
       const { expandBlocks } = require('@replayweb/utils');
@@ -258,7 +314,9 @@ export function runInParallelAllRegions(filePath, options = {}) {
 
       const new_expandedCommands = expandBlocks(baseCommands, (${blocksAsString}));
 
-      const commands = {commands: new_expandedCommands, metadata: ${JSON.stringify(fileContent.metadata)}};
+      const commands = {commands: new_expandedCommands, metadata: ${JSON.stringify(
+        fileContent.metadata
+      )}};
       describe('replay', function() {
         ${options.retries ? `this.retries(${options.retries})` : ''}
         ${options.timeout ? `this.timeout(${options.timeout})` : ''}
@@ -273,13 +331,16 @@ export function runInParallelAllRegions(filePath, options = {}) {
         });
       });
       `
-    }))
-  }).reduce((acc, cv) => {
-    return acc.concat(cv, [])
-  }, [])
+      }))
+    })
+    .reduce((acc, cv) => {
+      return acc.concat(cv, [])
+    }, [])
 
   if (testFiles.length === 0) {
-    throw new Error(`No test files found in ${filePath}. Do the files end in '.json'?`)
+    throw new Error(
+      `No test files found in ${filePath}. Do the files end in '.json'?`
+    )
   }
 
   testFiles.forEach(f => {
@@ -290,7 +351,8 @@ export function runInParallelAllRegions(filePath, options = {}) {
 
 export function expandLoginBlockForAllRegions(commands = [], blocks = []) {
   const newCommands = blocks.map(block => ({
-    locale: block.data.commands.find(b => b.parameters && b.parameters.locale).parameters.locale,
+    locale: block.data.commands.find(b => b.parameters && b.parameters.locale)
+      .parameters.locale,
     commands: block.data.commands.concat(commands)
   }))
   return newCommands
@@ -317,41 +379,39 @@ export function loadFromConfig(folderPath = '.', runInAllRegions = false) {
       if (!fs.existsSync(fullTestPath)) {
         throw new Error(`testPath does not exist at: ${fullTestPath}`)
       }
-      const fullBlockPath = blockPath ? path.resolve(configFolder, blockPath) : undefined
+      const fullBlockPath = blockPath
+        ? path.resolve(configFolder, blockPath)
+        : undefined
       const blocksExist = fs.existsSync(fullBlockPath)
 
       if (fullBlockPath && !blocksExist) {
-        console.warn(`blockPath is defined in replay.config.json but the path does not exist`)
+        console.warn(
+          `blockPath is defined in replay.config.json but the path does not exist`
+        )
       }
 
-      const specs = runInAllRegions ? runInParallelAllRegions(
-        fullTestPath,
-        {
-          blockPath: blocksExist ? fullBlockPath : undefined,
-          ...runOptions
-        }
-      ) : runInParallel(
-        fullTestPath,
-        {
-          blockPath: blocksExist ? fullBlockPath : undefined,
-          ...runOptions
-        }
-      )
+      const specs = runInAllRegions
+        ? runInParallelAllRegions(fullTestPath, {
+            blockPath: blocksExist ? fullBlockPath : undefined,
+            ...runOptions
+          })
+        : runInParallel(fullTestPath, {
+            blockPath: blocksExist ? fullBlockPath : undefined,
+            ...runOptions
+          })
       /*
        * Map through suites object keys and generate a new object with the same keys
        * but the values are arrays pointing to the generated paths from runInParallel
        */
       const suiteContents = Object.keys(suites)
-        .map(
-          s => ({
-            [s]: suites[s].map(
-              test => specs.find(tempPath => {
-                const p = path.parse(tempPath)
-                return p.name === test
-              })
-            )
-          })
-        )
+        .map(s => ({
+          [s]: suites[s].map(test =>
+            specs.find(tempPath => {
+              const p = path.parse(tempPath)
+              return p.name === test
+            })
+          )
+        }))
         .reduce((acc, cv) => ({ ...acc, ...cv }), {})
       return { specs, suites: suiteContents }
     } catch (e) {
@@ -378,7 +438,12 @@ export function loadFromConfig(folderPath = '.', runInAllRegions = false) {
  */
 export function getDefaults(options = {}) {
   const { port: portFlag = 4444, caps: capFlag = undefined } = argv
-  const { selenium, applitools, capabilities, logDir = './target/surefire-reports' } = options
+  const {
+    selenium,
+    applitools,
+    capabilities,
+    logDir = './target/surefire-reports'
+  } = options
   const { hostname, port, path, protocol } = getEnvironment(portFlag)
   const runSelenium = argv['selenium-started'] === undefined
   const seleniumConfig = getSeleniumConfig(selenium, portFlag)
@@ -412,10 +477,11 @@ export function getDefaults(options = {}) {
     cssSelectorsEnabled: true,
     sync: false,
     logLevel: 'error',
-    onComplete: () => { removeTemporaryFiles() }
+    onComplete: () => {
+      removeTemporaryFiles()
+    }
   }
 }
-
 
 /**
  * overrides default and returns webdriverio configuration to capture video and generate allure reporting for workflows
@@ -424,17 +490,24 @@ export function getDefaultsVideoPlusAllure(options = {}) {
   const { reporters, ...defaults } = getDefaults(options)
   return {
     ...defaults,
-    reporters: [...reporters,
-    [video, {
-      saveAllVideos: true,       // If true, also saves videos for successful test cases
-      videoSlowdownMultiplier: 5, // Higher to get slower videos, lower for faster videos [Value 1-100]
-      videoRenderTimeout: 5,      // Max seconds to wait for a video to finish rendering
-    }],
-    ['allure', {
-      outputDir: './_results_/allure-raw',
-      disableWebdriverStepsReporting: false,
-      disableWebdriverScreenshotsReporting: false,
-    }],
+    reporters: [
+      ...reporters,
+      [
+        video,
+        {
+          saveAllVideos: true, // If true, also saves videos for successful test cases
+          videoSlowdownMultiplier: 5, // Higher to get slower videos, lower for faster videos [Value 1-100]
+          videoRenderTimeout: 5 // Max seconds to wait for a video to finish rendering
+        }
+      ],
+      [
+        'allure',
+        {
+          outputDir: './_results_/allure-raw',
+          disableWebdriverStepsReporting: false,
+          disableWebdriverScreenshotsReporting: false
+        }
+      ]
     ],
     runner: 'local',
     services: undefined,
@@ -444,8 +517,7 @@ export function getDefaultsVideoPlusAllure(options = {}) {
     sync: true,
     logLevel: 'debug',
     onComplete: () => {
-      removeTemporaryFiles();
+      removeTemporaryFiles()
     }
   }
 }
-

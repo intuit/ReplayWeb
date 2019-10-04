@@ -1,26 +1,23 @@
-import { type3, types as T } from './action_types';
-import { until, filtering } from '../common/utils';
-import csIpc from '../common/ipc/ipc_cs';
-import storage from '../common/storage';
-import log from '../common/log';
-import {nativeMessage, logMessage, getBlockShareConfig} from './utilities'
+import { type3, types as T } from './action_types'
+import { until, filtering } from '../common/utils'
+import csIpc from '../common/ipc/ipc_cs'
+import storage from '../common/storage'
+import { nativeMessage, logMessage, getBlockShareConfig } from './utilities'
 
-
-const saveConfig = (function () {
-  let lastSize = {};
+const saveConfig = (function() {
+  let lastSize = {}
 
   return ({ dispatch, getState }) => {
-    let { config } = getState().app;
-    config = config || {};
+    let { config } = getState().app
+    config = config || {}
 
-    storage.set('config', config);
+    storage.set('config', config)
 
-    const savedSize = config.size;
-    const finalSize =
-      savedSize ||{
-            width: 1400,
-            height: 1000
-          };
+    const savedSize = config.size
+    const finalSize = savedSize || {
+      width: 1400,
+      height: 1000
+    }
 
     if (
       finalSize.width !== lastSize.width ||
@@ -29,11 +26,11 @@ const saveConfig = (function () {
       until(
         'find app dom',
         () => {
-          const $app = document.querySelector('.app');
+          const $app = document.querySelector('.app')
           return {
             pass: !!$app,
             result: $app
-          };
+          }
         },
         100
       )
@@ -42,24 +39,24 @@ const saveConfig = (function () {
         finalSize.width !== window.outerWidth ||
         finalSize.height !== window.outerHeight
       ) {
-        if (csIpc) csIpc.ask('PANEL_RESIZE_WINDOW', { size: finalSize });
+        if (csIpc) csIpc.ask('PANEL_RESIZE_WINDOW', { size: finalSize })
       }
 
-      lastSize = finalSize;
+      lastSize = finalSize
     }
-  };
-})();
+  }
+})()
 
 export function readBlockShareConfig() {
   return {
     types: type3('READ_BLOCK_SHARE_CONFIG'),
     promise: () => {
-      return getBlockShareConfig();
+      return getBlockShareConfig()
     }
-  };
+  }
 }
 
-export function addLog (type, text) {
+export function addLog(type, text) {
   return {
     type: T.ADD_LOGS,
     data: [
@@ -69,39 +66,39 @@ export function addLog (type, text) {
         createTime: new Date()
       }
     ]
-  };
+  }
 }
 
-export function clearLogs () {
+export function clearLogs() {
   return {
     type: T.CLEAR_LOGS,
     data: null
-  };
+  }
 }
 
-export function addScreenshot (screenshot) {
+export function addScreenshot(screenshot) {
   return {
     type: T.ADD_SCREENSHOT,
     data: {
       ...screenshot,
       createTime: new Date()
     }
-  };
+  }
 }
 
-export function clearScreenshots () {
+export function clearScreenshots() {
   return {
     type: T.CLEAR_SCREENSHOTS,
     data: null
-  };
+  }
 }
 
-export function updateConfig (data) {
+export function updateConfig(data) {
   return {
     type: T.UPDATE_CONFIG,
     data: data,
     post: saveConfig
-  };
+  }
 }
 
 function searchText(value) {
@@ -119,64 +116,64 @@ const newList = filterCommands => {
 }
 export function filterCommands(text) {
   return (dispatch, getState) => {
-    const state = getState();
+    const state = getState()
     const commands = state.editor.editing.commands
     const newCommands = filtering(commands, text)
     dispatch(searchText(text))
     dispatch(newList(newCommands))
-    if ( text && text !== ''){
-      dispatch(logMessage({type: 'Searching Word', text}))
+    if (text && text !== '') {
+      dispatch(logMessage({ type: 'Searching Word', text }))
     }
-  };
+  }
 }
 
-export function changeModalState (modal, state) {
+export function changeModalState(modal, state) {
   return {
     type: T.MODAL_STATE,
     modal,
     state
-  };
+  }
 }
 
-export function changeDropdownState (dropdown, state) {
+export function changeDropdownState(dropdown, state) {
   return {
     type: T.DROPDOWN_STATE,
     dropdown,
     state
-  };
+  }
 }
 
-export function setNextTest (id) {
+export function setNextTest(id) {
   return {
     type: T.NEXT_TEST,
     id
-  };
+  }
 }
-export function setNextBlock (id) {
+export function setNextBlock(id) {
   return {
     type: T.NEXT_BLOCK,
     id
-  };
+  }
 }
-export function setNextSuite (id) {
+export function setNextSuite(id) {
   return {
     type: T.NEXT_SUITE,
     id
-  };
+  }
 }
 
-export function setContext (key, value) {
+export function setContext(key, value) {
   return {
     type: T.SET_CONTEXT,
     key,
     value
-  };
+  }
 }
 
-export function clearContext () {
+export function clearContext() {
   return {
     type: T.CLEAR_CONTEXT
-  };
+  }
 }
 
 export function userName(name) {
@@ -191,36 +188,35 @@ export function getUser() {
     nativeMessage({
       type: 'whoami'
     })
-    .then(user => {
-      dispatch(userName(user.output.trim()))
-      dispatch(logMessage({type: "App Launch"}))
-    })
-    .catch(e => dispatch(userName(null)))
-  };
+      .then(user => {
+        dispatch(userName(user.output.trim()))
+        dispatch(logMessage({ type: 'App Launch' }))
+      })
+      .catch(e => dispatch(userName(null)))
+  }
 }
 
-
-export function multiSelect (index) {
-  return (dispatch) => {
+export function multiSelect(index) {
+  return dispatch => {
     dispatch({
       type: T.MULTI_SELECT,
-      data: {index}
+      data: { index }
     })
-    dispatch(logMessage({type: "Multi-Selection"}))
+    dispatch(logMessage({ type: 'Multi-Selection' }))
   }
 }
 
 export function groupSelect(index) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: T.GROUP_SELECT,
-      data: {index}
+      data: { index }
     })
-    dispatch(logMessage({type: "Group-Selection"}))
+    dispatch(logMessage({ type: 'Group-Selection' }))
   }
 }
 
-export function removeSelected () {
+export function removeSelected() {
   return {
     type: T.EMPTY_ARRAY
   }

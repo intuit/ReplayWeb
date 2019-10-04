@@ -1,7 +1,4 @@
-import {
-  postMessage,
-  onMessage
-} from '../../../src/common/ipc/cs_postmessage'
+import { postMessage, onMessage } from '../../../src/common/ipc/cs_postmessage'
 
 describe('cs-postmessage', () => {
   describe('postMessage', () => {
@@ -37,13 +34,19 @@ describe('cs-postmessage', () => {
       postMessage(targetWin, myWin, {})
       expect(setTimeout).toHaveBeenCalledTimes(1)
       expect(mockPostMessage).toHaveBeenCalledTimes(1)
-      expect(mockPostMessage).toHaveBeenCalledWith({
-        isRequest: true,
-        payload: {},
-        secret: expect.any(Number),
-        type: 'SELENIUM_IDE_CS_MSG'
-      }, '*')
-      expect(mockAddEventListener).toHaveBeenCalledWith('message', expect.any(Function))
+      expect(mockPostMessage).toHaveBeenCalledWith(
+        {
+          isRequest: true,
+          payload: {},
+          secret: expect.any(Number),
+          type: 'SELENIUM_IDE_CS_MSG'
+        },
+        '*'
+      )
+      expect(mockAddEventListener).toHaveBeenCalledWith(
+        'message',
+        expect.any(Function)
+      )
     })
   })
 
@@ -66,12 +69,18 @@ describe('cs-postmessage', () => {
       }
       const res = onMessage(win, jest.fn())
       expect(mockAddEventListener).toHaveBeenCalledTimes(1)
-      expect(mockAddEventListener).toHaveBeenCalledWith('message', expect.any(Function))
+      expect(mockAddEventListener).toHaveBeenCalledWith(
+        'message',
+        expect.any(Function)
+      )
       expect(mockRemoveEventListener).not.toHaveBeenCalled()
       expect(res).toEqual(expect.any(Function))
       res()
       expect(mockRemoveEventListener).toHaveBeenCalledTimes(1)
-      expect(mockRemoveEventListener).toHaveBeenCalledWith('message', expect.any(Function))
+      expect(mockRemoveEventListener).toHaveBeenCalledWith(
+        'message',
+        expect.any(Function)
+      )
     })
   })
 })

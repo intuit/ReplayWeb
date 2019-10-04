@@ -46,9 +46,7 @@ describe('project_model', () => {
 
       it('throws error for no projectPath', () => {
         try {
-          model.insert(
-            { name: 'test' }
-          )
+          model.insert({ name: 'test' })
           expect(true).toBe(false)
         } catch (err) {
           expect(err.toString()).toMatch(/insert: missing projectPath/)
@@ -57,9 +55,7 @@ describe('project_model', () => {
 
       it('throws error for no testPath', () => {
         try {
-          model.insert(
-            { name: 'test', projectPath: 'test' }
-          )
+          model.insert({ name: 'test', projectPath: 'test' })
           expect(true).toBe(false)
         } catch (err) {
           expect(err.toString()).toMatch(/insert: missing testPath/)
@@ -68,9 +64,7 @@ describe('project_model', () => {
 
       it('throws error for no blockPath', () => {
         try {
-          model.insert(
-            { name: 'test', projectPath: 'test', testPath: 'test' }
-          )
+          model.insert({ name: 'test', projectPath: 'test', testPath: 'test' })
           expect(true).toBe(false)
         } catch (err) {
           expect(err.toString()).toMatch(/insert: missing blockPath/)
@@ -78,9 +72,12 @@ describe('project_model', () => {
       })
 
       it('returns value', () => {
-        const res = model.insert(
-          { name: 'test', projectPath: 'test', testPath: 'test', blockPath: 'test' }
-        )
+        const res = model.insert({
+          name: 'test',
+          projectPath: 'test',
+          testPath: 'test',
+          blockPath: 'test'
+        })
         expect(res).toBe(true)
       })
     })

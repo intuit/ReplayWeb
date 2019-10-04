@@ -9,12 +9,14 @@ afterEach(() => {
 
 describe('SettingModal', () => {
   it('renders', () => {
-    const { getByText } = render(<SettingModal
-      updateConfig={jest.fn()}
-      config={{}}
-      visible={true}
-      onCancel={jest.fn()}
-    />)
+    const { getByText } = render(
+      <SettingModal
+        updateConfig={jest.fn()}
+        config={{}}
+        visible={true}
+        onCancel={jest.fn()}
+      />
+    )
     getByText('Replay Settings')
     getByText('Sidebar width')
     getByText('Replay Helper')

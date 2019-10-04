@@ -6,18 +6,9 @@ import {
   saveFile,
   deleteFile
 } from './filesystem'
-import {
-  startOrchestrator
-} from './docker'
-import {
-  whoami,
-  checkExecutable,
-  buildPackage
-} from './shell'
-import {
-  getCurrentVersion,
-  switchToTag,
-} from './git'
+import { startOrchestrator } from './docker'
+import { whoami, checkExecutable, buildPackage } from './shell'
+import { getCurrentVersion, switchToTag } from './git'
 
 /**
  * Function to be used with `chrome-native-messaging` Transformer
@@ -25,15 +16,15 @@ import {
  * @param {Function} push - Function provided by Transformer to push data to stdout
  * @param {Function} done - Function provided by Transformer to indicate that we're done handling the messsage
  */
-export function messageHandler (msg, push, done) {
-  const success = (data) => {
+export function messageHandler(msg, push, done) {
+  const success = data => {
     push({
       success: true,
       data
     })
     done()
   }
-  const failure = (data) => {
+  const failure = data => {
     push({
       success: false,
       msg,
@@ -62,14 +53,14 @@ export function messageHandler (msg, push, done) {
       break
     case 'readFiles':
       try {
-        success({files: readFiles(msg.filepaths)})
+        success({ files: readFiles(msg.filepaths) })
       } catch (e) {
         failure(e.message)
       }
       break
     case 'saveFile':
       try {
-        const {folder, fileName, data} = msg.data
+        const { folder, fileName, data } = msg.data
         success(saveFile(folder, fileName, data))
       } catch (e) {
         failure(e.message)
@@ -77,7 +68,7 @@ export function messageHandler (msg, push, done) {
       break
     case 'deleteFile':
       try {
-        const {folder, fileName} = msg.data
+        const { folder, fileName } = msg.data
         success(deleteFile(folder, fileName))
       } catch (e) {
         failure(e.message)
@@ -86,7 +77,7 @@ export function messageHandler (msg, push, done) {
     case 'checkExecutable':
       return checkExecutable(msg.executable)
         .then(output => {
-          success({output})
+          success({ output })
         })
         .catch(e => {
           failure(e.message)
@@ -94,7 +85,7 @@ export function messageHandler (msg, push, done) {
     case 'whoami':
       return whoami()
         .then(output => {
-          success({output})
+          success({ output })
         })
         .catch(e => {
           failure(e.message)

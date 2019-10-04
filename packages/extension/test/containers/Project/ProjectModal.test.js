@@ -13,12 +13,12 @@ afterEach(() => {
 
 describe('ProjectModal store', () => {
   it('operates', () => {
-    const mockConnect = jest.fn().mockImplementation(() => (component) => {})
+    const mockConnect = jest.fn().mockImplementation(() => component => {})
     jest.doMock('react-redux', () => ({
       connect: mockConnect
     }))
     require('../../../src/containers/Project/ProjectModal')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       modals: {
@@ -66,7 +66,10 @@ describe('ProjectModal store', () => {
     expect(mockDispatch).toHaveBeenNthCalledWith(2, 1)
     expect(mockDispatch).toHaveBeenNthCalledWith(3, 2)
     expect(mockDispatch).toHaveBeenNthCalledWith(4, 3)
-    expect(mockDispatch).toHaveBeenNthCalledWith(5, { type: 'PROJECT_PATH', path: undefined })
+    expect(mockDispatch).toHaveBeenNthCalledWith(5, {
+      type: 'PROJECT_PATH',
+      path: undefined
+    })
     expect(mockDispatch).toHaveBeenNthCalledWith(6, 6)
     expect(mockDispatch).toHaveBeenNthCalledWith(7, 4)
     expect(mockDispatch).toHaveBeenNthCalledWith(8, 3)

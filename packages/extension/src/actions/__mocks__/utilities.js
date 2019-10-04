@@ -9,7 +9,7 @@ export function logMessage() {
     type: 'LOG_MESSAGE'
   }
 }
-const __setReturn = (k,v) => {
+const __setReturn = (k, v) => {
   ret[k] = v
 }
 const __setFail = f => {

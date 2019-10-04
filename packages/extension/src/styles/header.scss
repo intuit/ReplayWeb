@@ -22,7 +22,6 @@
     }
   }
 
-
   .show-sidebar {
     display: none;
   }
@@ -33,11 +32,11 @@
       margin-left: 15px;
     }
   }
-      
+
   .ant-checkbox-wrapper {
     color: #ffffff;
   }
-  .status-bar{
+  .status-bar {
     margin-left: 30px;
     .unsaved {
       color: rgb(0, 195, 255);
@@ -46,18 +45,18 @@
         content: '*';
         margin-left: 5px;
       }
-    }    
+    }
   }
 
   .ant-dropdown-menu {
     max-height: 300px;
     overflow-y: auto;
-  
+
     .editing {
       color: blue !important;
     }
   }
-  
+
   .play-ops {
     flex: 1;
     text-align: right;
@@ -66,15 +65,15 @@
     .ant-btn {
       border-color: rgb(0, 21, 41) !important;
     }
-    .play-ops-dark{
-      .ant-btn{
+    .play-ops-dark {
+      .ant-btn {
         background-color: #001529 !important;
         color: white;
       }
     }
   }
-  .content-result{
-    .ant-btn{
+  .content-result {
+    .ant-btn {
       background-color: #001529 !important;
       &.danger {
         color: #df3731 !important;

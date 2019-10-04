@@ -1,5 +1,4 @@
-const webpack = require('webpack');
-const path = require('path');
+const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const PermissionsPlugin = require('webpack-permissions-plugin')
@@ -31,7 +30,11 @@ module.exports = {
         flatten: true
       },
       {
-        from: `src/static/${process.env.NODE_ENV === 'production' ? 'nativeHost.sh': 'nativeHostLocal.sh'}`,
+        from: `src/static/${
+          process.env.NODE_ENV === 'production'
+            ? 'nativeHost.sh'
+            : 'nativeHostLocal.sh'
+        }`,
         to: 'nativeHost.sh'
       }
     ]),
@@ -49,7 +52,7 @@ module.exports = {
     })
   ],
   devtool: 'inline-source-map'
-};
+}
 
 // if (process.env.NODE_ENV === 'production') {
 //   delete module.exports.devtool

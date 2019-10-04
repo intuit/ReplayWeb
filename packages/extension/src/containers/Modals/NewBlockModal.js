@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import {
   changeModalState,
   setEditorStatus,
@@ -7,10 +7,9 @@ import {
   editNewBlock,
   clearNext,
   importBlockFromLink
-} from '../../actions';
-import NewBlockModal from '../../components/Modals/NewBlockModal';
-import * as C from '../../common/constant';
-import github from 'github-api'
+} from '../../actions'
+import NewBlockModal from '../../components/Modals/NewBlockModal'
+import * as C from '../../common/constant'
 const mapStateToProps = state => {
   return {
     visible: state.modals.newBlockModal,
@@ -20,8 +19,8 @@ const mapStateToProps = state => {
     blockShareConfig: state.app.blockShareConfig,
     blockShareConfigError: state.app.blockShareConfigError,
     blockShareConfigErrorMessage: state.app.blockShareConfigErrorMessage
-  };
-};
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -34,11 +33,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(editNewBlock())
       dispatch(changeModalState('newBlockModal', false))
     },
-    importBlock: (link) => {
+    importBlock: link => {
       return dispatch(importBlockFromLink(link))
-  
     }
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewBlockModal);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewBlockModal)

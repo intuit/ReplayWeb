@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal, Button, Input, message } from 'antd'
 import * as C from '../../common/constant'
 
-export default function SaveModal (props) {
+export default function SaveModal(props) {
   switch (props.editorStatus) {
     case C.EDITOR_STATUS.TESTS:
       return <SaveTestCaseModal {...props} />
@@ -18,7 +18,7 @@ SaveModal.propTypes = {
   editorStatus: PropTypes.string.isRequired
 }
 
-export function SaveBlockModal (props) {
+export function SaveBlockModal(props) {
   const onSave = saveAsName => {
     return (props.src
       ? props.saveEditingBlockAsExisted()
@@ -65,9 +65,10 @@ SaveBlockModal.propTypes = {
   visible: PropTypes.func.isRequired
 }
 
-export function SaveMultiSelectModal (props) {
+export function SaveMultiSelectModal(props) {
   const onSave = saveAsName => {
-    return props.saveMultiSelectAsNewBlock(saveAsName)
+    return props
+      .saveMultiSelectAsNewBlock(saveAsName)
       .then(() => onCancel())
       .catch(e => message.error(e.message, 1.5))
   }
@@ -81,7 +82,7 @@ export function SaveMultiSelectModal (props) {
       onSave={onSave}
       onCancel={onCancel}
       hasFileName={false}
-      title='Save as a new block'
+      title="Save as a new block"
       visible={props.visible}
     />
   )
@@ -93,7 +94,7 @@ SaveMultiSelectModal.propTypes = {
   visible: PropTypes.bool.isRequired
 }
 
-export function SaveTestCaseModal (props) {
+export function SaveTestCaseModal(props) {
   const onSave = saveAsName => {
     return (props.src
       ? props.saveEditingAsExisted()
@@ -140,7 +141,7 @@ SaveTestCaseModal.propTypes = {
   visible: PropTypes.any.isRequired
 }
 
-export function SaveSuiteModal (props) {
+export function SaveSuiteModal(props) {
   const onSave = saveAsName => {
     return (props.src
       ? props.saveEditingSuiteAsExisted()
@@ -188,26 +189,30 @@ SaveSuiteModal.propTypes = {
 }
 
 class GenericSaveModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       saveAsName: ''
     }
   }
 
-  onChange (e) {
+  onChange(e) {
     this.setState({
       saveAsName: e.target.value
     })
   }
 
-  render () {
+  render() {
     const footerButtons = (
       <div>
         <Button onClick={this.props.onCancel}>Cancel</Button>
-        {this.props.onDiscard ? <Button type="danger" onClick={this.props.onDiscard}>
-          Discard
-        </Button> : undefined}
+        {this.props.onDiscard ? (
+          <Button type="danger" onClick={this.props.onDiscard}>
+            Discard
+          </Button>
+        ) : (
+          undefined
+        )}
         <Button
           type="primary"
           onClick={() => this.props.onSave(this.state.saveAsName)}
@@ -224,15 +229,15 @@ class GenericSaveModal extends React.Component {
         className="save-modal"
         onCancel={this.props.onCancel}
       >
-        {
-          (this.props.hasFileName)
-            ? <p>{this.props.unsavedChangesText}</p>
-            : <Input
-              style={{ width: '100%' }}
-              onChange={this.onChange}
-              placeholder="enter name"
-            />
-        }
+        {this.props.hasFileName ? (
+          <p>{this.props.unsavedChangesText}</p>
+        ) : (
+          <Input
+            style={{ width: '100%' }}
+            onChange={this.onChange}
+            placeholder="enter name"
+          />
+        )}
       </Modal>
     )
   }

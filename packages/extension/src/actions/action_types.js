@@ -3,9 +3,9 @@ export const make3 = name => [
   name + '_REQUEST',
   name + '_SUCCESS',
   name + '_FAIL'
-];
+]
 
-export const type3 = name => make3(name).map(key => types[key]);
+export const type3 = name => make3(name).map(key => types[key])
 
 const promiseTypes = [
   'START_RECORDING',
@@ -15,11 +15,11 @@ const promiseTypes = [
   'READ_BLOCK_SHARE_CONFIG'
 ].reduce((prev, cur) => {
   make3(cur).forEach(key => {
-    prev[key] = key;
-  });
+    prev[key] = key
+  })
 
-  return prev;
-}, {});
+  return prev
+}, {})
 
 const simpleTypes = [
   'DONE_INSPECTING',
@@ -72,7 +72,6 @@ const simpleTypes = [
   'START_PLAYING',
   'STOP_PLAYING',
 
-
   'SEARCH_WORD',
   'FILTER_COMMANDS',
 
@@ -97,9 +96,9 @@ const simpleTypes = [
   'SHOW_CONTEXT_MENU',
   'HIDE_CONTEXT_MENU'
 ].reduce((prev, cur) => {
-  prev[cur] = cur;
-  return prev;
-}, {});
+  prev[cur] = cur
+  return prev
+}, {})
 
 const filesystemTypes = [
   'SELECT_FOLDER',
@@ -108,9 +107,9 @@ const filesystemTypes = [
   'FOLDER_MODAL',
   'FILE_ERROR'
 ].reduce((prev, cur) => {
-  prev[cur] = cur;
-  return prev;
-}, {});
+  prev[cur] = cur
+  return prev
+}, {})
 
 const projectSetupTypes = [
   'PROJECT_PATH',
@@ -121,9 +120,9 @@ const projectSetupTypes = [
   'EDIT_PROJECT',
   'CLEAR_PROJECT_SETUP'
 ].reduce((prev, cur) => {
-  prev[cur] = cur;
-  return prev;
-}, {});
+  prev[cur] = cur
+  return prev
+}, {})
 const suiteEditorTypes = [
   'ADD_SUITE_TEST',
   'REMOVE_SUITE_TEST',
@@ -137,8 +136,14 @@ const suiteEditorTypes = [
   'RENAME_SUITE',
   'EXISTING_SUITES'
 ].reduce((prev, cur) => {
-  prev[cur] = cur;
-  return prev;
-}, {});
+  prev[cur] = cur
+  return prev
+}, {})
 
-export const types = { ...simpleTypes, ...promiseTypes, ...filesystemTypes, ...projectSetupTypes, ...suiteEditorTypes };
+export const types = {
+  ...simpleTypes,
+  ...promiseTypes,
+  ...filesystemTypes,
+  ...projectSetupTypes,
+  ...suiteEditorTypes
+}

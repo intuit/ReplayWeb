@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import {
   changeModalState,
   saveEditingAsExisted,
@@ -7,15 +7,11 @@ import {
   saveEditingBlockAsNew,
   saveEditingAsNew,
   saveEditingSuiteAsNew,
-  setNextTest,
-  setNextBlock,
-  setNextSuite,
   selectProject,
   editNext,
   clearNext
-} from '../../actions';
-import SaveModal from '../../components/Modals/SaveModal';
-import * as C from '../../common/constant';
+} from '../../actions'
+import SaveModal from '../../components/Modals/SaveModal'
 const mapStateToProps = state => {
   return {
     visible: state.modals.save,
@@ -23,8 +19,8 @@ const mapStateToProps = state => {
     project: state.editor.project,
     editorStatus: state.editor.status,
     newSave: state.editor.editing.meta.isNewSave
-  };
-};
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -38,7 +34,10 @@ const mapDispatchToProps = dispatch => {
     saveEditingBlockAsNew: name => dispatch(saveEditingBlockAsNew(name)),
     closeModal: () => dispatch(changeModalState('save', false)),
     selectProject: project => dispatch(selectProject(project))
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(SaveModal);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SaveModal)

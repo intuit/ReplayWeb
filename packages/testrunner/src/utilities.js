@@ -18,10 +18,12 @@ export function log(message, verbose = false) {
  */
 export function tryRequire(packageName, parameters) {
   try {
-    const pack = require(packageName)
-    return new pack(parameters)
+    const Pack = require(packageName)
+    return new Pack(parameters)
   } catch (e) {
-    throw new Error(`Could not find plugin: "${packageName}", did you forget to install it? -- Actual error: ${e}`)
+    throw new Error(
+      `Could not find plugin: "${packageName}", did you forget to install it? -- Actual error: ${e}`
+    )
   }
 }
 
@@ -39,10 +41,12 @@ export function loadPlugin(data) {
   } else {
     console.error(`Invalid plugin format: ${JSON.stringify(data)}`)
     console.error('Acceptable formats:')
-    console.error("string: the package name that is the plugin")
-    console.error("array: the package name that is the plugin")
-    console.error("      0 - the package name that is the plugin")
-    console.error("      1 - an options object that gets passed to the plugin constructor")
+    console.error('string: the package name that is the plugin')
+    console.error('array: the package name that is the plugin')
+    console.error('      0 - the package name that is the plugin')
+    console.error(
+      '      1 - an options object that gets passed to the plugin constructor'
+    )
     throw new Error(`Invalid plugin format: ${JSON.stringify(data)}`)
   }
 }
@@ -54,7 +58,7 @@ export function loadPlugin(data) {
  * @returns {string} - A string that can be used by `browser.execute` to access an element
  */
 export function getExecElString(selector) {
-  if ((/^\//.test(selector))) {
+  if (/^\//.test(selector)) {
     return `document.evaluate(\`${selector}\`, document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)`
   } else {
     const el = selector.replace('\\:', '\\\\:')
@@ -68,11 +72,24 @@ export function getExecElString(selector) {
  * @param {string} target The target to get an element for, in the replay form, eg: id=test
  * @param {number} timeout How long to wait for the element to exist
  */
-export const getAndWaitForElement = async (target, timeout = 7000, command, context, hooks) => {
-  const element = await browser.$(getSelector(target))
+export const getAndWaitForElement = async (
+  target,
+  timeout = 7000,
+  command,
+  context,
+  hooks
+) => {
+  const element = await browser
+    .$(getSelector(target))
     .then(el => el.waitForExist(timeout).then(() => el))
   if (hooks) {
-    await hooks.onElement.promise(element, browser, command, context, process.env.REPLAY_TEST_NAME || '')
+    await hooks.onElement.promise(
+      element,
+      browser,
+      command,
+      context,
+      process.env.REPLAY_TEST_NAME || ''
+    )
   }
   return element
 }
@@ -85,13 +102,14 @@ export const getAndWaitForElement = async (target, timeout = 7000, command, cont
  * @param {Array} targets The targets to retrieve
  * @param {number} timeout How long to wait for each target
  */
-export const waitForElements = (targets, timeout) => targets.reduce(
-  (acc, cv) => acc.then(
-    elements => getAndWaitForElement(cv, timeout)
-    .then(el => elements.concat(el))
-  ),
-  Promise.resolve([])
-)
+export const waitForElements = (targets, timeout) =>
+  targets.reduce(
+    (acc, cv) =>
+      acc.then(elements =>
+        getAndWaitForElement(cv, timeout).then(el => elements.concat(el))
+      ),
+    Promise.resolve([])
+  )
 
 /**
  * Unpacks the target into a selector for webdriverio
@@ -102,7 +120,7 @@ export const waitForElements = (targets, timeout) => targets.reduce(
 export function getSelector(str) {
   const i = str.indexOf('=')
   // is it an xpath selector?
-  if ((/^\//.test(str))) {
+  if (/^\//.test(str)) {
     return str
   } else if (i === -1) {
     throw new Error(`${str} is not a valid selector`)
@@ -117,7 +135,7 @@ export function getSelector(str) {
         return `[automationid="${value}"]`
 
       case 'id':
-        return `//*[@id=\"${value.replace(':', '\\:')}\"]`
+        return `//*[@id="${value.replace(':', '\\:')}"]`
 
       case 'title':
         return `.//*[contains(@${method} ,"${value}")]`
@@ -136,7 +154,7 @@ export function getSelector(str) {
         // Note: there are cases such as 'link=exact:xxx'
         let realVal = value.replace(/^exact:/, '')
         // Note: position support. eg. link=Download@POS=3
-        let match = realVal.match(/^(.+)@POS=(\d+)$/i)
+        const match = realVal.match(/^(.+)@POS=(\d+)$/i)
         if (match) {
           realVal = match[1]
         }
@@ -159,8 +177,13 @@ export function getSelector(str) {
 
 async function getTableHeader(tableElementLocator) {
   const trs = await browser.$$(getSelector(`${tableElementLocator}//tr`))
-  const allThs = await Promise.all(trs.map((_, index) => browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//th`))))
-  const tds = allThs.reduce((acc, cv) => acc.concat(cv), []) // reduce 2D array into 1D array
+  const allThs = await Promise.all(
+    trs.map((_, index) =>
+      browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//th`))
+    )
+  )
+  const tds = allThs
+    .reduce((acc, cv) => acc.concat(cv), []) // reduce 2D array into 1D array
     .map(async th => (await th.getText()).trim()) // get the text for all elements
   const headerRow = (await Promise.all(tds)).filter(thText => thText !== '') // filter out all empty cells
   return headerRow
@@ -169,11 +192,22 @@ async function getTableHeader(tableElementLocator) {
 export async function fetchTable(tableElementLocator) {
   const headerList = await getTableHeader(tableElementLocator)
   const trs = await browser.$$(getSelector(`${tableElementLocator}//tr`))
-  const fullRows = await Promise.all(trs.map((_, index) => browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//td`))))
-  const tableMap = await Promise.all(fullRows.map(tds => Promise.all(tds.map(async td => (await td.getText()).trim()))))
-  const tableWithoutHeader = tableMap.filter((row, i) => { //to remove multiple headers
-    const header = row.filter((cellText, index) => headerList[index] === cellText)
-    return header.length!==headerList.length && i !== 0
+  const fullRows = await Promise.all(
+    trs.map((_, index) =>
+      browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//td`))
+    )
+  )
+  const tableMap = await Promise.all(
+    fullRows.map(tds =>
+      Promise.all(tds.map(async td => (await td.getText()).trim()))
+    )
+  )
+  const tableWithoutHeader = tableMap.filter((row, i) => {
+    // to remove multiple headers
+    const header = row.filter(
+      (cellText, index) => headerList[index] === cellText
+    )
+    return header.length !== headerList.length && i !== 0
   })
   return tableWithoutHeader
 }

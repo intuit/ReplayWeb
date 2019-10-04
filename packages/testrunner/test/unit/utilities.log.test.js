@@ -1,4 +1,4 @@
-import {log} from '../../src/utilities'
+import { log } from '../../src/utilities'
 
 describe('log', () => {
   it('should log if verbose', () => {

@@ -12,7 +12,7 @@ import {
 } from '../../actions'
 import CommandTable from '../../components/dashboard/CommandTable'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     editing: state.editor.editing,
     player: state.player,
@@ -23,18 +23,19 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    selectCommand: (index) => dispatch(selectCommand(index)),
-    removeCommand: (index) => dispatch(removeCommand(index)),
+    selectCommand: index => dispatch(selectCommand(index)),
+    removeCommand: index => dispatch(removeCommand(index)),
     insertCommand: (command, index) => dispatch(insertCommand(command, index)),
-    reorderCommand: (dragIndex, hoverIndex) => dispatch(reorderCommand(dragIndex, hoverIndex)),
-    filterCommands: (searchText) => dispatch(filterCommands(searchText)),
+    reorderCommand: (dragIndex, hoverIndex) =>
+      dispatch(reorderCommand(dragIndex, hoverIndex)),
+    filterCommands: searchText => dispatch(filterCommands(searchText)),
     removeSearchText: () => dispatch(filterCommands('')),
-    multiSelect: (index) => dispatch(multiSelect(index)),
-    groupSelect: (index) => dispatch(groupSelect(index)),
+    multiSelect: index => dispatch(multiSelect(index)),
+    groupSelect: index => dispatch(groupSelect(index)),
     removeSelected: () => dispatch(removeSelected()),
-    showContextMenu: (data) => dispatch(showContextMenu(data))
+    showContextMenu: data => dispatch(showContextMenu(data))
   }
 }
 

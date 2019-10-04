@@ -3,44 +3,45 @@ import PropTypes from 'prop-types'
 import { Modal, Input, message } from 'antd'
 
 class DuplicateModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       duplicateName: this.props.src ? `${this.props.src.name}_new` : ''
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setState({
       duplicateName: nextProps.src ? `${nextProps.src.name}_new` : ''
     })
   }
 
-  onChange (e) {
+  onChange(e) {
     this.setState({
       duplicateName: e.target.value
     })
   }
 
-  onDuplicate () {
-    this.props.duplicate(this.state.duplicateName)
+  onDuplicate() {
+    this.props
+      .duplicate(this.state.duplicateName)
       .then(() => {
         message.success('successfully duplicated!', 1.5)
         this.props.closeModal()
       })
-      .catch((e) => {
+      .catch(e => {
         message.error(e.message, 1.5)
       })
   }
 
-  onCancel () {
+  onCancel() {
     this.props.closeModal()
     this.setState({
       duplicateName: ''
     })
   }
 
-  render () {
+  render() {
     return (
       <Modal
         title={`Duplicate ${this.props.type}`}
@@ -53,7 +54,9 @@ class DuplicateModal extends React.Component {
       >
         <Input
           style={{ width: '100%' }}
-          onKeyDown={e => { if (e.keyCode === 13) this.onDuplicate() }}
+          onKeyDown={e => {
+            if (e.keyCode === 13) this.onDuplicate()
+          }}
           onChange={this.onChange}
           placeholder={`${this.props.type} name`}
           value={this.state.duplicateName}

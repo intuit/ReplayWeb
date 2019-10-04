@@ -1,5 +1,4 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import {
   editTestCase,
   editBlock,
@@ -18,9 +17,9 @@ import {
   editNextTest,
   editNextBlock,
   editNextSuite
-} from '../actions';
+} from '../actions'
 import * as C from '../common/constant'
-import Sidebar from '../components/Sidebar/Sidebar';
+import Sidebar from '../components/Sidebar/Sidebar'
 const mapStateToProps = state => {
   return {
     status: state.app.status,
@@ -32,9 +31,9 @@ const mapStateToProps = state => {
     config: state.app.config,
     project: state.editor.project || {},
     projects: state.editor.projects || [],
-    editorStatus: state.editor.status,
-  };
-};
+    editorStatus: state.editor.status
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -63,7 +62,10 @@ const mapDispatchToProps = dispatch => {
     selectProject: project => dispatch(selectProject(project)),
     removeProject: project => dispatch(removeProject(project)),
     setEditorStatus: status => dispatch(setEditorStatus(status))
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Sidebar)

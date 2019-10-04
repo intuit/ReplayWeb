@@ -9,14 +9,16 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <PlayLoopModal
-    playerPlay={props.playerPlay || jest.fn()}
-    editing={props.editing || { commands: { meta: { src: {} } } }}
-    config={props.config || {}}
-    togglePlayLoopsModal={props.togglePlayLoopsModal || jest.fn()}
-    visible={props.visible || true}
-    /* eslint-enable react/prop-types */
-  />
+  return (
+    <PlayLoopModal
+      playerPlay={props.playerPlay || jest.fn()}
+      editing={props.editing || { commands: { meta: { src: {} } } }}
+      config={props.config || {}}
+      togglePlayLoopsModal={props.togglePlayLoopsModal || jest.fn()}
+      visible={props.visible || true}
+      /* eslint-enable react/prop-types */
+    />
+  )
 }
 
 describe('PlayLoopModal', () => {

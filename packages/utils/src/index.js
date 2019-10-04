@@ -18,21 +18,21 @@ export const availableReplacements = {
     action: getMillis
   }
 }
-async function getMillis () {
+async function getMillis() {
   return Date.now()
 }
 
-async function getRandomNumber () {
+async function getRandomNumber() {
   return Math.floor(Math.random() * RANDOM_MAX)
 }
 
-async function getTodaysDate () {
+async function getTodaysDate() {
   return moment().format('MM/D/YYYY')
 }
 
 //* ****************************************************************************
 
-export function getAllMatches (regex, str) {
+export function getAllMatches(regex, str) {
   const results = []
   let match
   while ((match = regex.exec(str)) !== null) {
@@ -41,23 +41,27 @@ export function getAllMatches (regex, str) {
   return results
 }
 
-async function resolveMatches (string, defaults, context) {
+async function resolveMatches(string, defaults, context) {
   const matches = getAllMatches(/\{([\w|.]*?)\}/g, string)
-  return Promise.all(matches.map(async match => {
-    const parts = match[1].split('.')
-    // Descend into the context object for replacements like
-    // {someObject.someProperty}
-    // with context like {someObject: {someProperty: 'a'}}
-    const currentContext = parts.slice(0, parts.length - 1).reduce((acc, cv) => acc[cv], context)
-    if (process && process.env && process.env[match[1]]) {
-      return {old: match[0], new: process.env[match[1]]}
-    } else if (defaults[match[1]]) {
-      const result = await defaults[match[1]].action()
-      return {old: match[0], new: result}
-    } else if (currentContext[parts[parts.length - 1]]) {
-      return {old: match[0], new: currentContext[parts[parts.length - 1]]}
-    }
-  }))
+  return Promise.all(
+    matches.map(async match => {
+      const parts = match[1].split('.')
+      // Descend into the context object for replacements like
+      // {someObject.someProperty}
+      // with context like {someObject: {someProperty: 'a'}}
+      const currentContext = parts
+        .slice(0, parts.length - 1)
+        .reduce((acc, cv) => acc[cv], context)
+      if (process && process.env && process.env[match[1]]) {
+        return { old: match[0], new: process.env[match[1]] }
+      } else if (defaults[match[1]]) {
+        const result = await defaults[match[1]].action()
+        return { old: match[0], new: result }
+      } else if (currentContext[parts[parts.length - 1]]) {
+        return { old: match[0], new: currentContext[parts[parts.length - 1]] }
+      }
+    })
+  )
 }
 
 /**
@@ -68,11 +72,20 @@ async function resolveMatches (string, defaults, context) {
  * @param {Object} defaults - An object for asynchronous replacements, mostly just for dependency injection, should probably not be overridden
  * @returns {Promise<string>} - Returns a promise that resolves to the resulting string
  */
-export async function doReplace (string, context = {}, defaults = availableReplacements) {
-  const replaceMatches = (results) => results.filter(r => r !== undefined).reduce((acc, cv) => acc.replace(cv.old, () => cv.new), string)
+export async function doReplace(
+  string,
+  context = {},
+  defaults = availableReplacements
+) {
+  const replaceMatches = results =>
+    results
+      .filter(r => r !== undefined)
+      .reduce((acc, cv) => acc.replace(cv.old, () => cv.new), string)
   const re = /\{([\w|.]*?)\}/g
   if (re.test(string)) {
-    const result = replaceMatches(await resolveMatches(string, defaults, context))
+    const result = replaceMatches(
+      await resolveMatches(string, defaults, context)
+    )
     return result === string ? result : doReplace(result, context)
   }
   return string
@@ -85,9 +98,15 @@ export async function doReplace (string, context = {}, defaults = availableRepla
  * @param {Object} context - The context to replace with
  * @return {Object} - A copy of the original object fields with the values replaced
  */
-export const replaceAllFields = (obj, context) => Object.keys(obj)
-  .reduce(
-    async (acc, cv) => ({...(await acc), [cv]: typeof obj[cv] === 'object' ? await replaceAllFields(obj[cv], context) : await doReplace(obj[cv], context)}),
+export const replaceAllFields = (obj, context) =>
+  Object.keys(obj).reduce(
+    async (acc, cv) => ({
+      ...(await acc),
+      [cv]:
+        typeof obj[cv] === 'object'
+          ? await replaceAllFields(obj[cv], context)
+          : await doReplace(obj[cv], context)
+    }),
     Promise.resolve({})
   )
 
@@ -97,16 +116,18 @@ export const replaceAllFields = (obj, context) => Object.keys(obj)
  * @param {Array} blocks - The blocks associated with the commands
  * @returns {Array} - The commands with the blocks replaced with their contents
  */
-export function expandBlocks (commands = [], blocks = []) {
+export function expandBlocks(commands = [], blocks = []) {
   return commands.reduce((current, nextCommand, index) => {
     if (nextCommand.command === 'runBlock') {
       const blockName = nextCommand.parameters.block
-      const block = blocks.find(({name}) => name === blockName)
+      const block = blocks.find(({ name }) => name === blockName)
       if (!block) {
         throw new Error(`Block "${blockName}" does not exist`)
       }
       // Also label this command so that we know that this is a block
-      const commands = block.data.commands.map(command => Object.assign({}, command, {isBlock: true}))
+      const commands = block.data.commands.map(command =>
+        Object.assign({}, command, { isBlock: true })
+      )
       return current.concat(expandBlocks(commands, blocks))
     }
     return current.concat(nextCommand)
@@ -118,17 +139,14 @@ export function expandBlocks (commands = [], blocks = []) {
  * @param {Object} el - The DOM element to extract text from
  * @returns {string} - The text from the element
  */
-export function domText (el) {
+export function domText(el) {
   if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
     return el.value
   }
   const it = el.innerText
   const tc = el.textContent
   return tc
-    ? tc.substr(
-      tc.toUpperCase().indexOf(it.toUpperCase()),
-      it.length
-    )
+    ? tc.substr(tc.toUpperCase().indexOf(it.toUpperCase()), it.length)
     : ''
 }
 
@@ -141,37 +159,39 @@ export function domText (el) {
  * @param {Array<string>} ignorePatterns - An array of regular expression strings to use for ignoring generated identifiers when recording. Does not ignore patterns across several nodes
  * @returns {string} - The xpath for the given element
  */
-export function xpath (dom, cur, list, ignorePatterns = []) {
+export function xpath(dom, cur, list, ignorePatterns = []) {
   const ignore = ignorePatterns.map(p => new RegExp(p))
-  const shouldIgnore = (st) => ignore.find(reg => reg.test(st))
+  const shouldIgnore = st => ignore.find(reg => reg.test(st))
 
-  const getTagIndex = function (dom) {
-    return Array.from(dom.parentNode.childNodes).filter(function (item) {
-      return item.nodeType === dom.nodeType && item.tagName === dom.tagName
-    }).reduce(function (prev, node, i) {
-      if (prev !== null) return prev
-      return node === dom ? (i + 1) : prev
-    }, null)
+  const getTagIndex = function(dom) {
+    return Array.from(dom.parentNode.childNodes)
+      .filter(function(item) {
+        return item.nodeType === dom.nodeType && item.tagName === dom.tagName
+      })
+      .reduce(function(prev, node, i) {
+        if (prev !== null) return prev
+        return node === dom ? i + 1 : prev
+      }, null)
   }
 
-  const name = function (dom) {
+  const name = function(dom) {
     if (!dom) return null
     if (dom.nodeType === 3) return '@text'
 
     const index = getTagIndex(dom)
-    const count = Array.from(dom.parentNode.childNodes).filter(function (item) {
+    const count = Array.from(dom.parentNode.childNodes).filter(function(item) {
       return item.nodeType === dom.nodeType && item.tagName === dom.tagName
     }).length
     const tag = dom.tagName.toLowerCase()
-    return count > 1 ? (tag + '[' + index + ']') : tag
+    return count > 1 ? tag + '[' + index + ']' : tag
   }
 
-  function getElementByXpath (path) {
+  function getElementByXpath(path) {
     return document.evaluate(path, document, null, XPathResult.ANY_TYPE, null)
   }
 
   // Call this recursively once overhead is loaded
-  const xpathRecur = function (dom, cur, list) {
+  const xpathRecur = function(dom, cur, list) {
     if (!dom) return null
 
     if (!cur) {
@@ -221,7 +241,9 @@ export function xpath (dom, cur, list, ignorePatterns = []) {
 
     const classes = Array.from(cur.classList)
     if (classes.length > 0) {
-      const classString = classes.map(c => `contains(@class, "${c}")`).join(' and ')
+      const classString = classes
+        .map(c => `contains(@class, "${c}")`)
+        .join(' and ')
       const selector = `${cur.tagName.toLowerCase()}[${classString}]`
       let found = 0
       const iterator = getElementByXpath('//' + selector)
@@ -247,11 +269,11 @@ export function xpath (dom, cur, list, ignorePatterns = []) {
  * @param {Array<string>} ignorePatterns - An array of regular expression strings to use for ignoring generated identifiers when recording
  * @returns {(string|Object)} - Returns the locator or an object with all locator options
  */
-export function getLocator (el, withAllOptions, ignorePatterns = []) {
+export function getLocator(el, withAllOptions, ignorePatterns = []) {
   if (!el.getAttribute) return
 
   const ignore = ignorePatterns.map(p => new RegExp(p))
-  const notIgnored = (locator) => !ignore.find(reg => reg.test(locator))
+  const notIgnored = locator => !ignore.find(reg => reg.test(locator))
   const id = el.getAttribute('id')
   const name = el.getAttribute('name')
   const dataAutomation = el.getAttribute('data-automation-id')
@@ -282,7 +304,8 @@ export function getLocator (el, withAllOptions, ignorePatterns = []) {
   }
 
   if (classes.length > 0) {
-    const selector = el.tagName.toLowerCase() + classes.map(c => '.' + c).join('')
+    const selector =
+      el.tagName.toLowerCase() + classes.map(c => '.' + c).join('')
     const els = document.querySelectorAll(selector)
 
     // Note: to use css selector, we need to make sure that selecor is unique
@@ -292,7 +315,9 @@ export function getLocator (el, withAllOptions, ignorePatterns = []) {
   }
 
   candidates.push(xpath(el))
-  const validCandidates = ignorePatterns.length ? candidates.filter(notIgnored) : candidates
+  const validCandidates = ignorePatterns.length
+    ? candidates.filter(notIgnored)
+    : candidates
 
   if (withAllOptions) {
     return {
@@ -308,7 +333,7 @@ export function getLocator (el, withAllOptions, ignorePatterns = []) {
  * @param {Object} params - The parameters for the splunk message
  * @returns {Promise<Object>} - Returns a promise that resolves to a status code
  */
-export function log (params) {
+export function log(params) {
   console.log(params)
   return new Promise((resolve, reject) => {
     resolve({
@@ -324,14 +349,16 @@ export function log (params) {
  * @returns {string} - Return a string that contains a matching string from text against regular expression
  * @throws {Error} - Thrown if match was not found
  */
-export function regExpMatch (value, text) {
+export function regExpMatch(value, text) {
   const group = value.match(/^\/(.+)\/$/)
   const re = new RegExp(group[1])
   const match = text.match(re)
   if (match) {
     return match[0]
   } else {
-    throw new Error(`No match found with regular expression: /${group[1]}/ for text: ${text}`)
+    throw new Error(
+      `No match found with regular expression: /${group[1]}/ for text: ${text}`
+    )
   }
 }
 
@@ -371,8 +398,8 @@ export const filterJson = (json, propertyChainList) => {
     }
   }
 
-  let jsonCopy = cloneJson(json)
-  propertyChainList.forEach((propertyChain) => {
+  const jsonCopy = cloneJson(json)
+  propertyChainList.forEach(propertyChain => {
     traverseDelete(jsonCopy, propertyChain)
   })
 
@@ -384,7 +411,7 @@ export const filterJson = (json, propertyChainList) => {
  * @private
  * @param {Object} JSON object that needs to be cloned
  */
-export const cloneJson = (json) => {
+export const cloneJson = json => {
   return JSON.parse(JSON.stringify(json))
 }
 
@@ -393,23 +420,25 @@ export const cloneJson = (json) => {
  * @param {string} key - The key to set the value for
  * @param {string} value - The value to set for the key
  */
-export const setLocalStorage = (key, value) => window.localStorage.setItem(key, value)
+export const setLocalStorage = (key, value) =>
+  window.localStorage.setItem(key, value)
 
 /**
  * Function to get a value for a key in local storage
  * @param {string} key - The key to get the value for
  */
-export const getLocalStorage = (key) => window.localStorage.getItem(key)
+export const getLocalStorage = key => window.localStorage.getItem(key)
 
 /**
  * Function to set a value for a key in session storage
  * @param {string} key - The key to set the value for
  * @param {string} value - The value to set for the key
  */
-export const setSessionStorage = (key, value) => window.sessionStorage.setItem(key, value)
+export const setSessionStorage = (key, value) =>
+  window.sessionStorage.setItem(key, value)
 
 /**
  * Function to get a value for a key in session storage
  * @param {string} key - The key to get the value for
  */
-export const getSessionStorage = (key) => window.sessionStorage.getItem(key)
+export const getSessionStorage = key => window.sessionStorage.getItem(key)

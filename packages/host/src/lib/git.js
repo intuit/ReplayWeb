@@ -1,7 +1,5 @@
 import gitP from 'simple-git/promise'
-import path from 'path'
-import {LOCATION} from './common'
-import {expandHome} from './filesystem'
+import { LOCATION } from './common'
 
 const git = gitP(LOCATION)
 
@@ -21,7 +19,7 @@ export async function getCurrentVersion() {
  * @returns {string} - stdout from the git command
  */
 export async function fetchChanges() {
-  return await git.fetch({'--all': null})
+  return git.fetch({ '--all': null })
 }
 
 /**
@@ -49,7 +47,7 @@ export function fetchTags() {
  * @returns {string} - stdout from the git command
  */
 export async function checkoutTag(tag) {
-  return await git.checkout(tag)
+  return git.checkout(tag)
 }
 
 /**
@@ -59,10 +57,11 @@ export async function checkoutTag(tag) {
  * @throws {Error} - Thrown if the specified tag was not found
  */
 export async function switchToTag(tag) {
-  const changes = await fetchChanges()
+  await fetchChanges()
   const tags = await fetchTags()
+
   if (tags.find(e => e === tag)) {
-    return await checkoutTag(tag)
+    return checkoutTag(tag)
   } else {
     throw new Error(`Tag not found: ${tag}`)
   }

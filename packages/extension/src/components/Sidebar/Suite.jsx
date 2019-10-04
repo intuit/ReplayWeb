@@ -1,13 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 const Suite = props => {
   return (
-    <span
-      className={`block ${props.disabled ? 'disabled' : ''} normal`}
-    >
+    <span className={`block ${props.disabled ? 'disabled' : ''} normal`}>
       {props.name}
     </span>
-  );
-};
+  )
+}
 
-export default Suite;
+export default Suite

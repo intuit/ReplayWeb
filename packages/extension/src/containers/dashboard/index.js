@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators }  from 'redux'
-import {Checkbox} from 'antd'
+import { bindActionCreators } from 'redux'
+import { Checkbox } from 'antd'
 
 import '../../styles/dashboard.scss'
 import * as actions from '../../actions'
@@ -12,37 +12,38 @@ import C from '../../config'
 
 class Dashboard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      isChecked: true,
-    };
-    this.toggleChange = this.toggleChange.bind(this);
+      isChecked: true
+    }
+    this.toggleChange = this.toggleChange.bind(this)
   }
 
-  toggleChange () {
+  toggleChange() {
     this.setState({
       isChecked: !this.state.isChecked
-    });
+    })
   }
 
-  render () {
-    const viewLog = this.state.isChecked ? <DashboardBottom/> : null;
+  render() {
+    const viewLog = this.state.isChecked ? <DashboardBottom /> : null
     return (
       <div className="dashboard">
         <DashboardEditor />
         <div>
-        <Checkbox
-            checked={this.state.isChecked}
-            onChange={this.toggleChange}
-          >
+          <Checkbox checked={this.state.isChecked} onChange={this.toggleChange}>
             Show Log
           </Checkbox>
           {viewLog}
         </div>
         <div className="online-help">
-          <a href={C.urlHomePage} target="_blank">Documentation</a>
+          <a href={C.urlHomePage} target="_blank" rel="noopener noreferrer">
+            Documentation
+          </a>
           <span> - </span>
-          <a href={C.urlReleases} target="_blank">Release Notes</a>
+          <a href={C.urlReleases} target="_blank" rel="noopener noreferrer">
+            Release Notes
+          </a>
         </div>
       </div>
     )
@@ -51,5 +52,5 @@ class Dashboard extends React.Component {
 
 export default connect(
   state => ({}),
-  dispatch => bindActionCreators({...actions}, dispatch)
+  dispatch => bindActionCreators({ ...actions }, dispatch)
 )(Dashboard)

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {
@@ -33,14 +35,14 @@ describe('Filesystem', () => {
     })
     it('should create a directory', () => {
       // mock fs
-      filesystemRewire.__Rewire__('mkdirp', (path, cb) =>{
+      filesystemRewire.__Rewire__('mkdirp', (path, cb) => {
         cb(undefined)
       })
       expect(makeDirectory('~/test')).to.eventually.be.fulfilled
     })
     it('should throw an error if mkdirp fails', () => {
       // mock fs
-      filesystemRewire.__Rewire__('mkdirp', (path, cb) =>{
+      filesystemRewire.__Rewire__('mkdirp', (path, cb) => {
         cb(new Error('fakeError'))
       })
       expect(makeDirectory('~/test')).to.eventually.be.rejectedWith('fakeError')
@@ -126,10 +128,10 @@ describe('Filesystem', () => {
       filesystemRewire.__ResetDependency__('readFile')
     })
     beforeEach(() => {
-      filesystemRewire.__Rewire__('readFile', (fp) => ({
+      filesystemRewire.__Rewire__('readFile', fp => ({
         file: fp,
         testName: fp.split('.')[0],
-        data: {Commands: []}
+        data: { Commands: [] }
       }))
     })
     it('should ignore non-json files', () => {
@@ -151,13 +153,15 @@ describe('Filesystem', () => {
           throw new Error('EACCES')
         }
       })
-      expect(saveFile.bind(null, '/test', 'a.json', {Commands: []})).to.throw('EACCES')
+      expect(saveFile.bind(null, '/test', 'a.json', { Commands: [] })).to.throw(
+        'EACCES'
+      )
     })
     it('should write file', () => {
       filesystemRewire.__Rewire__('fs', {
         writeFileSync: () => {}
       })
-      const response = saveFile('/test', 'a', {Commands: []})
+      const response = saveFile('/test', 'a', { Commands: [] })
       expect(response.fullpath).to.equal('/test/a.json')
       expect(response.JSONdata).to.equal('{\n  "Commands": []\n}')
     })

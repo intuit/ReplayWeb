@@ -7,9 +7,7 @@ afterEach(cleanup)
 
 describe('Block with testing-library', () => {
   it('renders with defaults', () => {
-    const { container } = render(
-      <Block name="TEST"/>
-    )
+    const { container } = render(<Block name="TEST" />)
     const span = container.querySelector('span')
     expect(span).not.toBeNull()
     expect(span.innerHTML).toEqual('TEST')
@@ -17,9 +15,7 @@ describe('Block with testing-library', () => {
   })
 
   it('renders with disabled', () => {
-    const { container } = render(
-      <Block disabled={true} name="TEST"/>
-    )
+    const { container } = render(<Block disabled={true} name="TEST" />)
     const span = container.querySelector('span')
     expect(span).not.toBeNull()
     expect(span.innerHTML).toEqual('TEST')
@@ -27,9 +23,7 @@ describe('Block with testing-library', () => {
   })
 
   it('renders with custom status', () => {
-    const { container } = render(
-      <Block status="STATUS" name="TEST"/>
-    )
+    const { container } = render(<Block status="STATUS" name="TEST" />)
     const span = container.querySelector('span')
     expect(span).not.toBeNull()
     expect(span.innerHTML).toEqual('TEST')

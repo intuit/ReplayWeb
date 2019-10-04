@@ -3,7 +3,7 @@ import storage from '../../../src/common/storage/ext_storage'
 jest.mock('../../../src/common/web_extension', () => ({
   storage: {
     local: {
-      get: jest.fn().mockImplementation((key) => Promise.resolve({ foo: 'bar' })),
+      get: jest.fn().mockImplementation(key => Promise.resolve({ foo: 'bar' })),
       set: jest.fn().mockImplementation(() => Promise.resolve(true)),
       remove: jest.fn().mockImplementation(() => Promise.resolve(true)),
       clear: jest.fn().mockImplementation(() => Promise.resolve(true))

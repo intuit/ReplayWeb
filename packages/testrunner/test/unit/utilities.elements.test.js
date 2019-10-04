@@ -1,4 +1,7 @@
-import { waitForElements, __RewireAPI__ as utilitiesRewire } from '../../src/utilities'
+import {
+  waitForElements,
+  __RewireAPI__ as utilitiesRewire
+} from '../../src/utilities'
 
 describe('waitForElements', () => {
   afterEach(() => {

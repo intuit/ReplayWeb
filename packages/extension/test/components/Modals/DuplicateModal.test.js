@@ -9,14 +9,16 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <DuplicateModal
-    src={props.src || ''}
-    duplicate={props.duplicate || jest.fn()}
-    closeModal={props.closeModal || jest.fn()}
-    visible={props.visible || false}
-    type={props.type || ''}
-    /* eslint-enable react/prop-types */
-  />
+  return (
+    <DuplicateModal
+      src={props.src || ''}
+      duplicate={props.duplicate || jest.fn()}
+      closeModal={props.closeModal || jest.fn()}
+      visible={props.visible || false}
+      type={props.type || ''}
+      /* eslint-enable react/prop-types */
+    />
+  )
 }
 
 describe('DuplicateModal', () => {

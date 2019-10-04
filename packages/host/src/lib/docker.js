@@ -1,6 +1,6 @@
 import Docker from 'dockerode'
 
-const docker = new Docker({socketPath: '/var/run/docker.sock'})
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 const dockerFolder = 'docker.example.com/dev/test/replayui/team'
 
 /**
@@ -9,8 +9,10 @@ const dockerFolder = 'docker.example.com/dev/test/replayui/team'
  * @param {boolean} local - Whether or not to generate the local name
  * @returns {string} - The image name
  */
-export function imageName (local = false) {
-  return `${local ? 'replay' : dockerFolder}/crossbrowser-local-orchestrator:latest`
+export function imageName(local = false) {
+  return `${
+    local ? 'replay' : dockerFolder
+  }/crossbrowser-local-orchestrator:latest`
 }
 
 /**
@@ -21,13 +23,13 @@ export function imageName (local = false) {
  * @param {string} image - The name of the image to pull
  * @returns {Promise<Object>} - An object with the output from it finishing
  */
-export function pullImage (image) {
+export function pullImage(image) {
   return new Promise((resolve, reject) => {
     docker.pull(image, (err, stream) => {
       if (err) {
         reject(err)
       }
-      function onFinished (e, output) {
+      function onFinished(e, output) {
         if (e) {
           reject(e)
         }
@@ -46,7 +48,7 @@ export function pullImage (image) {
  * @param {string} image - The name of the image to look for
  * @returns {Array<Object>} - An array of docker images with the image name in the RepoTags
  */
-export async function findLocalImages (image) {
+export async function findLocalImages(image) {
   const images = await docker.listImages()
   return images.filter(i => i.RepoTags && i.RepoTags.includes(image))
 }
@@ -57,31 +59,25 @@ export async function findLocalImages (image) {
  * @param {number} port - The port to pass on to the orchestrator to listen on
  * @returns {Promise<Object>} - Information about the running container
  */
-export async function startOrchestrator (port) {
+export async function startOrchestrator(port) {
   const localImages = await findLocalImages(imageName(true))
   if (localImages.length === 0) {
-    const pull = await pullImage(imageName())
+    await pullImage(imageName())
   }
   const container = await docker.createContainer({
     Image: imageName(localImages.length > 0),
     name: 'local-orchestrator',
-    Env: [
-      `PORT=${port}`
-    ],
+    Env: [`PORT=${port}`],
     ExposedPorts: {
       [`${port}/tcp`]: {}
     },
     HostConfig: {
       AutoRemove: true,
-      Binds: [
-        '/var/run/docker.sock:/var/run/docker.sock'
-      ],
+      Binds: ['/var/run/docker.sock:/var/run/docker.sock'],
       PortBindings: {
-        [`${port}/tcp`]: [
-          { HostPort: `${port}` }
-        ]
+        [`${port}/tcp`]: [{ HostPort: `${port}` }]
       }
     }
   })
-  return await container.start()
+  return container.start()
 }

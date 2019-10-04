@@ -1,4 +1,6 @@
-import sendKeys, { __RewireAPI__ as keysRewire } from '../../src/common/send_keys'
+import sendKeys, {
+  __RewireAPI__ as keysRewire
+} from '../../src/common/send_keys'
 
 afterEach(() => {
   keysRewire.__ResetDependency__('splitStringToChars')

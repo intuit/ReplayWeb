@@ -9,16 +9,18 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <Dropdown
-    editorStatus={props.editorStatus || ''}
-    status={props.status || ''}
-    editing={props.editing || { meta: { src: '' } }}
-    closeDropdown={props.closeDropdown || jest.fn()}
-    changeModalState={props.changeModalState || jest.fn()}
-    onDelete={props.onDelete || jest.fn()}
-    onShare={props.onShare || jest.fn()}
-    /* eslint-enable react/prop-types */
-  />
+  return (
+    <Dropdown
+      editorStatus={props.editorStatus || ''}
+      status={props.status || ''}
+      editing={props.editing || { meta: { src: '' } }}
+      closeDropdown={props.closeDropdown || jest.fn()}
+      changeModalState={props.changeModalState || jest.fn()}
+      onDelete={props.onDelete || jest.fn()}
+      onShare={props.onShare || jest.fn()}
+      /* eslint-enable react/prop-types */
+    />
+  )
 }
 
 describe('Dropdown', () => {

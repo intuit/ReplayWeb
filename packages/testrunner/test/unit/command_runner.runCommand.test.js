@@ -1,6 +1,9 @@
 import fetchMock from 'fetch-mock'
 
-import {runCommand, __RewireAPI__ as runCommandRewire} from '../../src/command_runner'
+import {
+  runCommand,
+  __RewireAPI__ as runCommandRewire
+} from '../../src/command_runner'
 
 const hookMock = {
   beforeCommand: {
@@ -12,8 +15,10 @@ const hookMock = {
 }
 describe('runCommand', () => {
   const makeFakeElement = (fail = false, msg = 'fakeError') => ({
-    waitForExist: timeout => fail ? Promise.reject(msg) : Promise.resolve(true),
-    waitForDisplayed: timeout => fail ? Promise.reject(msg) : Promise.resolve(true)
+    waitForExist: timeout =>
+      fail ? Promise.reject(msg) : Promise.resolve(true),
+    waitForDisplayed: timeout =>
+      fail ? Promise.reject(msg) : Promise.resolve(true)
   })
   beforeEach(() => {
     global.browser = {}
@@ -22,8 +27,8 @@ describe('runCommand', () => {
     runCommandRewire.__Rewire__('doReplace', s => Promise.resolve(s))
     runCommandRewire.__Rewire__('log', () => {}) // don't log for tests
     runCommandRewire.__Rewire__('getSelector', target => target)
-    runCommandRewire.__Rewire__('getExecElString', (sel) => {
-      return 'document.querySelector(\'' + sel + '\')'
+    runCommandRewire.__Rewire__('getExecElString', sel => {
+      return "document.querySelector('" + sel + "')"
     })
   })
   afterEach(() => {
@@ -118,7 +123,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: (at) => {
+          getAttribute: at => {
             switch (at) {
               case 'type':
                 return Promise.resolve('checkbox')
@@ -141,7 +146,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: (at) => {
+          getAttribute: at => {
             switch (at) {
               case 'type':
                 return Promise.resolve('checkbox')
@@ -164,7 +169,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: (at) => {
+          getAttribute: at => {
             switch (at) {
               case 'type':
                 return Promise.resolve('checkbox')
@@ -187,7 +192,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: (at) => {
+          getAttribute: at => {
             switch (at) {
               case 'type':
                 return Promise.resolve('checkbox')
@@ -226,7 +231,8 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: () => Promise.resolve('not-test-class another-fake-class')
+          getAttribute: () =>
+            Promise.resolve('not-test-class another-fake-class')
         }
         global.browser.$ = () => Promise.resolve(el)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
@@ -273,7 +279,8 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          getAttribute: () => Promise.resolve('not-test-class another-fake-class')
+          getAttribute: () =>
+            Promise.resolve('not-test-class another-fake-class')
         }
         global.browser.$ = () => Promise.resolve(el)
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
@@ -420,7 +427,7 @@ describe('runCommand', () => {
             expected: 'testValue'
           }
         }
-        global.browser.execute = (s) => Promise.resolve('testValue')
+        global.browser.execute = s => Promise.resolve('testValue')
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should reject assertLocalStorage command', () => {
@@ -431,7 +438,7 @@ describe('runCommand', () => {
             expected: 'testValue'
           }
         }
-        global.browser.execute = (s) => Promise.reject(new Error('key not found'))
+        global.browser.execute = s => Promise.reject(new Error('key not found'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -444,7 +451,7 @@ describe('runCommand', () => {
             expected: 'testValue'
           }
         }
-        global.browser.execute = (s) => Promise.resolve('testValue')
+        global.browser.execute = s => Promise.resolve('testValue')
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should reject assertSessionStorage command', () => {
@@ -455,7 +462,7 @@ describe('runCommand', () => {
             expected: 'testValue'
           }
         }
-        global.browser.execute = (s) => Promise.reject(new Error('key not found'))
+        global.browser.execute = s => Promise.reject(new Error('key not found'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -470,7 +477,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.execute = (s) => Promise.resolve('testValue')
+        global.browser.execute = s => Promise.resolve('testValue')
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should run assertStyle command for non id', () => {
@@ -483,7 +490,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.execute = (s) => Promise.resolve('testValue')
+        global.browser.execute = s => Promise.resolve('testValue')
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should reject assertStyle command if execute has an error', () => {
@@ -495,7 +502,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.execute = (s) => Promise.reject(new Error('cssError'))
+        global.browser.execute = s => Promise.reject(new Error('cssError'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
       it('should reject assertStyle command if property does not exist', () => {
@@ -507,7 +514,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.execute = (s) => Promise.resolve(undefined)
+        global.browser.execute = s => Promise.resolve(undefined)
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
       it('should reject assertStyle command if values do not match', () => {
@@ -519,7 +526,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.execute = (s) => Promise.resolve('notTestValue')
+        global.browser.execute = s => Promise.resolve('notTestValue')
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -654,7 +661,8 @@ describe('runCommand', () => {
             expected: 'testTitle'
           }
         }
-        global.browser.getTitle = () => Promise.reject(new Error('notTestTitle'))
+        global.browser.getTitle = () =>
+          Promise.reject(new Error('notTestTitle'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -676,7 +684,8 @@ describe('runCommand', () => {
             expected: 'https://example.com'
           }
         }
-        global.browser.getUrl = () => Promise.reject(new Error('http://potato.com'))
+        global.browser.getUrl = () =>
+          Promise.reject(new Error('http://potato.com'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -731,10 +740,19 @@ describe('runCommand', () => {
           }
         }
         const ctx = {
-          testJson: { apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }
+          testJson: {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          }
         }
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(JSON.stringify(ctx.filteredJson)).toEqual(JSON.stringify({ apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } })))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(JSON.stringify(ctx.filteredJson)).toEqual(
+            JSON.stringify({
+              apple: { type: 'pome', color: 'red' },
+              orange: { type: 'citrus', color: 'orange' }
+            })
+          )
+        )
       })
       it('should locate intermediate node', () => {
         const c = {
@@ -746,10 +764,16 @@ describe('runCommand', () => {
           }
         }
         const ctx = {
-          testJson: { apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }
+          testJson: {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          }
         }
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(JSON.stringify(ctx.filteredJson)).toEqual(JSON.stringify({ type: 'pome', color: 'red' })))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(JSON.stringify(ctx.filteredJson)).toEqual(
+            JSON.stringify({ type: 'pome', color: 'red' })
+          )
+        )
       })
       it('should locate leaf node', () => {
         const c = {
@@ -761,10 +785,14 @@ describe('runCommand', () => {
           }
         }
         const ctx = {
-          testJson: { apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }
+          testJson: {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          }
         }
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.filteredJson).toEqual('pome'))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.filteredJson).toEqual('pome')
+        )
       })
       it('should ignore nodes', () => {
         const c = {
@@ -776,10 +804,19 @@ describe('runCommand', () => {
           }
         }
         const ctx = {
-          testJson: { apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }
+          testJson: {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          }
         }
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(JSON.stringify(ctx.filteredJson)).toEqual(JSON.stringify({ apple: { color: 'red' }, orange: { type: 'citrus' } })))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(JSON.stringify(ctx.filteredJson)).toEqual(
+            JSON.stringify({
+              apple: { color: 'red' },
+              orange: { type: 'citrus' }
+            })
+          )
+        )
       })
       it('should locate node & ignore nodes', () => {
         const c = {
@@ -792,10 +829,16 @@ describe('runCommand', () => {
           }
         }
         const ctx = {
-          testJson: { apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }
+          testJson: {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          }
         }
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(JSON.stringify(ctx.filteredJson)).toEqual(JSON.stringify({ color: 'red' })))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(JSON.stringify(ctx.filteredJson)).toEqual(
+            JSON.stringify({ color: 'red' })
+          )
+        )
       })
     })
   })
@@ -814,7 +857,8 @@ describe('runCommand', () => {
           command: 'captureScreenshot',
           parameters: {}
         }
-        global.browser.takeScreenshot = () => Promise.reject(new Error('fakeError'))
+        global.browser.takeScreenshot = () =>
+          Promise.reject(new Error('fakeError'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -828,7 +872,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          clearValue: (v) => Promise.resolve(true)
+          clearValue: v => Promise.resolve(true)
         }
         global.browser.$ = () => Promise.resolve(el)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
@@ -879,8 +923,7 @@ describe('runCommand', () => {
       })
     })
     describe('debug', () => {
-      afterEach(() => {
-      })
+      afterEach(() => {})
       it('should run debug command', () => {
         const c = {
           command: 'debug',
@@ -912,7 +955,8 @@ describe('runCommand', () => {
           command: 'deleteAllCookies',
           parameters: {}
         }
-        global.browser.deleteCookies = () => Promise.reject(new Error('fakeError'))
+        global.browser.deleteCookies = () =>
+          Promise.reject(new Error('fakeError'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -961,8 +1005,9 @@ describe('runCommand', () => {
           }
         }
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.testKey.testResponse).toBe(true))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.testKey.testResponse).toBe(true)
+        )
       })
       it('should run POST http command and store result in context', () => {
         fetchMock.post('testUrl', {
@@ -980,8 +1025,9 @@ describe('runCommand', () => {
           }
         }
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.testKey.testResponse).toBe(true))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.testKey.testResponse).toBe(true)
+        )
       })
       it('should reject command if fetch fails', () => {
         fetchMock.get('testUrl', 500)
@@ -1037,17 +1083,33 @@ describe('runCommand', () => {
           }
         }
         const events = []
-        global.browser.execute = (s) => {
+        global.browser.execute = s => {
           events.push(s)
           return Promise.resolve(true)
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
         // return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
         return runCommand(c, {}, 1000, hookMock)
-          .then(() => expect(events[0]).toEqual('document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mouseover", { bubbles: true }))'))
-          .then(() => expect(events[1]).toEqual('document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))'))
-          .then(() => expect(events[2]).toEqual('document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mouseup", { bubbles: true }))'))
-          .then(() => expect(events[3]).toEqual('document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("click", { bubbles: true }))'))
+          .then(() =>
+            expect(events[0]).toEqual(
+              'document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mouseover", { bubbles: true }))'
+            )
+          )
+          .then(() =>
+            expect(events[1]).toEqual(
+              'document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))'
+            )
+          )
+          .then(() =>
+            expect(events[2]).toEqual(
+              'document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("mouseup", { bubbles: true }))'
+            )
+          )
+          .then(() =>
+            expect(events[3]).toEqual(
+              'document.querySelector(\'id=test\').dispatchEvent(new MouseEvent("click", { bubbles: true }))'
+            )
+          )
       })
       it('should reject mouseEvent command if execute fails', () => {
         const c = {
@@ -1056,7 +1118,7 @@ describe('runCommand', () => {
             target: 'id=test'
           }
         }
-        global.browser.execute = (s) => Promise.reject(new Error('fakeError'))
+        global.browser.execute = s => Promise.reject(new Error('fakeError'))
         global.browser.$ = () => Promise.resolve(makeFakeElement())
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
@@ -1068,7 +1130,7 @@ describe('runCommand', () => {
           }
         }
         const events = []
-        global.browser.execute = (s) => {
+        global.browser.execute = s => {
           events.push(s)
           return Promise.resolve(true)
         }
@@ -1082,9 +1144,14 @@ describe('runCommand', () => {
             target: 'id=test'
           }
         }
-        global.browser.execute = (s) => Promise.reject(new Error('Cannot read property \'dispatchEvent\' of null'))
+        global.browser.execute = s =>
+          Promise.reject(
+            new Error("Cannot read property 'dispatchEvent' of null")
+          )
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeUndefined()
+        return expect(
+          runCommand(c, {}, 1000, hookMock)
+        ).resolves.toBeUndefined()
       })
       it('should reject mouseEvent command if error is not about dispatchEvent', () => {
         const c = {
@@ -1093,7 +1160,7 @@ describe('runCommand', () => {
             target: 'id=test'
           }
         }
-        global.browser.execute = (s) => Promise.reject(new Error('fakeError'))
+        global.browser.execute = s => Promise.reject(new Error('fakeError'))
         global.browser.$ = () => Promise.resolve(makeFakeElement())
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
@@ -1141,7 +1208,7 @@ describe('runCommand', () => {
             millis: 1000
           }
         }
-        global.browser.pause = (t) => Promise.resolve(t)
+        global.browser.pause = t => Promise.resolve(t)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual(1000)
       })
       it('should run pause command with default value if value is not a number', () => {
@@ -1151,7 +1218,7 @@ describe('runCommand', () => {
             millis: '{}'
           }
         }
-        global.browser.pause = (t) => Promise.resolve(t)
+        global.browser.pause = t => Promise.resolve(t)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual(3000)
       })
       it('should reject pause command if browser.pause fails', () => {
@@ -1194,10 +1261,12 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.resolve(t)
+          selectByVisibleText: t => Promise.resolve(t)
         }
         global.browser.$ = () => Promise.resolve(el)
-        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual('testText')
+        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual(
+          'testText'
+        )
       })
       it('should run select command and replace label=', () => {
         const c = {
@@ -1209,10 +1278,12 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.resolve(t)
+          selectByVisibleText: t => Promise.resolve(t)
         }
         global.browser.$ = () => Promise.resolve(el)
-        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual('testText')
+        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual(
+          'testText'
+        )
       })
       it('should reject select command if browser.selectByVisibleText fails', () => {
         const c = {
@@ -1224,7 +1295,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.reject(new Error('fakeError'))
+          selectByVisibleText: t => Promise.reject(new Error('fakeError'))
         }
         global.browser.$ = () => Promise.resolve(el)
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
@@ -1241,7 +1312,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.resolve(t)
+          selectByVisibleText: t => Promise.resolve(t)
         }
         global.browser.$ = () => Promise.resolve(el)
         global.browser.pause = () => Promise.resolve(true)
@@ -1257,7 +1328,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.resolve(t)
+          selectByVisibleText: t => Promise.resolve(t)
         }
         global.browser.$ = () => Promise.resolve(el)
         global.browser.pause = () => Promise.resolve(true)
@@ -1273,7 +1344,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.reject(new Error('fakeError'))
+          selectByVisibleText: t => Promise.reject(new Error('fakeError'))
         }
         global.browser.$ = () => Promise.resolve(el)
         global.browser.pause = () => Promise.resolve(true)
@@ -1289,7 +1360,7 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          selectByVisibleText: (t) => Promise.resolve(t)
+          selectByVisibleText: t => Promise.resolve(t)
         }
         global.browser.$ = () => Promise.resolve(el)
         global.browser.pause = () => Promise.reject(new Error('fakeError'))
@@ -1305,7 +1376,7 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.switchToFrame = (t) => Promise.resolve(true)
+        global.browser.switchToFrame = t => Promise.resolve(true)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should run selectFrame with index', () => {
@@ -1315,7 +1386,7 @@ describe('runCommand', () => {
             target: 'index=2'
           }
         }
-        global.browser.switchToFrame = (t) => Promise.resolve(true)
+        global.browser.switchToFrame = t => Promise.resolve(true)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should run selectFrame with relative', () => {
@@ -1325,7 +1396,7 @@ describe('runCommand', () => {
             target: 'relative=top'
           }
         }
-        global.browser.switchToFrame = (t) => Promise.resolve(true)
+        global.browser.switchToFrame = t => Promise.resolve(true)
         return expect(runCommand(c, {}, 1000, hookMock)).resolves.toBeTruthy()
       })
       it('should reject selectFrame command if element cant be found', () => {
@@ -1346,7 +1417,8 @@ describe('runCommand', () => {
           }
         }
         global.browser.$ = () => Promise.resolve(makeFakeElement())
-        global.browser.switchToFrame = () => Promise.reject(new Error('fakeError'))
+        global.browser.switchToFrame = () =>
+          Promise.reject(new Error('fakeError'))
         return expect(runCommand(c, {}, 1000, hookMock)).rejects.toBeDefined()
       })
     })
@@ -1360,8 +1432,9 @@ describe('runCommand', () => {
           }
         }
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.testKey).toEqual('testValue'))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.testKey).toEqual('testValue')
+        )
       })
     })
     describe('setCookie', () => {
@@ -1373,11 +1446,20 @@ describe('runCommand', () => {
             value: 'cookieValue'
           }
         }
-        global.browser.setCookies = (cookie) => Promise.resolve(cookie)
+        global.browser.setCookies = cookie => Promise.resolve(cookie)
         return Promise.all([
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('name', 'cookieName'),
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('value', 'cookieValue'),
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('domain', '.example.com')
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'name',
+            'cookieName'
+          ),
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'value',
+            'cookieValue'
+          ),
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'domain',
+            '.example.com'
+          )
         ])
       })
       it('should run setCookie command with custom domain', () => {
@@ -1389,11 +1471,20 @@ describe('runCommand', () => {
             domain: 'potatoes'
           }
         }
-        global.browser.setCookies = (cookie) => Promise.resolve(cookie)
+        global.browser.setCookies = cookie => Promise.resolve(cookie)
         return Promise.all([
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('name', 'cookieName'),
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('value', 'cookieValue'),
-          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty('domain', 'potatoes')
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'name',
+            'cookieName'
+          ),
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'value',
+            'cookieValue'
+          ),
+          expect(runCommand(c, {}, 1000, hookMock)).resolves.toHaveProperty(
+            'domain',
+            'potatoes'
+          )
         ])
       })
       it('should reject setCookie command if browser.setCookies fails', () => {
@@ -1489,8 +1580,9 @@ describe('runCommand', () => {
         }
         global.browser.$ = () => Promise.resolve(el)
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.potatoes).toEqual('yams'))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.potatoes).toEqual('yams')
+        )
       })
       it('should run storeValue command for input node', () => {
         const c = {
@@ -1507,8 +1599,9 @@ describe('runCommand', () => {
         }
         global.browser.$ = () => Promise.resolve(el)
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.potatoes).toEqual('yams'))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.potatoes).toEqual('yams')
+        )
       })
       it('should run storeValue command for input node and default text to empty string', () => {
         const c = {
@@ -1525,8 +1618,9 @@ describe('runCommand', () => {
         }
         global.browser.$ = () => Promise.resolve(el)
         const ctx = {}
-        return runCommand(c, ctx, 1000, hookMock)
-          .then(() => expect(ctx.potatoes).toEqual(''))
+        return runCommand(c, ctx, 1000, hookMock).then(() =>
+          expect(ctx.potatoes).toEqual('')
+        )
       })
       it('should reject storeValue command if browser.getText fails', () => {
         const c = {
@@ -1553,10 +1647,12 @@ describe('runCommand', () => {
         }
         const el = {
           ...makeFakeElement(),
-          setValue: (v) => Promise.resolve(v)
+          setValue: v => Promise.resolve(v)
         }
         global.browser.$ = () => Promise.resolve(el)
-        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual('testValue')
+        return expect(runCommand(c, {}, 1000, hookMock)).resolves.toEqual(
+          'testValue'
+        )
       })
       it('should reject type command if browser.setValue fails', () => {
         const c = {
@@ -1603,7 +1699,7 @@ describe('runCommand', () => {
           getText: () => Promise.resolve('testRow'),
           getValue: () => Promise.resolve('')
         }
-        global.browser.$$ = (selector) => {
+        global.browser.$$ = selector => {
           if (selector.includes('th')) return Promise.resolve([el, el])
           else return Promise.resolve([el1, el1])
         }

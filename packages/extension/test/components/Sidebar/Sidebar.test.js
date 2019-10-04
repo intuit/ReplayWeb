@@ -1,5 +1,10 @@
 import React from 'react'
-import { cleanup, fireEvent, render, waitForElement } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  waitForElement
+} from '@testing-library/react'
 import Sidebar from '../../../src/components/Sidebar/Sidebar.jsx'
 import * as C from '../../../src/common/constant'
 
@@ -10,11 +15,11 @@ afterEach(cleanup)
 
 const renderSidebar = (overrides = {}) => {
   const {
-    editing = {meta: {src: {name: ''}}},
+    editing = { meta: { src: { name: '' } } },
     testCases = [],
-    project = {name: ''},
+    project = { name: '' },
     projects = [],
-    player = {status: ''},
+    player = { status: '' },
     status = '',
     blocks = [],
     suites = [],
@@ -45,19 +50,22 @@ const renderSidebar = (overrides = {}) => {
   )
 }
 
-const checkToggle = async (labelText) => {
+const checkToggle = async labelText => {
   const { getByText } = renderSidebar()
   let testCasesLabel = getByText(labelText)
-  expect(testCasesLabel.closest('li').classList.contains('ant-menu-submenu-open')).toBe(true)
+  expect(
+    testCasesLabel.closest('li').classList.contains('ant-menu-submenu-open')
+  ).toBe(true)
   fireEvent.click(testCasesLabel)
-  testCasesLabel = await waitForElement(
-    () => getByText(labelText),
-    { getByText }
-  )
-  expect(testCasesLabel.closest('li').classList.contains('ant-menu-submenu-open')).toBe(false)
+  testCasesLabel = await waitForElement(() => getByText(labelText), {
+    getByText
+  })
+  expect(
+    testCasesLabel.closest('li').classList.contains('ant-menu-submenu-open')
+  ).toBe(false)
 }
 
-const checkMenuItems = (variableName) => {
+const checkMenuItems = variableName => {
   const data = {}
   data[variableName] = [
     { id: 1, name: `${variableName} 1` },
@@ -93,13 +101,13 @@ describe('Sidebar', () => {
       { id: 2, name: 'Test Case b' },
       { id: 3, name: 'Test Case a' }
     ]
-    const { container, getByText, getAllByText } = renderSidebar({ testCases })
+    const { getByText, getAllByText } = renderSidebar({ testCases })
     expect(getByText('Test Case a')).not.toBeNull()
     expect(getByText('Test Case b')).not.toBeNull()
     expect(getByText('Test Case c')).not.toBeNull()
     const testCaseParts = getAllByText(/Test Case \w/)
     const testCaseNames = testCaseParts.map(p => p.innerHTML)
-    expect(testCaseNames).toEqual([ 'Test Case a', 'Test Case b', 'Test Case c' ])
+    expect(testCaseNames).toEqual(['Test Case a', 'Test Case b', 'Test Case c'])
   })
 
   it('shows which project is being edited', async () => {
@@ -110,24 +118,32 @@ describe('Sidebar', () => {
     ]
     const project = { id: 2, name: 'Project 2' }
     const selectProject = jest.fn()
-    const {
-      container,
-      getAllByText,
-      getByText,
-      queryByText
-    } = renderSidebar({ projects, project, selectProject })
+    const { getAllByText, getByText, queryByText } = renderSidebar({
+      projects,
+      project,
+      selectProject
+    })
     expect(queryByText('Project 1')).toBeNull()
     expect(queryByText('Project 2')).not.toBeNull()
     expect(queryByText('Project 3')).toBeNull()
     fireEvent.mouseOver(getByText('Project 2'))
-    await waitForElement(
-      () => getByText('Project 1'),
-      { getByText }
-    )
+    await waitForElement(() => getByText('Project 1'), { getByText })
     expect(getAllByText('Project 2').length).toBe(2)
-    expect(getByText('Project 1').closest('li').classList.contains('editing')).toBe(false)
-    expect(getAllByText('Project 2')[1].closest('li').classList.contains('editing')).toBe(true)
-    expect(getByText('Project 3').closest('li').classList.contains('editing')).toBe(false)
+    expect(
+      getByText('Project 1')
+        .closest('li')
+        .classList.contains('editing')
+    ).toBe(false)
+    expect(
+      getAllByText('Project 2')[1]
+        .closest('li')
+        .classList.contains('editing')
+    ).toBe(true)
+    expect(
+      getByText('Project 3')
+        .closest('li')
+        .classList.contains('editing')
+    ).toBe(false)
   })
 
   it('can collapse the sidebar', async () => {
@@ -176,14 +192,14 @@ describe('Sidebar', () => {
 
   describe('changeTestCase', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeTestCase(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -198,7 +214,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -207,7 +223,13 @@ describe('Sidebar', () => {
       }
       const setNextTest = jest.fn()
       const changeModalState = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, setNextTest, changeModalState })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        setNextTest,
+        changeModalState
+      })
       const result = await component.changeTestCase(1)
       expect(result).toBe(false)
       expect(setNextTest).toHaveBeenCalledWith(1)
@@ -215,22 +237,32 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editTestCase = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, editTestCase })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        editTestCase
+      })
       const result = await component.changeTestCase(1)
       expect(result).toBe(true)
       expect(editTestCase).toHaveBeenCalledWith(1)
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editNewTestCase = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, editNewTestCase })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        editNewTestCase
+      })
       const result = await component.changeTestCase(null)
       expect(result).toBe(true)
       expect(editNewTestCase).toHaveBeenCalled()
@@ -239,14 +271,14 @@ describe('Sidebar', () => {
 
   describe('changeBlock', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeBlock(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -261,7 +293,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -270,7 +302,13 @@ describe('Sidebar', () => {
       }
       const setNextBlock = jest.fn()
       const changeModalState = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, setNextBlock, changeModalState })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        setNextBlock,
+        changeModalState
+      })
       const result = await component.changeBlock(1)
       expect(result).toBe(false)
       expect(setNextBlock).toHaveBeenCalledWith(1)
@@ -278,7 +316,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editBlock = jest.fn()
@@ -289,11 +327,16 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const changeModalState = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, changeModalState })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        changeModalState
+      })
       const result = await component.changeBlock(null)
       expect(result).toBe(true)
       expect(changeModalState).toHaveBeenCalledWith('newBlockModal', true)
@@ -302,14 +345,14 @@ describe('Sidebar', () => {
 
   describe('changeSuite', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeSuite(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -324,7 +367,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -333,7 +376,13 @@ describe('Sidebar', () => {
       }
       const setNextSuite = jest.fn()
       const changeModalState = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, setNextSuite, changeModalState })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        setNextSuite,
+        changeModalState
+      })
       const result = await component.changeSuite(1)
       expect(result).toBe(false)
       expect(setNextSuite).toHaveBeenCalledWith(1)
@@ -341,7 +390,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editSuite = jest.fn()
@@ -352,11 +401,16 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editNewSuite = jest.fn()
-      const component = new Sidebar({ testCases, status, editing, editNewSuite })
+      const component = new Sidebar({
+        testCases,
+        status,
+        editing,
+        editNewSuite
+      })
       const result = await component.changeSuite(null)
       expect(result).toBe(true)
       expect(editNewSuite).toHaveBeenCalled()

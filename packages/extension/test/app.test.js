@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 
 import React from 'react'
-import { App } from '../src/App'
+import { App } from '../src/app'
 import { shallow } from 'enzyme'
 
 jest.mock('../src/actions/app', () => ({
@@ -24,9 +24,9 @@ afterEach(() => {
 describe('App', () => {
   it('renders', () => {
     const mockReadBlockShareConfig = jest.fn()
-    const wrapper = shallow(<App
-      readBlockShareConfig={mockReadBlockShareConfig}
-    />)
+    const wrapper = shallow(
+      <App readBlockShareConfig={mockReadBlockShareConfig} />
+    )
     expect(mockReadBlockShareConfig).toHaveBeenCalledTimes(1)
     expect(wrapper.find('Adapter').length).not.toBeNull()
     expect(wrapper.find('Component').length).not.toBeNull()

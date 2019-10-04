@@ -6,7 +6,7 @@ import OneField from './OneField'
 const CommandField = props => {
   switch (props.selectedCmd && props.selectedCmd.command) {
     case 'setEnvironment':
-      return <EnvironmentField {...props}/>
+      return <EnvironmentField {...props} />
     default:
       return <OneField {...props} />
   }

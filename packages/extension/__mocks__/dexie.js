@@ -4,6 +4,7 @@ class Dexie {
       stores: () => {}
     }
   }
+
   open() {}
 }
 export default Dexie

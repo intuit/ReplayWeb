@@ -1,6 +1,6 @@
-import {exec} from 'child_process'
-import {expandHome} from './filesystem'
-import {LOCATION} from './common'
+import { exec } from 'child_process'
+import { expandHome } from './filesystem'
+import { LOCATION } from './common'
 /**
  * Wraps `exec` in a promise
  * @private
@@ -8,7 +8,7 @@ import {LOCATION} from './common'
  * @param {string} command - The command to exec
  * @returns {Promise} - exec wrapped in a promise
  */
-export function promiseExec (command) {
+export function promiseExec(command) {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout, stderr) => {
       if (err) {
@@ -25,7 +25,7 @@ export function promiseExec (command) {
  * @async
  * @returns {Promise<string>} - The username of the host
  */
-export function whoami () {
+export function whoami() {
   return promiseExec('whoami')
 }
 
@@ -35,7 +35,7 @@ export function whoami () {
  * @param {string} executable - The executable to
  * @returns {Promise<string>} - The output from `which`
  */
-export function checkExecutable (executable) {
+export function checkExecutable(executable) {
   return promiseExec(`which "${executable}"`)
 }
 

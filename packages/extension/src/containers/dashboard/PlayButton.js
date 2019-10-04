@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import {playerPlay, filterCommands} from '../../actions'
+import { playerPlay, filterCommands } from '../../actions'
 import PlayButton from '../../components/dashboard/PlayButton'
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     editing: state.editor.editing,
     config: state.app.config,
@@ -9,9 +9,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    playerPlay: (options) => dispatch(playerPlay(options)),
+    playerPlay: options => dispatch(playerPlay(options)),
     removeSearch: () => dispatch(filterCommands(''))
   }
 }

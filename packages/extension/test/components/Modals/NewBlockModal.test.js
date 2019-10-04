@@ -12,9 +12,14 @@ afterEach(() => {
 
 describe('NewBlockModal', () => {
   it('disables block importing on invalid blockShareConfig', () => {
-    const { getByText, getByTestId } = render(
-      <NewBlockModal visible={true} blockShareConfig={({})}
-        blockShareConfigError={true} blockShareConfigErrorMessage="This is an error" />)
+    const { getByText } = render(
+      <NewBlockModal
+        visible={true}
+        blockShareConfig={{}}
+        blockShareConfigError={true}
+        blockShareConfigErrorMessage="This is an error"
+      />
+    )
 
     getByText('Importing blocks from registry is disabled')
   })

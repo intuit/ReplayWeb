@@ -3,10 +3,10 @@ import { runCommands, __RewireAPI__ as runCommandsRewire } from '../../src'
 describe('runCommands', () => {
   const fakeHooks = {
     beforeTest: {
-      promise: () => { }
+      promise: () => {}
     },
     afterTest: {
-      promise: () => { }
+      promise: () => {}
     }
   }
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -35,7 +35,10 @@ describe('runCommands', () => {
         }
       ]
     }
-    return expect(runCommands(testDef)).resolves.toHaveProperty('command', 'click')
+    return expect(runCommands(testDef)).resolves.toHaveProperty(
+      'command',
+      'click'
+    )
   })
   it('should run commands for testDef with a delay', () => {
     const testDef = {
@@ -43,7 +46,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -60,7 +63,10 @@ describe('runCommands', () => {
     const testDef = {
       CreatedDate: '6/29/18'
     }
-    return expect(runCommands(testDef)).rejects.toHaveProperty('message', 'Cannot read property \'reduce\' of undefined')
+    return expect(runCommands(testDef)).rejects.toHaveProperty(
+      'message',
+      "Cannot read property 'reduce' of undefined"
+    )
   })
   it('should call beforeTest hook', async () => {
     const beforeTestMock = jest.fn()
@@ -77,7 +83,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -88,7 +94,10 @@ describe('runCommands', () => {
         }
       ]
     }
-    await expect(runCommands(testDef)).resolves.toHaveProperty('command', 'click')
+    await expect(runCommands(testDef)).resolves.toHaveProperty(
+      'command',
+      'click'
+    )
     expect(beforeTestMock).toHaveBeenCalledTimes(1)
   })
   it('should call afterTest hook', async () => {
@@ -110,7 +119,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -121,7 +130,10 @@ describe('runCommands', () => {
         }
       ]
     }
-    await expect(runCommands(testDef)).resolves.toHaveProperty('command', 'click')
+    await expect(runCommands(testDef)).resolves.toHaveProperty(
+      'command',
+      'click'
+    )
     expect(beforeTestMock).toHaveBeenCalledTimes(1)
     expect(afterTestMock).toHaveBeenCalledTimes(1)
   })
@@ -140,13 +152,16 @@ describe('runCommands', () => {
     runCommandsRewire.__ResetDependency__('makeHooks')
     runCommandsRewire.__Rewire__('makeHooks', () => hooks)
     runCommandsRewire.__ResetDependency__('runCommand')
-    runCommandsRewire.__Rewire__('runCommand', (c) => Promise.reject('runCommand failed'))
+    runCommandsRewire.__Rewire__('runCommand', c =>
+      // eslint-disable-next-line  prefer-promise-reject-errors
+      Promise.reject('runCommand failed')
+    )
     const testDef = {
       commands: [
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -176,7 +191,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -191,8 +206,16 @@ describe('runCommands', () => {
         overview: 'overview'
       }
     }
-    await expect(runCommands(testDef)).resolves.toHaveProperty('command', 'click')
-    expect(afterTestMock).toHaveBeenCalledWith('', {}, {}, {title: 'title', overview: 'overview'})
+    await expect(runCommands(testDef)).resolves.toHaveProperty(
+      'command',
+      'click'
+    )
+    expect(afterTestMock).toHaveBeenCalledWith(
+      '',
+      {},
+      {},
+      { title: 'title', overview: 'overview' }
+    )
     expect(afterTestMock).toHaveBeenCalledTimes(1)
   })
 })

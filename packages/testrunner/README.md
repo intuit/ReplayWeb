@@ -107,13 +107,11 @@ yarn test -- --startsWith=Smoke
 
 ```json
 {
-    "testPath": "./tests",
-    "blockPath": "./blocks",
-    "suites": {
-        "smoketests": [
-            "SmokeTest"
-        ]
-    }
+  "testPath": "./tests",
+  "blockPath": "./blocks",
+  "suites": {
+    "smoketests": ["SmokeTest"]
+  }
 }
 ```
 
@@ -138,17 +136,18 @@ const { getDefaults, loadFromConfig } = require('@replayweb/testrunner')
 const { specs, suites } = loadFromConfig()
 
 exports.config = {
-    ...getDefaults(),
-    specs: [
-        ...specs,
-        './tests/test.js' // test files to include when running all tests
-    ],
-    suites: {
-        ...suites,
-        suite1: [ // any additional suites
-            './tests/test.js'
-        ]
-    }
+  ...getDefaults(),
+  specs: [
+    ...specs,
+    './tests/test.js' // test files to include when running all tests
+  ],
+  suites: {
+    ...suites,
+    suite1: [
+      // any additional suites
+      './tests/test.js'
+    ]
+  }
 }
 ```
 
@@ -158,31 +157,31 @@ There are some configuration options that are deeply nested, such as the seleniu
 
 ```js
 const defaultConfig = getDefaults({
-    // Override versions used for selenium standalone
-    // without having to create the entire config object yourself
-    // any combination of these versions can be provided, the full object
-    // is not required
-    selenium: {
-        seleniumVersion: '',
-        chromedriverVersion: '',
-        firefoxdriverVersion: '',
-        iedriverVersion: ''
-    },
-    // To add the applitools service to the services, while preserving the
-    // --selenium-started flag functionality
-    // this requires that you install @wdio/applitools-service@^5.9.0
-    applitools: true,
-    // Add capabilities to the capability object, so they can be used with the
-    // --capabilities flag
-    capabilities: {
-        // Add a specific version of firefox for --capabilities=firefox55
-        firefox55: {
-            browserName: 'firefox',
-            browserVersion: '55.0'
-        }
-    },
-    // Change log directory
-    logDir: './customLogDir'
+  // Override versions used for selenium standalone
+  // without having to create the entire config object yourself
+  // any combination of these versions can be provided, the full object
+  // is not required
+  selenium: {
+    seleniumVersion: '',
+    chromedriverVersion: '',
+    firefoxdriverVersion: '',
+    iedriverVersion: ''
+  },
+  // To add the applitools service to the services, while preserving the
+  // --selenium-started flag functionality
+  // this requires that you install @wdio/applitools-service@^5.9.0
+  applitools: true,
+  // Add capabilities to the capability object, so they can be used with the
+  // --capabilities flag
+  capabilities: {
+    // Add a specific version of firefox for --capabilities=firefox55
+    firefox55: {
+      browserName: 'firefox',
+      browserVersion: '55.0'
+    }
+  },
+  // Change log directory
+  logDir: './customLogDir'
 })
 ```
 
@@ -233,17 +232,15 @@ exports.config = {
 
 ```json
 {
-    "runOptions": {
-      "retries": 3,
-      "timeout": 600000
-    },
-    "testPath": "./tests",
-    "blockPath": "./blocks",
-    "suites": {
-        "smoketests": [
-            "SmokeTest"
-        ]
-    }
+  "runOptions": {
+    "retries": 3,
+    "timeout": 600000
+  },
+  "testPath": "./tests",
+  "blockPath": "./blocks",
+  "suites": {
+    "smoketests": ["SmokeTest"]
+  }
 }
 ```
 
@@ -359,10 +356,9 @@ Or configure your build process to add it for you.
 This hook is fired before each test is started, but after the browser is launched.
 
 ```js
-async (testName, browser) => {
+;async (testName, browser) => {
   // testName is the name of the test
   // ex: SampleTest.json
-
   // browser is the webdriverio browser object
 }
 ```
@@ -372,25 +368,20 @@ async (testName, browser) => {
 This hook is fired after each test is finished, but before the browser instance has been terminated.
 
 ```js
-async (testName, browser, context, metadata) => {
+;async (testName, browser, context, metadata) => {
   // testName is the name of the test
   // ex: SampleTest.json
-
   // browser is the webdriverio browser object
-
   // context is the context object passed between commands, this holds any setContext
   // or setEnvironment values, as well as responses from the http command
   // {
   //   ENVIRONMENT: 'dev'
   // }
-
   // Sample metadata
   // {
   //   title: 'title',
   //   overview: 'overview'
   // }
-
-
 }
 ```
 
@@ -399,7 +390,7 @@ async (testName, browser, context, metadata) => {
 This hook is fired before every command is run, after parameters have been replaced with context values and environment variables.
 
 ```js
-async (command, context, browser) => {
+;async (command, context, browser) => {
   // command is the command from your JSON test
   // after the parameters have been replaced from context/environment
   // {
@@ -408,16 +399,13 @@ async (command, context, browser) => {
   //     "target": "id=1"
   //   }
   // }
-
   // context is the current context object
   // this does not include environment variables, those can be accessed
   // directly with process.env
   // {
   //   "authId": "1234567890"
   // }
-
   // browser is the webdriverio browser object
-
 }
 ```
 
@@ -426,11 +414,9 @@ async (command, context, browser) => {
 This hook is fired after any element is retrieved.
 
 ```js
-async (element, browser, command, context, testName) => {
+;async (element, browser, command, context, testName) => {
   // element is the webdriverio Element object for the element that was retrieved
-
   // browser is the webdriverio browser object
-
   // command is the replay command object
   // {
   //   command: 'open',
@@ -438,13 +424,11 @@ async (element, browser, command, context, testName) => {
   //     url: 'https://app.example.com
   //   }
   // }
-
   // context is the context object passed between commands, this holds any setContext
   // or setEnvironment values, as well as responses from the http command
   // {
   //   ENVIRONMENT: 'dev'
   // }
-
   // testName is the name of the test file currently being run
   // Test01.json
 }
@@ -455,9 +439,8 @@ async (element, browser, command, context, testName) => {
 This hook is fired if there is an error during the test, before the test execution has halted. This hook cannot prevent the test from failing.
 
 ```js
-async (error, browser, testName) => {
+;async (error, browser, testName) => {
   // error is the error object that was thrown
-
   // browser is the webdriverio browser object
   // which can be used for custom cleanup
   // testName is the name of the test file currently being run

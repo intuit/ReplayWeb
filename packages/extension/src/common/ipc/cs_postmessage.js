@@ -1,6 +1,12 @@
 const TYPE = 'SELENIUM_IDE_CS_MSG'
 
-export const postMessage = (targetWin, myWin, payload, target = '*', timeout = 60000) => {
+export const postMessage = (
+  targetWin,
+  myWin,
+  payload,
+  target = '*',
+  timeout = 60000
+) => {
   return new Promise((resolve, reject) => {
     if (!targetWin || !targetWin.postMessage) {
       throw new Error('csPostMessage: targetWin is not a window', targetWin)
@@ -14,7 +20,7 @@ export const postMessage = (targetWin, myWin, payload, target = '*', timeout = 6
     const type = TYPE
 
     // Note: create a listener with a corresponding secret every time
-    const onMsg = (e) => {
+    const onMsg = e => {
       if (e.data && e.data.type === TYPE && e.data.secret === secret) {
         myWin.removeEventListener('message', onMsg)
         const { payload, error } = e.data
@@ -37,12 +43,15 @@ export const postMessage = (targetWin, myWin, payload, target = '*', timeout = 6
     // * `secret` is for 1 to 1 relationship between a msg and a listener
     // * `payload` is the real data you want to send
     // * `isRequest` is to mark that it's not an answer to some previous request
-    targetWin.postMessage({
-      type,
-      secret,
-      payload,
-      isRequest: true
-    }, target)
+    targetWin.postMessage(
+      {
+        type,
+        secret,
+        payload,
+        isRequest: true
+      },
+      target
+    )
 
     setTimeout(() => {
       reject(new Error(`csPostMessage: timeout ${timeout} ms`))
@@ -55,9 +64,15 @@ export const onMessage = (win, fn) => {
     throw new Error('csOnMessage: not a window', win)
   }
 
-  const onMsg = (e) => {
+  const onMsg = e => {
     // Note: only respond to msg with `isRequest` as true
-    if (e && e.data && e.data.type === TYPE && e.data.isRequest && e.data.secret) {
+    if (
+      e &&
+      e.data &&
+      e.data.type === TYPE &&
+      e.data.isRequest &&
+      e.data.secret
+    ) {
       const tpl = {
         type: TYPE,
         secret: e.data.secret
@@ -76,21 +91,26 @@ export const onMessage = (win, fn) => {
         }
 
         resolve(ret)
-      })
-        .then(
-          (res) => {
-            e.source.postMessage({
+      }).then(
+        res => {
+          e.source.postMessage(
+            {
               ...tpl,
               payload: res
-            }, '*')
-          },
-          (err) => {
-            e.source.postMessage({
+            },
+            '*'
+          )
+        },
+        err => {
+          e.source.postMessage(
+            {
               ...tpl,
               error: err.message
-            }, '*')
-          }
-        )
+            },
+            '*'
+          )
+        }
+      )
     }
   }
 

@@ -66,7 +66,7 @@ describe('block-model', () => {
       })
 
       it('returns value', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const res = model.insert({ name: 'test', data: 'test' })
         expect(res).toBe(true)
       })
@@ -79,7 +79,7 @@ describe('block-model', () => {
       })
 
       it('throws error for some data without name', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{}]
         try {
           model.bulkInsert(blocks)
@@ -90,7 +90,7 @@ describe('block-model', () => {
       })
 
       it('returns value for some data', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{ name: 'test' }]
         try {
           model.bulkInsert(blocks)
@@ -101,7 +101,7 @@ describe('block-model', () => {
       })
 
       it('returns value for some data', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{ name: 'test', data: 'test' }]
         const res = model.bulkInsert(blocks)
         expect(res).toBe(true)
@@ -115,7 +115,7 @@ describe('block-model', () => {
       })
 
       it('throws error for some data without name', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{}]
         try {
           model.bulkUpdate(blocks)
@@ -126,7 +126,7 @@ describe('block-model', () => {
       })
 
       it('returns value for some data', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{ name: 'test' }]
         try {
           model.bulkUpdate(blocks)
@@ -137,7 +137,7 @@ describe('block-model', () => {
       })
 
       it('returns value for some data', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const blocks = [{ name: 'test', data: 'test' }]
         const res = model.bulkUpdate(blocks)
         expect(res).toBe(true)
@@ -146,7 +146,7 @@ describe('block-model', () => {
 
     describe('update', () => {
       it('returns value', () => {
-        modelRewire.__Rewire__('normalizeBlock', (data) => data)
+        modelRewire.__Rewire__('normalizeBlock', data => data)
         const res = model.update(1, {})
         expect(res).toBe(true)
       })

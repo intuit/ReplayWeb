@@ -1,12 +1,12 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "standard",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/standard"
   ],
-  "plugins": [
-    "react",
-    "jest"
-  ],
+  "plugins": ["react", "jest", "prettier", "standard"],
   "env": {
     "browser": true,
     "node": true,
@@ -22,6 +22,7 @@
     }
   },
   "rules": {
-    "semi": [1, "never"]
+    "semi": [1, "never"],
+    "react/prop-types": 1
   }
 }

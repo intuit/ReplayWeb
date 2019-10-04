@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { Menu } from 'antd'
 import * as C from '../../common/constant'
 
-const PlayMenu = (props) => {
+const PlayMenu = props => {
   return (
     <Menu onClick={() => props.togglePlayLoopsModal(true)} selectable={false}>
-      <Menu.Item key="play_loop" disabled={props.status !== C.PLAYER_STATUS.STOPPED}>
+      <Menu.Item
+        key="play_loop"
+        disabled={props.status !== C.PLAYER_STATUS.STOPPED}
+      >
         Play loop..
       </Menu.Item>
     </Menu>

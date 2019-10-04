@@ -5,13 +5,16 @@ const table = db.projects
 
 const model = {
   table,
-  list () {
+  list() {
     return table.toArray()
   },
-  get (id) {
-    return table.where('id').equals(id).first()
+  get(id) {
+    return table
+      .where('id')
+      .equals(id)
+      .first()
   },
-  insert (data) {
+  insert(data) {
     if (!data.name) {
       throw new Error('Model Project - insert: missing name')
     }
@@ -32,13 +35,13 @@ const model = {
     data.id = uid()
     return table.add(data)
   },
-  update (id, data) {
+  update(id, data) {
     return table.update(id, data)
   },
-  remove (id) {
+  remove(id) {
     return table.delete(id)
   },
-  clear () {
+  clear() {
     return table.clear()
   }
 }

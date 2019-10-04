@@ -4,7 +4,7 @@ import { Modal, Row, Col, Form, Input, message } from 'antd'
 import { getPlayer } from '../../common/player'
 
 class PlayLoopModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       loopsStart: 1,
@@ -12,13 +12,13 @@ class PlayLoopModal extends React.Component {
     }
   }
 
-  onChange (e) {
+  onChange(e) {
     this.setState({
       [e.target.name]: parseInt(e.target.value, 10)
     })
   }
 
-  onPlay () {
+  onPlay() {
     const { loopsStart, loopsEnd } = this.state
 
     if (loopsStart <= 0) {
@@ -42,21 +42,21 @@ class PlayLoopModal extends React.Component {
       },
       mode: player.C.MODE.LOOP,
       startIndex: 0,
-      startUrl: (openTc && openTc.parameters) ? openTc.parameters.url : null,
+      startUrl: openTc && openTc.parameters ? openTc.parameters.url : null,
       resources: this.props.editing.commands,
       postDelay: this.props.config.playCommandInterval * 1000
     })
     this.props.togglePlayLoopsModal(false)
   }
 
-  onCancel () {
+  onCancel() {
     this.props.togglePlayLoopsModal(false)
     this.setState({
       duplicateName: ''
     })
   }
 
-  render () {
+  render() {
     return (
       <Modal
         title="How many loops to play?"
@@ -71,11 +71,13 @@ class PlayLoopModal extends React.Component {
           <Col span={10}>
             <Form.Item label="Start value">
               <Input
-                name='loopsStart'
+                name="loopsStart"
                 type="number"
                 min="0"
                 value={this.state.loopsStart}
-                onKeyDown={e => { if (e.keyCode === 13) this.onClickPlayLoops() }}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) this.onClickPlayLoops()
+                }}
                 onChange={this.onChange}
               />
             </Form.Item>
@@ -83,11 +85,13 @@ class PlayLoopModal extends React.Component {
           <Col span={10} offset={2}>
             <Form.Item label="Max">
               <Input
-                name='loopsEnd'
+                name="loopsEnd"
                 type="number"
                 min="0"
                 value={this.state.loopsEnd}
-                onKeyDown={e => { if (e.keyCode === 13) this.onClickPlayLoops() }}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) this.onClickPlayLoops()
+                }}
                 onChange={this.onChange}
               />
             </Form.Item>
@@ -95,7 +99,8 @@ class PlayLoopModal extends React.Component {
         </Row>
 
         <p>
-          The value of the loop counter is available in ${'{'}!LOOP{'}'} variable
+          The value of the loop counter is available in ${'{'}!LOOP{'}'}{' '}
+          variable
         </p>
       </Modal>
     )

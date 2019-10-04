@@ -23,7 +23,7 @@ describe('command_runner', () => {
     it('returns empty result', () => {
       runnerRewire.__Rewire__('getTableHeader', () => [])
       runnerRewire.__Rewire__('getElementByXPath', () => ({
-        getElementsByTagName () {
+        getElementsByTagName() {
           return []
         }
       }))
@@ -48,7 +48,9 @@ describe('command_runner', () => {
         getElementByLocator('/test')
         expect(true).toBe(false)
       } catch (err) {
-        expect(err.toString()).toMatch(/fail to find element based on the locator/)
+        expect(err.toString()).toMatch(
+          /fail to find element based on the locator/
+        )
       }
     })
 
@@ -83,7 +85,9 @@ describe('command_runner', () => {
         getFrameByLocator('test', null)
         expect(true).toBe(false)
       } catch (err) {
-        expect(err.toString()).toMatch(/The element found based on name=test is NOT a frame\/iframe/)
+        expect(err.toString()).toMatch(
+          /The element found based on name=test is NOT a frame\/iframe/
+        )
       }
     })
 
