@@ -11,9 +11,11 @@ ReplayWeb is a all-in-one toolbox that allows developers to focus on writing and
 
 ### Feature highlights
 
-- Easy script recording via a Chrome extension
-- Ability to execute recorded tests locally via Chrome extension or command line
-- Integration with source code repositories to enable running tests during CI/CD
+:rocket: Easy script recording via a Chrome extension
+
+:rocket: Ability to execute recorded tests locally via Chrome extension or command line
+
+:rocket: Integration with source code repositories to enable running tests during CI/CD
 
 ## Getting Started with ReplayWeb
 
