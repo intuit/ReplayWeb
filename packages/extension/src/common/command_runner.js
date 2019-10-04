@@ -514,20 +514,6 @@ export const run = async (commandObject, csIpc, helpers) => {
 
     // END ASSERTS
     // *************************************************************************
-    case 'ABAssign': {
-      const { experiment, recipe, authid, prod } = finalParameters
-      return assignABTest(experiment, recipe, authid, prod)
-        .then(assignment => ({
-          log: {
-            info: `AB Assignment successful: ${experiment} - ${recipe} - ${assignment.payload}`
-          }
-        }))
-        .catch(e => ({
-          log: {
-            error: e.message
-          }
-        }))
-    }
 
     case 'captureScreenshot': {
       return csIpc.ask('CS_CAPTURE_SCREENSHOT', {})

@@ -16,37 +16,6 @@ export const newCommand = {
  */
 const availableCommands = [
   {
-    name: 'ABAssign',
-    description: 'Assign an account to a specific recipe of a wasabi AB test',
-    comment: '',
-    parameters: [
-      {
-        name: 'experiment',
-        type: 'string',
-        description: 'The name of the experiment to allocate the account to',
-        example: 'ty18_1786'
-      },
-      {
-        name: 'recipe',
-        type: 'string',
-        description: 'The recipe of the experiment to assign to the account',
-        example: 'A'
-      },
-      {
-        name: 'authid',
-        type: 'string',
-        description: 'The authid of the account to allocate to the experiment',
-        example: '4620745996294540165'
-      },
-      {
-        name: 'prod',
-        type: 'checkbox',
-        description: 'Whether or not to use the wasabi prod environment',
-        example: true
-      }
-    ]
-  },
-  {
     name: 'assertAttribute',
     description: 'Assert that a given element has an attribute of the expected value',
     comment: '',
@@ -775,7 +744,6 @@ const availableCommands = [
 ];
 
 // Map commands array to Object with command names as keys, and the command objects as values
-// ex {ABAssign: {name,description,comment,parameters}, ...}
 export const commandsMap = availableCommands.map(c => ({[c.name]: c})).reduce((acc, cv) => ({...acc, ...cv}), {})
 
 export default availableCommands;

@@ -41,7 +41,6 @@ describe('CommandOptions', () => {
     getByText('CommandField component')
     getByText('?')
     expect(container.querySelector('.ant-select')).not.toBeNull()
-    // getByText('ABAssign') // this should pass, given that the option _should be somewhere_
   })
 
   it('displays available commands', () => {
