@@ -10,7 +10,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "version": "git add .",
-    "lint": "eslint '**/*.{js,jsx}'",
+    "lint": "eslint '**/*.{js,jsx}' --ignore-pattern '**/lib/**/*'",
     "lint:fix": "eslint --fix '**/*.{js,jsx}'"
   },
   "repository": {
