@@ -34,7 +34,7 @@
   "license": "AGPL",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.17",
-    "@replayweb/utils": "^1.0.0",
+    "@replayweb/utils": "link:../utils",
     "@wdio/applitools-service": "^5.12.1",
     "deep-equal": "^1.0.1",
     "es6-promise": "~4.2.4",

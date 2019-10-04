@@ -20,7 +20,7 @@
   "author": "",
   "license": "AGPL",
   "dependencies": {
-    "@replayweb/utils": "^1.0.0",
+    "@replayweb/utils": "link:../utils",
     "antd": "~3.8.0",
     "deep-equal": "^1.0.1",
     "dexie": "^1.5.1",
