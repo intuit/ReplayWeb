@@ -1,6 +1,9 @@
-# ReplayWeb
-
-![Logo](packages/extension/extension/logo.png)
+<div align="center">
+  <img width="200" height="200"
+    src="./packages/extension/extension/logo.png">
+  <h1>ReplayWeb</h1>
+  <p>All-in-one toolbox for generating browser automation</p>
+</div>
 
 <!-- TODO badges -->
 
@@ -8,9 +11,9 @@ ReplayWeb is a all-in-one toolbox that allows developers to focus on writing and
 
 ### Feature highlights
 
-* Easy script recording via a Chrome extension
-* Ability to execute recorded tests locally via Chrome extension or command line
-* Integration with source code repositories to enable running tests during CI/CD
+- Easy script recording via a Chrome extension
+- Ability to execute recorded tests locally via Chrome extension or command line
+- Integration with source code repositories to enable running tests during CI/CD
 
 ## Getting Started with ReplayWeb
 
@@ -36,8 +39,8 @@ yarn add -D @replayweb/testrunner @wdio/cli @wdio/local-runner @wdio/junit-repor
 And add a simple `wdio.conf.js`:
 
 ```js
-const { getDefaults, loadFromConfig } = require('@replayweb/testrunner')
-exports.config = { ...getDefaults(), ...loadFromConfig() }
+const { getDefaults, loadFromConfig } = require('@replayweb/testrunner');
+exports.config = { ...getDefaults(), ...loadFromConfig() };
 ```
 
 This will read the `replay.config.json` from your repository, that was created by the Chrome extension and load all of your tests and suites. To execute the tests in your shell you can do `npx wdio`, or add a script to `package.json` that just executes `wdio`.
@@ -47,21 +50,25 @@ For additional details see the [readme](packages/testrunner/README.md) for the T
 ## Documentation
 
 The documentation is divided into several sections:
-* [Chrome Extension](packages/extension/README.md)
-* [Test Runner](packages/testrunner/README.md)
-* See full list of documentation [here](packages/)
+
+- [Chrome Extension](packages/extension/README.md)
+- [Test Runner](packages/testrunner/README.md)
+- See full list of documentation [here](packages/)
 
 ## Contributing
 
 Read below to learn how you can take part in improving ReplayWeb.
 
 ### Code of Conduct
+
 Intuit has adopted a Code of Conduct that we expect project participants to adhere to. Please read the [full text](.github/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
 
 ### Contributing Guide
+
 Thanks for your interest! Please see the [CONTRIBUTING.md](.github/CONTRIBUTING.md) file for more information on how to develop and test your changes before contributing bug fixes and enhancements for ReplayWeb.
 
 ### Good First Issues
+
 To help you get your feet wet with our contribution process, we have a list of [good first issues](https://github.com/intuit/replayweb/labels/good%20first%20issue) that have a relatively limited scope. This is a great place to get started.
 
 ## License
