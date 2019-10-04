@@ -163,7 +163,7 @@ const togglePlayingBadge = (isPlaying, options) => {
 const isUpgradeViewed = () => {
   return Ext.storage.local
     .get('upgrade_not_viewed')
-    .then(obj => obj['upgrade_not_viewed'] !== 'not_viewed')
+    .then(obj => obj.upgrade_not_viewed !== 'not_viewed')
 }
 
 const notifyRecordCommand = command => {
@@ -586,7 +586,7 @@ const onRequest = (cmd, args) => {
         })
       }
 
-      let timer = null
+      const timer = null
       const timeout = args.command.extra.timeoutElement * 1000
 
       const runCommandWithRetry = retry(runCommand, {

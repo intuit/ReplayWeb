@@ -398,7 +398,7 @@ export const filterJson = (json, propertyChainList) => {
     }
   }
 
-  let jsonCopy = cloneJson(json)
+  const jsonCopy = cloneJson(json)
   propertyChainList.forEach(propertyChain => {
     traverseDelete(jsonCopy, propertyChain)
   })

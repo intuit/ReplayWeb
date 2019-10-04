@@ -100,9 +100,9 @@ DragDropAction.prototype.dragStart = function(
   eventProperties,
   configCallback
 ) {
-  var params = parseParams(targetElement, eventProperties, configCallback),
-    events = ['mousedown', 'dragstart', 'drag'],
-    dataTransfer = new DataTransfer()
+  var params = parseParams(targetElement, eventProperties, configCallback)
+    var events = ['mousedown', 'dragstart', 'drag']
+    var dataTransfer = new DataTransfer()
 
   this._queue(function() {
     createAndDispatchEvents(
@@ -126,8 +126,8 @@ DragDropAction.prototype.dragEnter = function(
   eventProperties,
   configCallback
 ) {
-  var params = parseParams(overElement, eventProperties, configCallback),
-    events = ['mousemove', 'mouseover', 'dragenter']
+  var params = parseParams(overElement, eventProperties, configCallback)
+    var events = ['mousemove', 'mouseover', 'dragenter']
 
   this._queue(function() {
     createAndDispatchEvents(
@@ -148,8 +148,8 @@ DragDropAction.prototype.dragOver = function(
   eventProperties,
   configCallback
 ) {
-  var params = parseParams(overElement, eventProperties, configCallback),
-    events = ['mousemove', 'mouseover', 'dragover']
+  var params = parseParams(overElement, eventProperties, configCallback)
+    var events = ['mousemove', 'mouseover', 'dragover']
 
   this._queue(function() {
     createAndDispatchEvents(
@@ -170,8 +170,8 @@ DragDropAction.prototype.dragLeave = function(
   eventProperties,
   configCallback
 ) {
-  var params = parseParams(overElement, eventProperties, configCallback),
-    events = ['mousemove', 'mouseover', 'dragleave']
+  var params = parseParams(overElement, eventProperties, configCallback)
+    var events = ['mousemove', 'mouseover', 'dragleave']
 
   this._queue(function() {
     createAndDispatchEvents(

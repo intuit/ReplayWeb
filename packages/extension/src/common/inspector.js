@@ -171,8 +171,8 @@ var offset = function(dom, noPx) {
 var rect = function(dom, noPx) {
   var pos = offset(dom, noPx)
   var isInline = getStyle(dom, 'display') === 'inline'
-  var w = isInline ? dom.getClientRects()[0]['width'] : getStyle(dom, 'width')
-  var h = isInline ? dom.getClientRects()[0]['height'] : getStyle(dom, 'height')
+  var w = isInline ? dom.getClientRects()[0].width : getStyle(dom, 'width')
+  var h = isInline ? dom.getClientRects()[0].height : getStyle(dom, 'height')
   var fn = noPx ? id : pixel
 
   return extend({ width: fn(w), height: fn(h) }, pos)

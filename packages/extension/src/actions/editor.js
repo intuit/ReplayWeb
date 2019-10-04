@@ -311,7 +311,7 @@ export function saveEditingSuiteAsNew(name) {
     )
   }
 }
-//Share a Block
+// Share a Block
 export function shareEditingBlock() {
   return (dispatch, getState) => {
     const state = getState()
@@ -324,7 +324,7 @@ export function shareEditingBlock() {
     let version = 'v1'
 
     try {
-      //This is safer than it looks, but wrapping it in a try/catch just in case
+      // This is safer than it looks, but wrapping it in a try/catch just in case
       if (state.editor.editing.shareLink) {
         const curVerNum = parseInt(
           state.editor.editing.shareLink
@@ -392,7 +392,7 @@ export function shareEditingBlock() {
       })
       .then(() => {
         return link
-      }) //is caught in ShareModal
+      }) // is caught in ShareModal
   }
 }
 

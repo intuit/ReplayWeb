@@ -136,7 +136,7 @@ describe('substitution builder', () => {
       expect(pullValuesToBeReplaced()).toEqual([])
     })
     it('should return list of nulls if there are no type commands', () => {
-      const values = getValuesFromCommands(noTypeCommands) //We assume getValuesFromCommands to be safe due to above tests
+      const values = getValuesFromCommands(noTypeCommands) // We assume getValuesFromCommands to be safe due to above tests
       const replacements = pullValuesToBeReplaced(values)
       var allNulls = true
       for (var v in replacements) {

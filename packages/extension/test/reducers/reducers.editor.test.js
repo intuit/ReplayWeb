@@ -1,5 +1,5 @@
-import reducer from '../../src/reducers/editor'
-import { initialState, updateHasUnSaved } from '../../src/reducers/editor'
+import { initialState, updateHasUnSaved } from reducer from '../../src/reducers/editor'
+
 import { types } from '../../src/actions/action_types'
 import * as C from '../../src/common/constant'
 import { newCommand } from '../../src/common/commands'

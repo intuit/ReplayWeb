@@ -1,30 +1,30 @@
 import { expandBlocks, doReplace, getAllMatches } from '@replayweb/utils'
 
-//Pull all values from commands
+// Pull all values from commands
 export const getValuesFromCommands = commands => {
-  //Converted from loop to map
-  //Not a simple commands.map because commands is an object
+  // Converted from loop to map
+  // Not a simple commands.map because commands is an object
   if (!commands) return []
   return Object.keys(commands).map(key =>
     commands[key].command === 'type' ? commands[key].parameters.value : null
   )
 }
 
-//Pulls all values of form {thing} from string
+// Pulls all values of form {thing} from string
 export const pullValuesToBeReplaced = values => {
   if (!values) return []
   return values.map(value =>
     value ? [value, getAllMatches(/\{([\w|\.]*?)\}/g, value)] : null
   )
 }
-//Formatts list of subs returned from pullValuesToBeReplaced
+// Formatts list of subs returned from pullValuesToBeReplaced
 const getFormattedValues = subs => {
   return subs.map(subAr => (subAr ? subAr[1] : null))
 }
-//Builds up context one [command] at a time, recursivly traverses blocks
+// Builds up context one [command] at a time, recursivly traverses blocks
 export const buildContext = (blocks, context, command) => {
   if (!command) {
-    return
+    
   } else if (command.command === 'setContext') {
     context[command.parameters.key] = command.parameters.value
   } else if (command.command === 'runBlock') {
@@ -35,7 +35,7 @@ export const buildContext = (blocks, context, command) => {
     })
   }
 }
-//Remove duplicate keys from the same value
+// Remove duplicate keys from the same value
 export const removeDupeReplacements = ar => {
   if (!ar) return []
   return ar.map(subAr => {
@@ -53,18 +53,18 @@ export const removeDupeReplacements = ar => {
   })
 }
 
-//Checks if two states are equivalent (So we don't rerender if nothing has changed)
+// Checks if two states are equivalent (So we don't rerender if nothing has changed)
 export function isEquivState(n, o) {
-  //Not using deep-equal here because we need a special case for ssn, random, and millis
-  //Those return a new value each time they are called, and we don't want to rerender in those cases
-  //{random} -> 345 is functionally equal to {random} -> 999
-  //{toy} -> Ball is not functionally equal to {toy} -> Block , because that means toy was redefined and we should rerender
+  // Not using deep-equal here because we need a special case for ssn, random, and millis
+  // Those return a new value each time they are called, and we don't want to rerender in those cases
+  // {random} -> 345 is functionally equal to {random} -> 999
+  // {toy} -> Ball is not functionally equal to {toy} -> Block , because that means toy was redefined and we should rerender
 
   if (Boolean(n) != Boolean(o)) return false
   if (!n && !o) return true
-  //They both are defined
+  // They both are defined
   if (n.length != o.length) return false
-  //Both equal size
+  // Both equal size
   let isEquiv = true
   for (var index in n) {
     if (n[index] instanceof Array && o[index] instanceof Array) {

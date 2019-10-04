@@ -292,7 +292,7 @@ export function reloadProjectFiles(project) {
         filepath: `${currentProject.projectPath}/replay.config.json`
       })
         .then(data => {
-          currentProject['shareLinks'] =
+          currentProject.shareLinks =
             (data && data.data && data.data.shareLinks) || []
           return data
         })

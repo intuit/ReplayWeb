@@ -299,14 +299,14 @@ const getDtmSelector = async e => {
   e.target.removeAttribute('data-get-css-for-this')
   if (
     dtmResponse.selectors &&
-    dtmResponse.selectors['myElem'] &&
-    dtmResponse['selectors_list'] &&
-    dtmResponse['selectors_list'].length > 0
+    dtmResponse.selectors.myElem &&
+    dtmResponse.selectors_list &&
+    dtmResponse.selectors_list.length > 0
   ) {
     console.log('returning dtm css selector...')
     return {
-      target: `css=${dtmResponse.selectors['myElem']}`,
-      targetOptions: dtmResponse['selectors_list'].map(t => 'css=' + t)
+      target: `css=${dtmResponse.selectors.myElem}`,
+      targetOptions: dtmResponse.selectors_list.map(t => 'css=' + t)
     }
   } else {
     console.log('returning replay selector...')
@@ -641,7 +641,7 @@ const restoreAlertConfirmPrompt = () => {
     if (window.oldConfirm)  window.confirm = window.oldConfirm
     if (window.oldPrompt)   window.prompt = window.oldPrompt
   `
-  const s = document['constructor'].prototype.createElement.call(
+  const s = document.constructor.prototype.createElement.call(
     document,
     'script'
   )

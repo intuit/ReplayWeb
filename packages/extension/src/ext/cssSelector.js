@@ -10,25 +10,25 @@ const mapDOM = (element, json) => {
 
   // Recursively loop through DOM elements and assign properties to object
   const treeHTML = (element, object) => {
-    object['data'] = {}
-    object['data']['nn'] = element.nodeName.toLowerCase()
-    object['data']['classValue'] = ''
-    object['data']['classList'] = []
-    object['data']['attrs'] = {}
+    object.data = {}
+    object.data.nn = element.nodeName.toLowerCase()
+    object.data.classValue = ''
+    object.data.classList = []
+    object.data.attrs = {}
     var nodeList = element.childNodes
     if (nodeList != null) {
       if (nodeList.length) {
-        object['children'] = []
+        object.children = []
         for (var i = 0; i < nodeList.length; i++) {
           if (nodeList[i].nodeType == 3) {
             const nodeValue = nodeList[i].nodeValue.trim()
-            if (nodeValue && object['data']['nn'] !== 'script')
-              object['text'] = nodeValue
+            if (nodeValue && object.data.nn !== 'script')
+              object.text = nodeValue
           } else {
-            object['children'].push({})
+            object.children.push({})
             treeHTML(
               nodeList[i],
-              object['children'][object['children'].length - 1]
+              object.children[object.children.length - 1]
             )
           }
         }
@@ -40,14 +40,14 @@ const mapDOM = (element, json) => {
           const attrName = element.attributes[i].nodeName
           const attrValue = element.attributes[i].nodeValue
           if (attrName === 'class') {
-            object['data']['classValue'] = attrValue
-            object['data']['classList'] = attrValue
+            object.data.classValue = attrValue
+            object.data.classList = attrValue
               .split(' ')
               .filter(value => !!value.trim())
           } else if (attrName === 'style') {
             continue
           } else {
-            object['data']['attrs'][attrName] = attrValue
+            object.data.attrs[attrName] = attrValue
           }
         }
       }
@@ -65,7 +65,7 @@ const mapDOM = (element, json) => {
         sibCount++
       }
     }
-    object['data']['sibIndex'] = sibIndex
+    object.data.sibIndex = sibIndex
   }
 
   treeHTML(element, treeObject)

@@ -654,7 +654,7 @@ export default function reducer(state = initialState, action) {
       const { id } = state.editing.meta.src
       const { selectedIndex } = state.editing.meta
       const candidates = state.testCases.filter(tc => tc.id !== id)
-      let lastIndex = state.testCases.findIndex(tc => tc.id === id)
+      const lastIndex = state.testCases.findIndex(tc => tc.id === id)
       let editing
 
       if (candidates.length === 0) {
@@ -690,7 +690,7 @@ export default function reducer(state = initialState, action) {
       const { id } = state.editing.meta.src
       const { selectedIndex } = state.editing.meta
       const candidates = state.blocks.filter(block => block.id !== id)
-      let lastIndex = state.blocks.findIndex(block => block.id === id)
+      const lastIndex = state.blocks.findIndex(block => block.id === id)
       let editing
 
       if (candidates.length === 0) {
@@ -725,7 +725,7 @@ export default function reducer(state = initialState, action) {
       const { id } = state.editing.meta.src
       const { selectedIndex } = state.editing.meta
       const candidates = state.suites.filter(block => block.id !== id)
-      let lastIndex = state.suites.findIndex(block => block.id === id)
+      const lastIndex = state.suites.findIndex(block => block.id === id)
       let editing
 
       if (candidates.length === 0) {

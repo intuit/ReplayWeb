@@ -1,15 +1,5 @@
 import { types as T } from '../../src/actions/action_types'
 import { mockStore } from '../utils'
-jest.mock('../../src/actions/editor')
-jest.mock('../../src/actions/filesystem')
-jest.mock('../../src/actions/utilities')
-jest.mock('../../src/actions/app')
-jest.mock('../../src/common/storage')
-jest.mock('../../src/models/project_model')
-jest.mock('../../src/models/test_case_model')
-jest.mock('../../src/models/suite_model')
-jest.mock('../../src/models/block-model')
-jest.mock('antd')
 import {
   existingConfig,
   setPathPurpose,
@@ -29,6 +19,16 @@ import {
   __RewireAPI__ as projectRewire
 } from '../../src/actions/project'
 import * as C from '../../src/common/constant'
+jest.mock('../../src/actions/editor')
+jest.mock('../../src/actions/filesystem')
+jest.mock('../../src/actions/utilities')
+jest.mock('../../src/actions/app')
+jest.mock('../../src/common/storage')
+jest.mock('../../src/models/project_model')
+jest.mock('../../src/models/test_case_model')
+jest.mock('../../src/models/suite_model')
+jest.mock('../../src/models/block-model')
+jest.mock('antd')
 
 describe('project actions', () => {
   afterEach(() => {

@@ -154,7 +154,7 @@ export function getSelector(str) {
         // Note: there are cases such as 'link=exact:xxx'
         let realVal = value.replace(/^exact:/, '')
         // Note: position support. eg. link=Download@POS=3
-        let match = realVal.match(/^(.+)@POS=(\d+)$/i)
+        const match = realVal.match(/^(.+)@POS=(\d+)$/i)
         if (match) {
           realVal = match[1]
         }
@@ -203,7 +203,7 @@ export async function fetchTable(tableElementLocator) {
     )
   )
   const tableWithoutHeader = tableMap.filter((row, i) => {
-    //to remove multiple headers
+    // to remove multiple headers
     const header = row.filter(
       (cellText, index) => headerList[index] === cellText
     )

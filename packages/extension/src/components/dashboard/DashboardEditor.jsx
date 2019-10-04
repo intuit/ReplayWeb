@@ -155,7 +155,7 @@ class DashboardEditor extends React.Component {
     const dw = document.documentElement.clientWidth
     const mw = 240
     let x = contextMenu.x + window.scrollX
-    let y = contextMenu.y + window.scrollY
+    const y = contextMenu.y + window.scrollY
     const inSearch = searchText !== ''
     const inSelection = selectedCmds.length !== 0
 

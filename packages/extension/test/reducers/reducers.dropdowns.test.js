@@ -1,5 +1,5 @@
-import reducer from '../../src/reducers/dropdowns'
-import { initialState } from '../../src/reducers/dropdowns'
+import { initialState } from reducer from '../../src/reducers/dropdowns'
+
 import { types } from '../../src/actions/action_types'
 import * as C from '../../src/common/constant'
 

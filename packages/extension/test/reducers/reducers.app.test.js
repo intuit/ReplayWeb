@@ -1,5 +1,5 @@
-import reducer from '../../src/reducers/app'
-import { initialState } from '../../src/reducers/app'
+import { initialState } from reducer from '../../src/reducers/app'
+
 import { types } from '../../src/actions/action_types'
 import * as C from '../../src/common/constant'
 
