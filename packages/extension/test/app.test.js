@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 
 import React from 'react'
-import { App } from '../src/App'
+import { App } from '../src/app'
 import { shallow } from 'enzyme'
 
 jest.mock('../src/actions/app', () => ({

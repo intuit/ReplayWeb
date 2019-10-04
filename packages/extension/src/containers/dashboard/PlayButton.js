@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {playerPlay, filterCommands} from '../../actions'
+import { playerPlay, filterCommands } from '../../actions'
 import PlayButton from '../../components/dashboard/PlayButton'
 const mapStateToProps = (state) => {
   return {

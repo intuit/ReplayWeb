@@ -4,7 +4,7 @@
  * @param {string} message - The message to log
  * @param {boolean} verbose - Whether or not to log
  */
-export function log(message, verbose = false) {
+export function log (message, verbose = false) {
   if (verbose) {
     console.log(message)
   }
@@ -16,7 +16,7 @@ export function log(message, verbose = false) {
  * @param {any} parameters - The parameters to construct the plugin with
  * @returns Constructed Plugin
  */
-export function tryRequire(packageName, parameters) {
+export function tryRequire (packageName, parameters) {
   try {
     const pack = require(packageName)
     return new pack(parameters)
@@ -30,7 +30,7 @@ export function tryRequire(packageName, parameters) {
  * @param {string|array} data - String or object representing the plugin
  * @returns Constructed Plugin
  */
-export function loadPlugin(data) {
+export function loadPlugin (data) {
   if (typeof data === 'string') {
     return tryRequire(data, {})
   } else if (Array.isArray(data)) {
@@ -39,10 +39,10 @@ export function loadPlugin(data) {
   } else {
     console.error(`Invalid plugin format: ${JSON.stringify(data)}`)
     console.error('Acceptable formats:')
-    console.error("string: the package name that is the plugin")
-    console.error("array: the package name that is the plugin")
-    console.error("      0 - the package name that is the plugin")
-    console.error("      1 - an options object that gets passed to the plugin constructor")
+    console.error('string: the package name that is the plugin')
+    console.error('array: the package name that is the plugin')
+    console.error('      0 - the package name that is the plugin')
+    console.error('      1 - an options object that gets passed to the plugin constructor')
     throw new Error(`Invalid plugin format: ${JSON.stringify(data)}`)
   }
 }
@@ -53,7 +53,7 @@ export function loadPlugin(data) {
  * @param {string} selector - The selector to get the string for
  * @returns {string} - A string that can be used by `browser.execute` to access an element
  */
-export function getExecElString(selector) {
+export function getExecElString (selector) {
   if ((/^\//.test(selector))) {
     return `document.evaluate(\`${selector}\`, document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)`
   } else {
@@ -88,7 +88,7 @@ export const getAndWaitForElement = async (target, timeout = 7000, command, cont
 export const waitForElements = (targets, timeout) => targets.reduce(
   (acc, cv) => acc.then(
     elements => getAndWaitForElement(cv, timeout)
-    .then(el => elements.concat(el))
+      .then(el => elements.concat(el))
   ),
   Promise.resolve([])
 )
@@ -99,7 +99,7 @@ export const waitForElements = (targets, timeout) => targets.reduce(
  * @param {string} str - The target that needs to be converted into a selector
  * @returns {string} - The webdriverio compatible selector
  */
-export function getSelector(str) {
+export function getSelector (str) {
   const i = str.indexOf('=')
   // is it an xpath selector?
   if ((/^\//.test(str))) {
@@ -136,7 +136,7 @@ export function getSelector(str) {
         // Note: there are cases such as 'link=exact:xxx'
         let realVal = value.replace(/^exact:/, '')
         // Note: position support. eg. link=Download@POS=3
-        let match = realVal.match(/^(.+)@POS=(\d+)$/i)
+        const match = realVal.match(/^(.+)@POS=(\d+)$/i)
         if (match) {
           realVal = match[1]
         }
@@ -157,7 +157,7 @@ export function getSelector(str) {
   }
 }
 
-async function getTableHeader(tableElementLocator) {
+async function getTableHeader (tableElementLocator) {
   const trs = await browser.$$(getSelector(`${tableElementLocator}//tr`))
   const allThs = await Promise.all(trs.map((_, index) => browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//th`))))
   const tds = allThs.reduce((acc, cv) => acc.concat(cv), []) // reduce 2D array into 1D array
@@ -166,14 +166,14 @@ async function getTableHeader(tableElementLocator) {
   return headerRow
 }
 
-export async function fetchTable(tableElementLocator) {
+export async function fetchTable (tableElementLocator) {
   const headerList = await getTableHeader(tableElementLocator)
   const trs = await browser.$$(getSelector(`${tableElementLocator}//tr`))
   const fullRows = await Promise.all(trs.map((_, index) => browser.$$(getSelector(`${tableElementLocator}//tr[${index}]//td`))))
   const tableMap = await Promise.all(fullRows.map(tds => Promise.all(tds.map(async td => (await td.getText()).trim()))))
-  const tableWithoutHeader = tableMap.filter((row, i) => { //to remove multiple headers
+  const tableWithoutHeader = tableMap.filter((row, i) => { // to remove multiple headers
     const header = row.filter((cellText, index) => headerList[index] === cellText)
-    return header.length!==headerList.length && i !== 0
+    return header.length !== headerList.length && i !== 0
   })
   return tableWithoutHeader
 }

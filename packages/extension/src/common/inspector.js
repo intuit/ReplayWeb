@@ -1,15 +1,15 @@
 
 import log from './log'
-import {getLocator, xpath, domText} from '@replayweb/utils'
+import { getLocator, xpath, domText } from '@replayweb/utils'
 /*
  * Basic tool function
  */
 var extend = function () {
   var args = Array.from(arguments)
-  var len  = args.length
+  var len = args.length
 
-  if (len <= 0)   return {}
-  if (len === 1)  return args[0]
+  if (len <= 0) return {}
+  if (len === 1) return args[0]
 
   var head = args[0]
   var rest = args.slice(1)
@@ -25,7 +25,7 @@ var extend = function () {
 
 var isArray = Array.isArray
 
-var id = function (x) { return x; }
+var id = function (x) { return x }
 
 var trim = function (str) {
   return str.replace(/^\s*|\s*$/g, '')
@@ -59,16 +59,16 @@ var and = function (list) {
 }
 
 var zipWith = function (fn) {
-  if (arguments.length < 3)   return null
+  if (arguments.length < 3) return null
 
   var list = Array.from(arguments).slice(1)
-  var len  = list.reduce(function (min, cur) {
+  var len = list.reduce(function (min, cur) {
     return cur.length < min ? cur.length : min
   }, Infinity)
-  var ret  = []
+  var ret = []
 
   for (var i = 0; i < len; i++) {
-    ret.push(fn.apply(null, list.map(function (item) { return item[i]; })))
+    ret.push(fn.apply(null, list.map(function (item) { return item[i] })))
   }
 
   return ret
@@ -76,16 +76,16 @@ var zipWith = function (fn) {
 
 var intersect = function () {
   var list = Array.from(arguments)
-  var len  = Math.max.apply(null, list.map(function (item) { return item.length; }))
+  var len = Math.max.apply(null, list.map(function (item) { return item.length }))
   var result = []
 
   for (var i = 0; i < len; i++) {
     var val = list[0][i]
-    var no  = list.filter(function (item) {
+    var no = list.filter(function (item) {
       return item[i] !== val
     })
 
-    if (no && no.length)  break
+    if (no && no.length) break
 
     result.push(val)
   }
@@ -111,17 +111,17 @@ var deepEqual = function (a, b) {
  */
 
 var pixel = function (num) {
-  if ((num + '').indexOf('px') !== -1)  return num
+  if ((num + '').indexOf('px') !== -1) return num
   return (num || 0) + 'px'
 }
 
 var getStyle = function (dom, styleName) {
-  if (!dom)   throw new Error('getStyle: dom not exist')
+  if (!dom) throw new Error('getStyle: dom not exist')
   return getComputedStyle(dom)[styleName]
 }
 
 var setStyle = function (dom, style) {
-  if (!dom)   throw new Error('setStyle: dom not exist')
+  if (!dom) throw new Error('setStyle: dom not exist')
 
   for (var i = 0, keys = Object.keys(style), len = keys.length; i < len; i++) {
     dom.style[keys[i]] = style[keys[i]]
@@ -135,8 +135,8 @@ var cssSum = function (dom, list) {
 
   return list.reduce(function (prev, cur) {
     var val = (isInline && ['width', 'height'].indexOf(cur) !== -1)
-          ? dom.getClientRects()[0][cur]
-          : getStyle(dom, cur)
+      ? dom.getClientRects()[0][cur]
+      : getStyle(dom, cur)
 
     return prev + parseInt(val || '0', 10)
   }, 0)
@@ -146,7 +146,7 @@ var offset = function (dom, noPx) {
   if (!dom) return { left: 0, top: 0 }
 
   var rect = dom.getBoundingClientRect()
-  var fn   = noPx ? id : pixel
+  var fn = noPx ? id : pixel
 
   return {
     left: fn(rect.left + window.scrollX),
@@ -155,13 +155,13 @@ var offset = function (dom, noPx) {
 }
 
 var rect = function (dom, noPx) {
-  var pos       = offset(dom, noPx)
-  var isInline  = getStyle(dom, 'display') === 'inline'
-  var w         = isInline ? dom.getClientRects()[0]['width']  : getStyle(dom, 'width')
-  var h         = isInline ? dom.getClientRects()[0]['height'] : getStyle(dom, 'height')
-  var fn        = noPx ? id : pixel
+  var pos = offset(dom, noPx)
+  var isInline = getStyle(dom, 'display') === 'inline'
+  var w = isInline ? dom.getClientRects()[0].width : getStyle(dom, 'width')
+  var h = isInline ? dom.getClientRects()[0].height : getStyle(dom, 'height')
+  var fn = noPx ? id : pixel
 
-  return extend({width: fn(w), height: fn(h)}, pos)
+  return extend({ width: fn(w), height: fn(h) }, pos)
 }
 
 // Reference: http://ryanve.com/lab/dimensions/
@@ -186,7 +186,7 @@ var removeChildren = function (dom, predicate) {
 
 var inDom = function ($outer, $el) {
   if (!$el) return false
-  if ($outer === $el)  return true
+  if ($outer === $el) return true
   return inDom($outer, $el.parentNode)
 }
 
@@ -217,9 +217,9 @@ var selector = function (dom) {
   if (dom.id) return '#' + dom.id
 
   var classes = dom.className.split(/\s+/g)
-                             .filter(function (item) {
-                               return item && item.length
-                             })
+    .filter(function (item) {
+      return item && item.length
+    })
 
   var children = Array.from(dom.parentNode.childNodes).filter(function ($el) {
     return $el.nodeType === 1
@@ -244,7 +244,7 @@ var selector = function (dom) {
   } else if (classes.length && sameClass.length === 1) {
     extra = '.' + classes.join('.')
   } else {
-    extra = ':nth-child(' + (1 + children.findIndex(function (item) { return item === dom; })) + ')'
+    extra = ':nth-child(' + (1 + children.findIndex(function (item) { return item === dom })) + ')'
   }
 
   var me = dom.tagName.toLowerCase() + extra
@@ -256,17 +256,17 @@ var selector = function (dom) {
 }
 
 var atXPath = function (xpath, document) {
-  var lower = function (str) { return str && str.toLowerCase(); }
-  var reg   = /^([a-zA-Z0-9]+)(\[(\d+)\])?$/
+  var lower = function (str) { return str && str.toLowerCase() }
+  var reg = /^([a-zA-Z0-9]+)(\[(\d+)\])?$/
 
   return xpath.reduce(function (prev, cur) {
-    if (!prev)  return prev
-    if (!prev.childNodes || !prev.childNodes.length)  return null
+    if (!prev) return prev
+    if (!prev.childNodes || !prev.childNodes.length) return null
 
     var match = cur.match(reg)
-    var tag   = match[1]
+    var tag = match[1]
     var index = match[3] ? parseInt(match[3], 10) : 1
-    var list  = Array.from(prev.childNodes).filter(function (item) {
+    var list = Array.from(prev.childNodes).filter(function (item) {
       return item.nodeType === 1 && lower(item.tagName) === lower(tag)
     })
 
@@ -289,8 +289,8 @@ var checkIframe = (iframeWin) => {
 var getFrameLocator = (frameWin, win) => {
   if (checkIframe(frameWin)) {
     const frameDom = frameWin.frameElement
-    const locator  = getLocator(frameDom)
-    
+    const locator = getLocator(frameDom)
+
     if (/^id=/.test(locator) || /^name=/.test(locator)) {
       return locator
     }
@@ -323,10 +323,10 @@ var getFrameLocator = (frameWin, win) => {
  */
 
 var maskFactory = function () {
-  var cache       = []
-  var prefix      = '__mask__' + (new Date() * 1) + Math.round(Math.random() * 1000) + '__'
-  var uid         = 1
-  var defaultStyle  = {
+  var cache = []
+  var prefix = '__mask__' + (new Date() * 1) + Math.round(Math.random() * 1000) + '__'
+  var uid = 1
+  var defaultStyle = {
     position: 'absolute',
     zIndex: '999',
     display: 'none',
@@ -364,14 +364,14 @@ var maskFactory = function () {
 
   return {
     gen: genMask,
-    clear:  clear
+    clear: clear
   }
 }
 
 var showMaskOver = function (mask, el) {
   var pos = offset(el)
-  var w   = cssSum(el, ['width',  'paddingLeft', 'paddingRight',  'borderLeftWidth', 'borderRightWidth'])
-  var h   = cssSum(el, ['height', 'paddingTop',  'paddingBottom', 'borderTopWidth', ' borderBottomWidth'])
+  var w = cssSum(el, ['width', 'paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'])
+  var h = cssSum(el, ['height', 'paddingTop', 'paddingBottom', 'borderTopWidth', ' borderBottomWidth'])
 
   setStyle(mask, extend(pos, {
     width: pixel(w),

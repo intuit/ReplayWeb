@@ -476,7 +476,7 @@ const availableCommands = [
         optional: true,
         description: 'A JSON Object of headers to use for the request',
         example: {
-          'example_tid': 'XXXXX-XXXXX-XXXXX'
+          example_tid: 'XXXXX-XXXXX-XXXXX'
         }
       },
       {
@@ -772,10 +772,10 @@ const availableCommands = [
       }
     ]
   }
-];
+]
 
 // Map commands array to Object with command names as keys, and the command objects as values
 // ex {ABAssign: {name,description,comment,parameters}, ...}
-export const commandsMap = availableCommands.map(c => ({[c.name]: c})).reduce((acc, cv) => ({...acc, ...cv}), {})
+export const commandsMap = availableCommands.map(c => ({ [c.name]: c })).reduce((acc, cv) => ({ ...acc, ...cv }), {})
 
-export default availableCommands;
+export default availableCommands

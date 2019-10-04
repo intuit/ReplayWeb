@@ -1,9 +1,10 @@
 class Dexie {
-  version() {
+  version () {
     return {
       stores: () => {}
     }
   }
-  open() {}
+
+  open () {}
 }
 export default Dexie

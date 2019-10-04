@@ -91,7 +91,7 @@ describe('configuration', () => {
     it('should return added capability if cli flag is provided; should return true for acceptInsecureCerts if not defined', () => {
       const caps = getCapabilities({
         test: {
-          browserName: "test"
+          browserName: 'test'
         }
       }, 'test')
       const { browserName, acceptInsecureCerts } = caps[0]
@@ -106,27 +106,27 @@ describe('configuration', () => {
       expect(secondBrowser).toBe('firefox')
     })
     it('should throw an error if capability name doesnt exist', () => {
-      expect(getCapabilities.bind(null, {}, 'ie')).toThrow(`Capability with name "ie" not found. Available options are: [chrome,firefox,headless]`)
+      expect(getCapabilities.bind(null, {}, 'ie')).toThrow('Capability with name "ie" not found. Available options are: [chrome,firefox,headless]')
     })
     it('should return true if acceptInsecureCerts flag set to true', () => {
       const caps = getCapabilities({
         test: {
-          browserName: "test",
+          browserName: 'test',
           acceptInsecureCerts: true
         }
       }, 'test')
-      const {browserName, acceptInsecureCerts} = caps[0]
+      const { browserName, acceptInsecureCerts } = caps[0]
       expect(browserName).toBe('test')
       expect(acceptInsecureCerts).toBe(true)
     })
     it('should return false if acceptInsecureCerts flag set to false', () => {
       const caps = getCapabilities({
         test: {
-          browserName: "test",
+          browserName: 'test',
           acceptInsecureCerts: false
         }
       }, 'test')
-      const {browserName, acceptInsecureCerts} = caps[0]
+      const { browserName, acceptInsecureCerts } = caps[0]
       expect(browserName).toBe('test')
       expect(acceptInsecureCerts).toBe(false)
     })

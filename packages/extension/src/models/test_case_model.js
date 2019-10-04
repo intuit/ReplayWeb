@@ -1,18 +1,18 @@
 import { uid, pick, compose, updateIn, on, map } from '../common/utils'
 import db from './db'
-import {commandsMap} from '../common/commands'
-const table = db.testCases;
+import { commandsMap } from '../common/commands'
+const table = db.testCases
 
 const model = {
   table,
   list () {
-    return table.toArray();
+    return table.toArray()
   },
   listByProject (project) {
-    return table.where('projectId').equals(project.id).toArray();
+    return table.where('projectId').equals(project.id).toArray()
   },
   removeByProject (project) {
-    return table.where('projectId').equals(project.id).delete();
+    return table.where('projectId').equals(project.id).delete()
   },
   insert (data) {
     if (!data.name) {
@@ -24,7 +24,7 @@ const model = {
     }
 
     data.updateTime = new Date() * 1
-    data.id         = uid()
+    data.id = uid()
     return table.add(normalizeTestCase(data))
   },
   bulkInsert (tcs) {
@@ -38,7 +38,7 @@ const model = {
       }
 
       data.updateTime = new Date() * 1
-      data.id         = uid()
+      data.id = uid()
 
       return normalizeTestCase(data)
     })
@@ -66,14 +66,14 @@ const model = {
   update (id, data) {
     return table.update(id, normalizeTestCase(data))
   },
-  bulkRemove(tcs) {
+  bulkRemove (tcs) {
     return tcs.reduce((acc, cv) => acc.then(() => table.delete(cv.id)), Promise.resolve())
   },
   remove (id) {
     return table.delete(id)
   },
-  clear() {
-    return table.clear();
+  clear () {
+    return table.clear()
   }
 }
 
@@ -115,7 +115,7 @@ export const commandWithoutBaseUrl = (baseUrl) => (command) => {
 }
 
 export const eliminateBaseUrl = (testCase) => {
-  if (!testCase.baseUrl)  return testCase
+  if (!testCase.baseUrl) return testCase
   return compose(
     on('data'),
     on('commands'),

@@ -38,7 +38,7 @@ describe.only('loadFromConfig', () => {
           }
         })
       })
-      const {specs, suites} = loadFromConfig()
+      const { specs, suites } = loadFromConfig()
       expect(specs).toHaveLength(5)
       expect(suites).toHaveProperty('someSuite')
       expect(suites.someSuite).toHaveLength(2)
@@ -52,7 +52,7 @@ describe.only('loadFromConfig', () => {
           blockPath: './blocks'
         })
       })
-      const {specs, suites} = loadFromConfig()
+      const { specs, suites } = loadFromConfig()
       expect(specs).toHaveLength(5)
       expect(suites).toEqual({})
     })
@@ -137,7 +137,7 @@ describe.only('loadFromConfig', () => {
           }
         })
       })
-      const {specs, suites} = loadFromConfig('.', true)
+      const { specs, suites } = loadFromConfig('.', true)
       expect(specs).toHaveLength(4)
       expect(suites).toHaveProperty('someSuite')
       expect(suites.someSuite).toHaveLength(2)

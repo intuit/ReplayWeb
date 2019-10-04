@@ -13,7 +13,7 @@ describe('runInParallelAllRegions', () => {
   })
   describe('expandLoginBlockForAllRegions', () => {
     it('should return new commands with login blocks', () => {
-      const cmds = [{key: 'value'}]
+      const cmds = [{ key: 'value' }]
       const blocks = [
         {
           data: {
@@ -40,7 +40,7 @@ describe('runInParallelAllRegions', () => {
     })
 
     it('should not throw error if blocks is empty', () => {
-      const cmds = [{key: 'value'}]
+      const cmds = [{ key: 'value' }]
       const blocks = []
       const allCmds = expandLoginBlockForAllRegions(cmds, blocks)
       expect(allCmds).toHaveLength(0)
@@ -55,8 +55,8 @@ describe('runInParallelAllRegions', () => {
         writeFileSync: (path, cont) => (contents = cont)
       })
       runInParallelAllRegionsRewire.__Rewire__('getJsonTestFiles', (testsPath) => ([]))
-      runInParallelAllRegionsRewire.__Rewire__('getAllBlockContents', (path) => [{cmd: 'test'}])
-      expect(runInParallelAllRegions.bind(null, './tests', {loginBlockPath: './loginBlocks'})).toThrow('No test files found')
+      runInParallelAllRegionsRewire.__Rewire__('getAllBlockContents', (path) => [{ cmd: 'test' }])
+      expect(runInParallelAllRegions.bind(null, './tests', { loginBlockPath: './loginBlocks' })).toThrow('No test files found')
     })
     it('should throw error if loginBlocks path is undefined', () => {
       let contents = ''
@@ -80,7 +80,7 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
       runInParallelAllRegionsRewire.__Rewire__('getAllBlockContents', (path) => [])
-      expect(runInParallelAllRegions.bind(null, './tests', {loginBlockPath: './loginBlocks'})).toThrow('loginBlockPath is defined in replay.config.json but the path does not exist')
+      expect(runInParallelAllRegions.bind(null, './tests', { loginBlockPath: './loginBlocks' })).toThrow('loginBlockPath is defined in replay.config.json but the path does not exist')
     })
     it('should throw error if no login blocks', () => {
       let contents = ''
@@ -92,7 +92,7 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
       runInParallelAllRegionsRewire.__Rewire__('getAllBlockContents', (path) => [])
-      expect(runInParallelAllRegions.bind(null, './tests', {loginBlockPath: './loginBlocks'})).toThrow('No login blocks found in path')
+      expect(runInParallelAllRegions.bind(null, './tests', { loginBlockPath: './loginBlocks' })).toThrow('No login blocks found in path')
     })
     it('should write out test files with no blocks', () => {
       let contents = ''
@@ -104,12 +104,12 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
       runInParallelAllRegionsRewire.__Rewire__('expandLoginBlockForAllRegions',
-        (commands, blocks) => ([{locale: 'en-ca', commands: [{key: 'value'}]}]))
+        (commands, blocks) => ([{ locale: 'en-ca', commands: [{ key: 'value' }] }]))
       runInParallelAllRegionsRewire.__Rewire__('getAllBlockContents', (path) => {
-        if (path.includes('loginBlocks')) return [{cmd: 'test'}]
+        if (path.includes('loginBlocks')) return [{ cmd: 'test' }]
         else return []
       })
-      const testFiles = runInParallelAllRegions('./tests', {loginBlockPath: './loginBlocks'})
+      const testFiles = runInParallelAllRegions('./tests', { loginBlockPath: './loginBlocks' })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1_en-ca.js')
       expect(contents).toEqual(expect.stringContaining('Test1 --> en-ca'))
@@ -134,12 +134,12 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('expandLoginBlockForAllRegions', (commands, blocks) => {
         return [
-          {locale: 'en-ca', commands: [{'login-enca': 'testCommand'}, {cmd: 'value'}]},
-          {locale: 'fr-ca', commands: [{'login-frca': 'testCommand'}, {cmd: 'value'}]}
+          { locale: 'en-ca', commands: [{ 'login-enca': 'testCommand' }, { cmd: 'value' }] },
+          { locale: 'fr-ca', commands: [{ 'login-frca': 'testCommand' }, { cmd: 'value' }] }
         ]
       })
 
-      const testFiles = runInParallelAllRegions('./tests', {blockPath: './blocks', loginBlockPath: './loginBlocks'})
+      const testFiles = runInParallelAllRegions('./tests', { blockPath: './blocks', loginBlockPath: './loginBlocks' })
       expect(testFiles).toHaveLength(2)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1_en-ca.js')
       expect(contentsENCA).toEqual(expect.stringContaining('login-enca'))
@@ -161,10 +161,10 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('expandLoginBlockForAllRegions', (commands, blocks) => {
         return [
-          {locale: 'en-ca', commands: [{'login-enca': 'testCommand'}, {cmd: 'value'}]}
+          { locale: 'en-ca', commands: [{ 'login-enca': 'testCommand' }, { cmd: 'value' }] }
         ]
       })
-      const testFiles = runInParallelAllRegions('./tests', {retries: 4, loginBlockPath: './loginBlocks'})
+      const testFiles = runInParallelAllRegions('./tests', { retries: 4, loginBlockPath: './loginBlocks' })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1_en-ca.js')
       expect(contents).toEqual(expect.stringContaining('retries(4)'))
@@ -184,10 +184,10 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('expandLoginBlockForAllRegions', (commands, blocks) => {
         return [
-          {locale: 'en-ca', commands: [{'login-enca': 'testCommand'}, {cmd: 'value'}]}
+          { locale: 'en-ca', commands: [{ 'login-enca': 'testCommand' }, { cmd: 'value' }] }
         ]
       })
-      const testFiles = runInParallelAllRegions('./tests', {timeout: 5678, loginBlockPath: './loginBlocks'})
+      const testFiles = runInParallelAllRegions('./tests', { timeout: 5678, loginBlockPath: './loginBlocks' })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1_en-ca.js')
       expect(contents).toEqual(expect.stringContaining('timeout(5678)'))
@@ -207,10 +207,10 @@ describe('runInParallelAllRegions', () => {
       })
       runInParallelAllRegionsRewire.__Rewire__('expandLoginBlockForAllRegions', (commands, blocks) => {
         return [
-          {locale: 'en-ca', commands: [{'login-enca': 'testCommand'}, {cmd: 'value'}]}
+          { locale: 'en-ca', commands: [{ 'login-enca': 'testCommand' }, { cmd: 'value' }] }
         ]
       })
-      const testFiles = runInParallelAllRegions('./tests', {timeout: 5678, loginBlockPath: './loginBlocks'})
+      const testFiles = runInParallelAllRegions('./tests', { timeout: 5678, loginBlockPath: './loginBlocks' })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1_en-ca.js')
       console.log('----- contents -------')

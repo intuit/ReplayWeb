@@ -1,4 +1,4 @@
-import {removeTemporaryFiles, __RewireAPI__ as removeTemporaryFilesRewire} from '../../src'
+import { removeTemporaryFiles, __RewireAPI__ as removeTemporaryFilesRewire } from '../../src'
 
 describe('removeTemporaryFiles', () => {
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe('removeTemporaryFiles', () => {
     const unlinked = []
     removeTemporaryFilesRewire.__Rewire__('fs', {
       readdirSync: (path) => (['.replay-tests-123']),
-      lstatSync: () => ({isDirectory: () => false}),
+      lstatSync: () => ({ isDirectory: () => false }),
       unlinkSync: (path) => unlinked.push(path)
     })
     removeTemporaryFiles()
@@ -23,7 +23,7 @@ describe('removeTemporaryFiles', () => {
     const unlinked = []
     removeTemporaryFilesRewire.__Rewire__('fs', {
       readdirSync: (path) => (['.replay-tests-123', '.babelrc']),
-      lstatSync: () => ({isDirectory: () => false}),
+      lstatSync: () => ({ isDirectory: () => false }),
       unlinkSync: (path) => unlinked.push(path)
     })
     removeTemporaryFiles()
@@ -34,7 +34,7 @@ describe('removeTemporaryFiles', () => {
     const rmdirs = []
     removeTemporaryFilesRewire.__Rewire__('fs', {
       readdirSync: (path) => path === '/test/.replay-tests-123' ? ['SomeTest.json'] : ['.replay-tests-123'],
-      lstatSync: () => ({isDirectory: () => true}),
+      lstatSync: () => ({ isDirectory: () => true }),
       unlinkSync: (path) => unlinked.push(path),
       rmdirSync: (path) => rmdirs.push(path)
     })
@@ -47,7 +47,7 @@ describe('removeTemporaryFiles', () => {
     const rmdirs = []
     removeTemporaryFilesRewire.__Rewire__('fs', {
       readdirSync: (path) => path === '/test/.replay-tests-123' ? ['SomeTest.json'] : ['.replay-tests-123', 'src'],
-      lstatSync: () => ({isDirectory: () => true}),
+      lstatSync: () => ({ isDirectory: () => true }),
       unlinkSync: (path) => unlinked.push(path),
       rmdirSync: (path) => rmdirs.push(path)
     })

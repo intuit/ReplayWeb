@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {changeModalState, playerPlay} from '../../actions'
+import { changeModalState, playerPlay } from '../../actions'
 import PlayLoopModal from '../../components/Modals/PlayLoopModal'
 const mapStateToProps = (state) => {
   return {

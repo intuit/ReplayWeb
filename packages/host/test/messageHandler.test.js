@@ -122,7 +122,7 @@ describe('index', () => {
   })
   describe('readFiles', () => {
     it('success callback should be triggered if it succeeds', () => {
-      indexRewire.__Rewire__('readFiles', () => [{data: '{"Commands: []"}'}, {data: '{"Commands: []"}'}])
+      indexRewire.__Rewire__('readFiles', () => [{ data: '{"Commands: []"}' }, { data: '{"Commands: []"}' }])
       const msg = {
         type: 'readFiles',
         filepaths: ['/test.json', '/test2.json']
@@ -156,7 +156,7 @@ describe('index', () => {
         data: {
           folder: '/',
           fileName: 'test',
-          data: {Commands: []}
+          data: { Commands: [] }
         }
       }
       const push = jest.fn()
@@ -174,7 +174,7 @@ describe('index', () => {
         data: {
           folder: '/',
           fileName: 'test',
-          data: {Commands: []}
+          data: { Commands: [] }
         }
       }
       const push = jest.fn()
@@ -278,7 +278,7 @@ describe('index', () => {
   })
   describe('startOrchestrator', () => {
     it('success callback should be triggered if it succeeds', () => {
-      indexRewire.__Rewire__('startOrchestrator', () => Promise.resolve({data: {}}))
+      indexRewire.__Rewire__('startOrchestrator', () => Promise.resolve({ data: {} }))
       const msg = {
         type: 'startOrchestrator'
       }
@@ -306,7 +306,7 @@ describe('index', () => {
   })
   describe('version', () => {
     it('success callback should be triggered if it succeeds', () => {
-      indexRewire.__Rewire__('getCurrentVersion', () => Promise.resolve({data: {}}))
+      indexRewire.__Rewire__('getCurrentVersion', () => Promise.resolve({ data: {} }))
       const msg = {
         type: 'version'
       }
@@ -334,9 +334,9 @@ describe('index', () => {
   })
   describe('update', () => {
     it('success callback should be triggered if it succeeds', () => {
-      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({data: {}}))
-      indexRewire.__Rewire__('buildPackage', () => Promise.resolve({data: {}}))
-      indexRewire.__Rewire__('getCurrentVersion', () => Promise.resolve({data: {}}))
+      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({ data: {} }))
+      indexRewire.__Rewire__('buildPackage', () => Promise.resolve({ data: {} }))
+      indexRewire.__Rewire__('getCurrentVersion', () => Promise.resolve({ data: {} }))
       const msg = {
         type: 'update'
       }
@@ -362,7 +362,7 @@ describe('index', () => {
         ]))
     })
     it('failure callback should be triggered if it fails in buildPackage', () => {
-      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({data: {}}))
+      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({ data: {} }))
       indexRewire.__Rewire__('buildPackage', () => Promise.reject(new Error('git error')))
       const msg = {
         type: 'update'
@@ -376,8 +376,8 @@ describe('index', () => {
         ]))
     })
     it('failure callback should be triggered if it fails in getCurrentVersion', () => {
-      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({data: {}}))
-      indexRewire.__Rewire__('buildPackage', () => Promise.resolve({data: {}}))
+      indexRewire.__Rewire__('switchToTag', () => Promise.resolve({ data: {} }))
+      indexRewire.__Rewire__('buildPackage', () => Promise.resolve({ data: {} }))
       indexRewire.__Rewire__('getCurrentVersion', () => Promise.reject(new Error('git error')))
       const msg = {
         type: 'update'

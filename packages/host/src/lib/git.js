@@ -1,7 +1,7 @@
 import gitP from 'simple-git/promise'
 import path from 'path'
-import {LOCATION} from './common'
-import {expandHome} from './filesystem'
+import { LOCATION } from './common'
+import { expandHome } from './filesystem'
 
 const git = gitP(LOCATION)
 
@@ -10,7 +10,7 @@ const git = gitP(LOCATION)
  * @async
  * @returns {string} - The version
  */
-export async function getCurrentVersion() {
+export async function getCurrentVersion () {
   const branches = await git.branch()
   return branches.current
 }
@@ -20,8 +20,8 @@ export async function getCurrentVersion() {
  * @async
  * @returns {string} - stdout from the git command
  */
-export async function fetchChanges() {
-  return await git.fetch({'--all': null})
+export async function fetchChanges () {
+  return await git.fetch({ '--all': null })
 }
 
 /**
@@ -29,7 +29,7 @@ export async function fetchChanges() {
  * @async
  * @returns {Promise<Array>} - An array of the available tags
  */
-export function fetchTags() {
+export function fetchTags () {
   // for some reason this isnt working as a promise though it does in the REPL
   // return git.tags().then(tags => tags.all)
   return new Promise((resolve, reject) => {
@@ -48,7 +48,7 @@ export function fetchTags() {
  * @async
  * @returns {string} - stdout from the git command
  */
-export async function checkoutTag(tag) {
+export async function checkoutTag (tag) {
   return await git.checkout(tag)
 }
 
@@ -58,7 +58,7 @@ export async function checkoutTag(tag) {
  * @returns {string} - The version
  * @throws {Error} - Thrown if the specified tag was not found
  */
-export async function switchToTag(tag) {
+export async function switchToTag (tag) {
   const changes = await fetchChanges()
   const tags = await fetchTags()
   if (tags.find(e => e === tag)) {

@@ -10,7 +10,7 @@ beforeEach(() => {
 describe('localstorage_adapter', () => {
   describe('get', () => {
     it('returns value', async () => {
-      localStorage.setItem('test', `{"foo": "bar"}`)
+      localStorage.setItem('test', '{"foo": "bar"}')
       const res = await localStorageAdapter.get('test')
       expect(res).toEqual({ test: { foo: 'bar' } })
     })

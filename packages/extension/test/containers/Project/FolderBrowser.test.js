@@ -15,7 +15,7 @@ describe('FolderBrowser store', () => {
       connect: mockConnect
     }))
     require('../../../src/containers/Project/FolderBrowser')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       files: {

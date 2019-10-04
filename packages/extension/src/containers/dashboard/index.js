@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators }  from 'redux'
-import {Checkbox} from 'antd'
+import { bindActionCreators } from 'redux'
+import { Checkbox } from 'antd'
 
 import '../../styles/dashboard.scss'
 import * as actions from '../../actions'
@@ -11,27 +11,27 @@ import DashboardBottom from './DashboardBottom'
 import C from '../../config'
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      isChecked: true,
-    };
-    this.toggleChange = this.toggleChange.bind(this);
+      isChecked: true
+    }
+    this.toggleChange = this.toggleChange.bind(this)
   }
 
   toggleChange () {
     this.setState({
       isChecked: !this.state.isChecked
-    });
+    })
   }
 
   render () {
-    const viewLog = this.state.isChecked ? <DashboardBottom/> : null;
+    const viewLog = this.state.isChecked ? <DashboardBottom/> : null
     return (
       <div className="dashboard">
         <DashboardEditor />
         <div>
-        <Checkbox
+          <Checkbox
             checked={this.state.isChecked}
             onChange={this.toggleChange}
           >
@@ -51,5 +51,5 @@ class Dashboard extends React.Component {
 
 export default connect(
   state => ({}),
-  dispatch => bindActionCreators({...actions}, dispatch)
+  dispatch => bindActionCreators({ ...actions }, dispatch)
 )(Dashboard)

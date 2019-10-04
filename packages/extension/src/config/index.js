@@ -7,4 +7,4 @@ export default {
   urlReleases: 'https://github.com/intuit/replayweb',
   productName: 'ReplayWeb',
   hostVersion: '1.0'
-};
+}

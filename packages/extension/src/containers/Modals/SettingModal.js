@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {updateConfig, changeModalState} from '../../actions'
+import { updateConfig, changeModalState } from '../../actions'
 import SettingModal from '../../components/Modals/SettingModal'
 const mapStateToProps = (state) => {
   return {

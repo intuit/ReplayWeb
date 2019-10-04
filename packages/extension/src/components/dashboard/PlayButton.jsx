@@ -8,7 +8,7 @@ const PlayButton = (props) => {
     const { commands } = props.editing
     const { src } = props.editing.meta
     const openTc = commands.find(tc => tc.command.toLowerCase() === 'open')
-    props.removeSearch();
+    props.removeSearch()
     props.playerPlay({
       title: src && src.name && src.name.length ? src.name : 'Untitled',
       extra: {
@@ -24,9 +24,9 @@ const PlayButton = (props) => {
   return (
     <Tooltip title="Play Test">
       <Button
-      shape='circle'
-      onClick={play}
-      style={{color: '#ffffff', background: '#35b876', 'marginLeft': '5px', 'marginRight': '5px'}}>
+        shape='circle'
+        onClick={play}
+        style={{ color: '#ffffff', background: '#35b876', marginLeft: '5px', marginRight: '5px' }}>
         <Icon type="caret-right" />
       </Button>
     </Tooltip>

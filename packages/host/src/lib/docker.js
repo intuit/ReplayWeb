@@ -1,6 +1,6 @@
 import Docker from 'dockerode'
 
-const docker = new Docker({socketPath: '/var/run/docker.sock'})
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 const dockerFolder = 'docker.example.com/dev/test/replayui/team'
 
 /**

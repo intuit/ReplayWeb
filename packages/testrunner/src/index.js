@@ -26,7 +26,7 @@ polyfill()
  * @param {string[]|array[]} plugins - Array of plugins from config file to load
  * @returns {Promise} - A promise chain of webdriverio commands
  */
-export async function runCommands({ commands, metadata }, implicitWait = 7000, delay = null, plugins = []) {
+export async function runCommands ({ commands, metadata }, implicitWait = 7000, delay = null, plugins = []) {
   const pause = (timeout) => () => new Promise(resolve => setTimeout(() => resolve(true), timeout))
   const context = {}
 
@@ -54,13 +54,13 @@ export async function runCommands({ commands, metadata }, implicitWait = 7000, d
  * Creates the hooks for running tests and registers plugins
  * @param {string[]|array[]} pluginData - Array of plugin data from config file
  */
-export function makeHooks(pluginData = []) {
+export function makeHooks (pluginData = []) {
   const hooks = {
-    beforeTest: new AsyncParallelHook(["testName", "browser"]),
-    afterTest: new AsyncParallelHook(["testName", "browser", "context", "metadata"]),
-    beforeCommand: new AsyncParallelHook(["command", "context", "browser"]),
-    onElement: new AsyncParallelHook(["element", "browser", "command", "context", "testName"]),
-    onError: new AsyncParallelHook(["error", "browser", "testName"])
+    beforeTest: new AsyncParallelHook(['testName', 'browser']),
+    afterTest: new AsyncParallelHook(['testName', 'browser', 'context', 'metadata']),
+    beforeCommand: new AsyncParallelHook(['command', 'context', 'browser']),
+    onElement: new AsyncParallelHook(['element', 'browser', 'command', 'context', 'testName']),
+    onError: new AsyncParallelHook(['error', 'browser', 'testName'])
   }
   hooks.beforeCommand.tapPromise(
     'Running Command',
@@ -76,7 +76,7 @@ export function makeHooks(pluginData = []) {
  * `runInParallel` function
  * @public
  */
-export function removeTemporaryFiles() {
+export function removeTemporaryFiles () {
   console.log('Cleaning temporary test folders')
   const currentFiles = fs.readdirSync(process.cwd())
   const replayFiles = currentFiles.filter(f => f.includes('.replay-tests'))
@@ -100,18 +100,17 @@ export function removeTemporaryFiles() {
  + * @param {function} callback - This function will report a sub-directory when found.
  + * @returns {Array<String>} - If directory exists, then returns an array of full path names to all JSON files found. Otherwise, returns an empty array.
  + */
-export function getJsonFiles(dir, callback) {
+export function getJsonFiles (dir, callback) {
   const filesList = new Array()
   fs.readdirSync(dir).forEach(f => {
-    const dirEntry = path.join(dir, f);
+    const dirEntry = path.join(dir, f)
     if (fs.statSync(dirEntry).isDirectory()) {
       typeof callback === 'function' && callback(dirEntry)
       getJsonFiles(dirEntry, callback).map(thisItem => filesList.push(thisItem))
-    }
-    else {
+    } else {
       filesList.push(dirEntry)
     }
-  });
+  })
   return filesList.filter(f => path.parse(f).ext.toLowerCase() === '.json')
 }
 
@@ -121,9 +120,9 @@ export function getJsonFiles(dir, callback) {
  * @param {string} blockPath - The path to the blocks
  * @returns {Array<Object>} - An array of Objects that are the blocks
  */
-export function getAllBlockContents(blockPath) {
+export function getAllBlockContents (blockPath) {
   return getJsonFiles(blockPath, (dir) => {
-    log('index.getAllBlockContents; sub-directory found:\t' + dir, true);
+    log('index.getAllBlockContents; sub-directory found:\t' + dir, true)
   }).map(fileName => ({
     name: path.parse(fileName).name,
     // parse it into json to validate that it is JSON
@@ -138,9 +137,9 @@ export function getAllBlockContents(blockPath) {
  * @param {string} testsPath - The path to the test files
  * @returns {Array<string>} - An array of filenames to process as tests
  */
-export function getJsonTestFiles(testsPath) {
+export function getJsonTestFiles (testsPath) {
   return getJsonFiles(testsPath, (dir) => {
-    log('index.getJsonTestFiles; sub-directory found:\t' + dir, true);
+    log('index.getJsonTestFiles; sub-directory found:\t' + dir, true)
   }).filter(f => {
     if (argv.test) {
       return path.parse(f).name === argv.test
@@ -164,7 +163,7 @@ export function getJsonTestFiles(testsPath) {
  * @param {number} options.delay - Delay to add between each command being processed
  * @returns {Array<string>} - Array of filepaths to the generated files
  */
-export function runInParallel(filePath, options = {}) {
+export function runInParallel (filePath, options = {}) {
   const blocks = !options.blockPath ? [] : getAllBlockContents(options.blockPath)
   // put back into a JSON string so it can be inserted into the test files
   const blocksAsString = JSON.stringify(blocks)
@@ -221,9 +220,9 @@ describe('replay', function() {
  * @param {number} options.delay - Delay to add between each command being processed
  * @returns {Array<string>} - Array of filepaths to the generated files
  */
-export function runInParallelAllRegions(filePath, options = {}) {
+export function runInParallelAllRegions (filePath, options = {}) {
   if (!options.loginBlockPath) {
-    throw new Error(`loginBlockPath is undefined in replay.config.json but runInAllRegions is true`)
+    throw new Error('loginBlockPath is undefined in replay.config.json but runInAllRegions is true')
   }
   const fullLoginBlockPath = options.loginBlockPath ? path.resolve(process.cwd(), options.loginBlockPath) : undefined
   const loginBlocksExist = fs.existsSync(fullLoginBlockPath)
@@ -288,7 +287,7 @@ export function runInParallelAllRegions(filePath, options = {}) {
   return testFiles.map(f => f.path)
 }
 
-export function expandLoginBlockForAllRegions(commands = [], blocks = []) {
+export function expandLoginBlockForAllRegions (commands = [], blocks = []) {
   const newCommands = blocks.map(block => ({
     locale: block.data.commands.find(b => b.parameters && b.parameters.locale).parameters.locale,
     commands: block.data.commands.concat(commands)
@@ -303,7 +302,7 @@ export function expandLoginBlockForAllRegions(commands = [], blocks = []) {
  * @param {string} folderPath - An optional argument to specify the folder where the config is located
  * @return {Object} An object with specs, and suites
  */
-export function loadFromConfig(folderPath = '.', runInAllRegions = false) {
+export function loadFromConfig (folderPath = '.', runInAllRegions = false) {
   const configFolder = path.resolve(process.cwd(), folderPath)
   const configLocation = path.resolve(configFolder, 'replay.config.json')
   if (fs.existsSync(configLocation)) {
@@ -321,7 +320,7 @@ export function loadFromConfig(folderPath = '.', runInAllRegions = false) {
       const blocksExist = fs.existsSync(fullBlockPath)
 
       if (fullBlockPath && !blocksExist) {
-        console.warn(`blockPath is defined in replay.config.json but the path does not exist`)
+        console.warn('blockPath is defined in replay.config.json but the path does not exist')
       }
 
       const specs = runInAllRegions ? runInParallelAllRegions(
@@ -376,7 +375,7 @@ export function loadFromConfig(folderPath = '.', runInAllRegions = false) {
  * @param {Object} options.capabilities - Object to add more capabilities to the defaults, so the --capabilities flag can be used
  * @return {Object} An object that is a webdriverio config without specs or suites
  */
-export function getDefaults(options = {}) {
+export function getDefaults (options = {}) {
   const { port: portFlag = 4444, caps: capFlag = undefined } = argv
   const { selenium, applitools, capabilities, logDir = './target/surefire-reports' } = options
   const { hostname, port, path, protocol } = getEnvironment(portFlag)
@@ -416,25 +415,24 @@ export function getDefaults(options = {}) {
   }
 }
 
-
 /**
  * overrides default and returns webdriverio configuration to capture video and generate allure reporting for workflows
  */
-export function getDefaultsVideoPlusAllure(options = {}) {
+export function getDefaultsVideoPlusAllure (options = {}) {
   const { reporters, ...defaults } = getDefaults(options)
   return {
     ...defaults,
     reporters: [...reporters,
-    [video, {
-      saveAllVideos: true,       // If true, also saves videos for successful test cases
-      videoSlowdownMultiplier: 5, // Higher to get slower videos, lower for faster videos [Value 1-100]
-      videoRenderTimeout: 5,      // Max seconds to wait for a video to finish rendering
-    }],
-    ['allure', {
-      outputDir: './_results_/allure-raw',
-      disableWebdriverStepsReporting: false,
-      disableWebdriverScreenshotsReporting: false,
-    }],
+      [video, {
+        saveAllVideos: true, // If true, also saves videos for successful test cases
+        videoSlowdownMultiplier: 5, // Higher to get slower videos, lower for faster videos [Value 1-100]
+        videoRenderTimeout: 5 // Max seconds to wait for a video to finish rendering
+      }],
+      ['allure', {
+        outputDir: './_results_/allure-raw',
+        disableWebdriverStepsReporting: false,
+        disableWebdriverScreenshotsReporting: false
+      }]
     ],
     runner: 'local',
     services: undefined,
@@ -444,8 +442,7 @@ export function getDefaultsVideoPlusAllure(options = {}) {
     sync: true,
     logLevel: 'debug',
     onComplete: () => {
-      removeTemporaryFiles();
+      removeTemporaryFiles()
     }
   }
 }
-

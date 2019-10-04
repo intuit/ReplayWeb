@@ -1,18 +1,17 @@
-import reducer from '../../src/reducers/editor';
-import {initialState, updateHasUnSaved} from '../../src/reducers/editor';
-import {types} from '../../src/actions/action_types';
-import * as C from '../../src/common/constant';
-import {newCommand} from '../../src/common/commands';
+import reducer, {initialState, updateHasUnSaved} from '../../src/reducers/editor'
+import { types } from '../../src/actions/action_types'
+import * as C from '../../src/common/constant'
+import { newCommand } from '../../src/common/commands'
 
 describe('editor reducer', () => {
   it('should do nothing if invalid action', () => {
     const action = {
       type: 'INVALID'
-    };
+    }
     const expected = Object.assign({},
       initialState
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set editing', () => {
     const action = {
@@ -25,7 +24,7 @@ describe('editor reducer', () => {
             value: '{}'
           }
         ],
-        filterCommands:[],
+        filterCommands: [],
         meta: {
           src: {
             id: 1,
@@ -34,8 +33,8 @@ describe('editor reducer', () => {
           hasUnsaved: false,
           selectedIndex: 0
         }
-      },
-    };
+      }
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -66,12 +65,12 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set editing', () => {
     const action = {
-      type: types.SET_EDITING,
-    };
+      type: types.SET_EDITING
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -90,13 +89,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set editor status', () => {
     const action = {
       type: types.SET_EDITOR_STATUS,
       data: 'potatoes'
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -105,7 +104,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -115,13 +114,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set next test', () => {
     const action = {
       type: types.NEXT_TEST,
       id: 1
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -130,7 +129,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -140,13 +139,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set next block', () => {
     const action = {
       type: types.NEXT_BLOCK,
       id: 1
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -155,7 +154,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -165,13 +164,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set next suite', () => {
     const action = {
       type: types.NEXT_SUITE,
       id: 1
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -180,7 +179,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -190,13 +189,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should set inspect target', () => {
     const action = {
       type: types.INSPECT_TARGET,
       target: 'id=testId'
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -205,7 +204,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -215,13 +214,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should select project', () => {
     const action = {
       type: types.SELECT_PROJECT,
       data: 'potato'
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -230,7 +229,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -240,13 +239,13 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should list projects', () => {
     const action = {
       type: types.LIST_PROJECTS,
       data: ['potato', 'tomato']
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -255,7 +254,7 @@ describe('editor reducer', () => {
           commands: [
             newCommand
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -265,8 +264,8 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
-  });
+    expect(reducer(initialState, action)).toEqual(expected)
+  })
   it('should show context menu', () => {
     const action = {
       type: types.SHOW_CONTEXT_MENU,
@@ -276,7 +275,7 @@ describe('editor reducer', () => {
         isShown: true,
         commandIndex: 1
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -288,12 +287,12 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
-  });
+    expect(reducer(initialState, action)).toEqual(expected)
+  })
   it('should hide context menu', () => {
     const action = {
       type: types.HIDE_CONTEXT_MENU
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -304,8 +303,8 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
-  });
+    expect(reducer(initialState, action)).toEqual(expected)
+  })
   describe('updateHasUnSaved', () => {
     it('should update hasUnsaved for tests', () => {
       const init = Object.assign(
@@ -361,7 +360,7 @@ describe('editor reducer', () => {
                   }
                 ]
               }
-            },
+            }
           ],
           suites: [
             {
@@ -434,7 +433,7 @@ describe('editor reducer', () => {
                   }
                 ]
               }
-            },
+            }
           ],
           suites: [
             {
@@ -502,7 +501,7 @@ describe('editor reducer', () => {
                   }
                 ]
               }
-            },
+            }
           ],
           suites: [
             {
@@ -521,4 +520,4 @@ describe('editor reducer', () => {
       expect(nextState.editing.meta.hasUnsaved.tests).toEqual(true)
     })
   })
-});
+})

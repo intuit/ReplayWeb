@@ -6,7 +6,7 @@ afterEach(cleanup)
 
 describe('Suite', () => {
   it('renders with defaults', () => {
-    const {container} = render(
+    const { container } = render(
       <Suite disabled={false} name="TEST" />
     )
     const span = container.querySelector('span')
@@ -16,7 +16,7 @@ describe('Suite', () => {
   })
 
   it('renders with disabled', () => {
-    const {container} = render(
+    const { container } = render(
       <Suite disabled={true} name="TEST"/>
     )
     const span = container.querySelector('span')

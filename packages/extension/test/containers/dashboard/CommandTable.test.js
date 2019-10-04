@@ -28,7 +28,7 @@ describe('CommandButtons store', () => {
       connect: mockConnect
     }))
     require('../../../src/containers/dashboard/CommandTable')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       editor: {

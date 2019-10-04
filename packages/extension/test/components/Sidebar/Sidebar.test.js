@@ -10,11 +10,11 @@ afterEach(cleanup)
 
 const renderSidebar = (overrides = {}) => {
   const {
-    editing = {meta: {src: {name: ''}}},
+    editing = { meta: { src: { name: '' } } },
     testCases = [],
-    project = {name: ''},
+    project = { name: '' },
     projects = [],
-    player = {status: ''},
+    player = { status: '' },
     status = '',
     blocks = [],
     suites = [],
@@ -99,7 +99,7 @@ describe('Sidebar', () => {
     expect(getByText('Test Case c')).not.toBeNull()
     const testCaseParts = getAllByText(/Test Case \w/)
     const testCaseNames = testCaseParts.map(p => p.innerHTML)
-    expect(testCaseNames).toEqual([ 'Test Case a', 'Test Case b', 'Test Case c' ])
+    expect(testCaseNames).toEqual(['Test Case a', 'Test Case b', 'Test Case c'])
   })
 
   it('shows which project is being edited', async () => {
@@ -176,14 +176,14 @@ describe('Sidebar', () => {
 
   describe('changeTestCase', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeTestCase(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -198,7 +198,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -215,7 +215,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editTestCase = jest.fn()
@@ -226,7 +226,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editNewTestCase = jest.fn()
@@ -239,14 +239,14 @@ describe('Sidebar', () => {
 
   describe('changeBlock', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeBlock(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -261,7 +261,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -278,7 +278,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editBlock = jest.fn()
@@ -289,7 +289,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const changeModalState = jest.fn()
@@ -302,14 +302,14 @@ describe('Sidebar', () => {
 
   describe('changeSuite', () => {
     it('does nothing if status is wrong', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const component = new Sidebar({ testCases, status: '' })
       const result = await component.changeSuite(1)
       expect(result).toBe(false)
     })
 
     it('succeeds if editing meta is set', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -324,7 +324,7 @@ describe('Sidebar', () => {
     })
 
     it('returns false if hasUnsaved', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = {
         meta: {
@@ -341,7 +341,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editSuite = jest.fn()
@@ -352,7 +352,7 @@ describe('Sidebar', () => {
     })
 
     it('returns true and edits new test case', async () => {
-      const testCases = [ { id: 1, name: 'Test case 1' } ]
+      const testCases = [{ id: 1, name: 'Test case 1' }]
       const status = C.APP_STATUS.NORMAL
       const editing = { meta: {} }
       const editNewSuite = jest.fn()

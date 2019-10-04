@@ -37,7 +37,7 @@
     }
 
     var promisify = function (method, source, target) {
-      if (!source)  return
+      if (!source) return
       var reg = /The message port closed before a res?ponse was received/
 
       target[method] = (...args) => {
@@ -58,7 +58,7 @@
     }
 
     var copy = function (method, source, target) {
-      if (!source)  return
+      if (!source) return
       target[method] = source[method]
     }
 
@@ -66,9 +66,9 @@
       [obj.toPromisify, promisify],
       [obj.toCopy, copy]
     ]
-    .reduce(function (prev, tuple) {
-      return adapt(chrome, prev, tuple[0], tuple[1])
-    }, {})
+      .reduce(function (prev, tuple) {
+        return adapt(chrome, prev, tuple[0], tuple[1])
+      }, {})
   }
 
   var UsedAPI = {

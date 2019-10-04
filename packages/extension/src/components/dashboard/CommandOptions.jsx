@@ -1,69 +1,61 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators }  from 'redux'
 import {
-  Menu, Input, Form, Select, message, Tabs, Button, Modal, Tooltip, Icon
+  Form, Select, Button, Modal, Tooltip
 } from 'antd'
-
-import inspector from '../../common/inspector'
-import { getPlayer } from '../../common/player'
-import csIpc from '../../common/ipc/ipc_cs'
-import * as actions from '../../actions'
 import * as C from '../../common/constant'
-
 import allCommands, { newCommand } from '../../common/commands'
-
 import CommandField from '../../containers/dashboard/fields/CommandField'
-import CommandDoc from './CommandDoc';
+import CommandDoc from './CommandDoc'
 
 const availableCommands = allCommands.map(c => c.name).slice().sort() // slice to make copy
-
 const defaultDataSource = [newCommand]
 
 class CommandOptions extends React.Component {
-  state = {
-    activeTabForCommands: 'table_view',
-    sourceText: '',
-    sourceTextModified: null,
-    sourceErrMsg: null,
-    visible: false,
+  constructor (props) {
+    super(props)
+    this.state = {
+      activeTabForCommands: 'table_view',
+      sourceText: '',
+      sourceTextModified: null,
+      sourceErrMsg: null,
+      visible: false,
 
-    contextMenu: {
-      x: null,
-      y: null,
-      isShown: false
+      contextMenu: {
+        x: null,
+        y: null,
+        isShown: false
+      }
     }
-
   }
 
-  showModal = () => {
+  showModal () {
     this.setState({
       visible: true
-    });
+    })
   }
 
-  handleOk = (e) => {
+  handleOk (e) {
     this.setState({
       visible: false
-    });
+    })
   }
 
-  handleCancel = (e) => {
+  handleCancel (e) {
     this.setState({
       visible: false
-    });
+    })
   }
 
-  onDetailChange = (key, value) => {
+  onDetailChange (key, value) {
     this.props.updateSelectedCommand({[key]: value})
   }
 
-  updateEditorStatus = () => {
+  updateEditorStatus () {
     this.props.setEditorStatus(C.EDITOR_STATUS.BLOCKS)
   }
 
-  switchToBlockByName = (name) => {
+  switchToBlockByName (name) {
     return new Promise((resolve, reject) => {
       const targetBlock = this.props.editor.blocks.find((block) => block.name === name)
       if (targetBlock) {
@@ -113,7 +105,7 @@ class CommandOptions extends React.Component {
               ))}
             </Select>
             <span className="commandDoc">
-            <Button type="primary" shape="circle" size="small" onClick={this.showModal}> ? </Button>
+              <Button type="primary" shape="circle" size="small" onClick={this.showModal}> ? </Button>
               <Modal
                 title="ReplayUI Commands"
                 visible={this.state.visible}
@@ -133,7 +125,7 @@ class CommandOptions extends React.Component {
                         const blockName = selectedCmd.parameters.block
                         if (blockName) {
                           this.switchToBlockByName(blockName)
-                          console.log('CommandOption: Switch to Block Name => ' + blockName);
+                          console.log('CommandOption: Switch to Block Name => ' + blockName)
                         } else {
                           alert('No block name associated with this command. Select a block in the "block" parameter associated with this command.')
                           console.log('CommandOption: Block name not found. Aborting editor switch to block.')

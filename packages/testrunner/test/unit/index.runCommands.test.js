@@ -24,7 +24,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -43,7 +43,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -77,7 +77,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -110,7 +110,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -146,7 +146,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -176,7 +176,7 @@ describe('runCommands', () => {
         {
           command: 'open',
           parameters: {
-            url: "https://example.com"
+            url: 'https://example.com'
           }
         },
         {
@@ -192,7 +192,7 @@ describe('runCommands', () => {
       }
     }
     await expect(runCommands(testDef)).resolves.toHaveProperty('command', 'click')
-    expect(afterTestMock).toHaveBeenCalledWith('', {}, {}, {title: 'title', overview: 'overview'})
+    expect(afterTestMock).toHaveBeenCalledWith('', {}, {}, { title: 'title', overview: 'overview' })
     expect(afterTestMock).toHaveBeenCalledTimes(1)
   })
 })

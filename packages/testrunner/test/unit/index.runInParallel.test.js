@@ -49,15 +49,15 @@ describe('runInParallel', () => {
           isDirectory: () => {
             switch (item) {
               case './blockPath':
-                case 'blockPath/dir1':
-                  return true
+              case 'blockPath/dir1':
+                return true
               default:
                 return false
             }
           }
         })
       })
-      const logFn = jest.fn( (msg, bool) => {
+      const logFn = jest.fn((msg, bool) => {
         if (bool) {
           return msg
         }
@@ -96,17 +96,17 @@ describe('runInParallel', () => {
     it('should return all .json files from parent directory and all sub-directories and use callback for all sub-directories found', () => {
       runInParallelRewire.__Rewire__('fs', {
         readdirSync: (dir) => {
-          switch(dir) {
+          switch (dir) {
             case './testPath':
-              return ['dir1','dir2','dir3','File.json'];
+              return ['dir1', 'dir2', 'dir3', 'File.json']
             case 'testPath/dir1':
-              return ['File1.json', 'File1.js'];
+              return ['File1.json', 'File1.js']
             case 'testPath/dir2':
-              return ['File2.json', 'File2.js'];
+              return ['File2.json', 'File2.js']
             case 'testPath/dir3':
-              return ['File3.json', 'File3.js'];
+              return ['File3.json', 'File3.js']
             default:
-              return [];
+              return []
           }
         },
         statSync: (item) => ({
@@ -211,7 +211,7 @@ describe('runInParallel', () => {
           }
         })
       })
-      const logFn = jest.fn( (msg, bool) => {
+      const logFn = jest.fn((msg, bool) => {
         if (bool) {
           return msg
         }
@@ -253,7 +253,7 @@ describe('runInParallel', () => {
       })
       runInParallelRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
       runInParallelRewire.__Rewire__('getAllBlockContents', (testsPath) => (['{"Commands": [{"cmd": "testCommand"}]}']))
-      const testFiles = runInParallel('./tests', {blockPath: './blocks'})
+      const testFiles = runInParallel('./tests', { blockPath: './blocks' })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1.js')
       expect(contents).toEqual(expect.stringContaining('testCommand'))
@@ -265,7 +265,7 @@ describe('runInParallel', () => {
         writeFileSync: (path, cont) => (contents = cont)
       })
       runInParallelRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
-      const testFiles = runInParallel('./tests', {retries: 4})
+      const testFiles = runInParallel('./tests', { retries: 4 })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1.js')
       expect(contents).toEqual(expect.stringContaining('retries(4)'))
@@ -277,7 +277,7 @@ describe('runInParallel', () => {
         writeFileSync: (path, cont) => (contents = cont)
       })
       runInParallelRewire.__Rewire__('getJsonTestFiles', (testsPath) => (['Test1.json']))
-      const testFiles = runInParallel('./tests', {timeout: 5678})
+      const testFiles = runInParallel('./tests', { timeout: 5678 })
       expect(testFiles).toHaveLength(1)
       expect(testFiles[0]).toBe('/test/.replay-tests-123/Test1.js')
       expect(contents).toEqual(expect.stringContaining('timeout(5678)'))

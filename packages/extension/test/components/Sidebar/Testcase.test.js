@@ -12,7 +12,7 @@ const trimUp = (s) => {
 
 describe('Testcase', () => {
   it('renders with defaults', () => {
-    const {container} = render(
+    const { container } = render(
       <Testcase name="TEST" />
     )
     const span = container.querySelector('span')
@@ -22,7 +22,7 @@ describe('Testcase', () => {
   })
 
   it('renders with disabled', () => {
-    const {container} = render(
+    const { container } = render(
       <Testcase disabled={true} name="TEST" />
     )
     const span = container.querySelector('span')
@@ -32,7 +32,7 @@ describe('Testcase', () => {
   })
 
   it('renders with custom status', () => {
-    const {container} = render(
+    const { container } = render(
       <Testcase disabled={true} name="TEST" status="STATUS"/>
     )
     const span = container.querySelector('span')

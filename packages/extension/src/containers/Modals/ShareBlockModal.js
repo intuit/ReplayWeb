@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {changeModalState, shareEditingBlock} from '../../actions'
+import { changeModalState, shareEditingBlock } from '../../actions'
 import ShareBlockModal from '../../components/Modals/ShareBlockModal'
 
 const mapStateToProps = (state) => {
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
     blockShareConfigError: state.app.blockShareConfigError,
     blockShareConfigErrorMessage: state.app.blockShareConfigErrorMessage
   }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => {
     openDuplicate: () => dispatch(changeModalState('duplicate', true)),
     shareEditingBlock: () => dispatch(shareEditingBlock())
   }
-};
+}
 
 export default connect(
   mapStateToProps,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Suite = props => {
   return (
@@ -7,7 +7,7 @@ const Suite = props => {
     >
       {props.name}
     </span>
-  );
-};
+  )
+}
 
-export default Suite;
+export default Suite

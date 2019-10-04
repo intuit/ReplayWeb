@@ -1,15 +1,15 @@
 let fail = false
 let ret = {}
-export function nativeMessage(msg) {
+export function nativeMessage (msg) {
   return fail ? Promise.reject(new Error()) : Promise.resolve(ret[msg.type])
 }
 
-export function logMessage() {
+export function logMessage () {
   return {
     type: 'LOG_MESSAGE'
   }
 }
-const __setReturn = (k,v) => {
+const __setReturn = (k, v) => {
   ret[k] = v
 }
 const __setFail = f => {

@@ -10,17 +10,17 @@ const CommandDoc = (props) => {
     if (a.name.toLowerCase() === b.name.toLowerCase()) {
       return 0
     } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1;
+      return 1
     } else {
-      return -1;
+      return -1
     }
-  });
+  })
 
   const columns = [
     { title: 'Cmd', dataIndex: 'name', key: 'name', width: 140 },
     { title: 'Description', dataIndex: 'description', key: 'description' },
     { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 140 }
-  ];
+  ]
 
   const addOn = <Icon
     type="close"

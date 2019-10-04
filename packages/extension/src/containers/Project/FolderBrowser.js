@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {listDirectory, changeModalState, selectProjectFolder} from '../../actions'
+import { listDirectory, changeModalState, selectProjectFolder } from '../../actions'
 import FolderBrowser from '../../components/Project/FolderBrowser.jsx'
 
 const mapStateToProps = state => {

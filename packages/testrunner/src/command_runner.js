@@ -8,7 +8,7 @@ import {
   setSessionStorage,
   getSessionStorage
 } from '@replayweb/utils'
-import {expect} from 'chai'
+import { expect } from 'chai'
 import {
   getAndWaitForElement,
   getExecElString,
@@ -28,13 +28,13 @@ import deepEqual from 'deep-equal'
  */
 export async function runCommand ({ command, parameters }, context, implicitWait, hooks) {
   const finalParameters = await replaceAllFields(parameters, context)
-  await hooks.beforeCommand.promise({command, parameters: finalParameters}, context, browser)
-  const tools = {getSelector, getAndWaitForElement, implicitWait, context, hooks}
+  await hooks.beforeCommand.promise({ command, parameters: finalParameters }, context, browser)
+  const tools = { getSelector, getAndWaitForElement, implicitWait, context, hooks }
 
   switch (command) {
     case 'assertAttribute': {
       const { target, attribute, expected } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.getAttribute(attribute))
         .then(attributeValue => {
           const re = expected.match(/^\/.+\/$/) ? regExpMatch(expected, attributeValue) : expected
@@ -43,8 +43,8 @@ export async function runCommand ({ command, parameters }, context, implicitWait
     }
 
     case 'assertCheckboxState': {
-      const {target, expected} = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      const { target, expected } = finalParameters
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => {
           return Promise.all([el.getAttribute('type'), el.getAttribute('checked')]).then(([type, checked]) => {
             return expect(type === 'checkbox' && Boolean(checked) === Boolean(expected)).to.equal(true)
@@ -54,14 +54,14 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'assertClassDoesNotExist': {
       const { target, class: assertClass } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.getAttribute('class'))
         .then(classes => expect(classes.split(' ')).to.not.include(assertClass))
     }
 
     case 'assertClassExists': {
       const { target, class: assertClass } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.getAttribute('class'))
         .then(classes => expect(classes.split(' ')).to.include(assertClass))
     }
@@ -91,13 +91,13 @@ export async function runCommand ({ command, parameters }, context, implicitWait
     }
 
     case 'assertLocalStorage': {
-      const {key, expected} = finalParameters
+      const { key, expected } = finalParameters
       return browser.execute(getLocalStorage, key)
         .then(value => expect(value).to.equal(expected))
     }
 
     case 'assertSessionStorage': {
-      const {key, expected} = finalParameters
+      const { key, expected } = finalParameters
       return browser.execute(getSessionStorage, key)
         .then(value => expect(value).to.equal(expected))
     }
@@ -114,7 +114,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
       // if the selector strategy is id, replace it with identifier to get an id in the form #someid so it works in queryselector
       const newTarget = target.indexOf('id=') === 0 ? target.replace('id=', 'identifier=') : target
       const execString = `return window.getComputedStyle(document.querySelector(\`${getSelector(newTarget)}\`))['${property}']`
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => browser.execute(execString))
         .then(computed => {
           if (computed === undefined) {
@@ -133,7 +133,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'assertText': {
       const { target, expected = '' } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(
           el => Promise.all([
             el.getText(),
@@ -173,7 +173,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'clearValue': {
       const { target } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.clearValue())
     }
 
@@ -181,7 +181,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
     case 'clickAndWait': {
       const { target } = finalParameters
       getSelector(target)
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.click())
     }
 
@@ -199,8 +199,8 @@ export async function runCommand ({ command, parameters }, context, implicitWait
     case 'dragAndDropToObject':
       const { startTarget, endTarget } = finalParameters
       return Promise.all([
-        getAndWaitForElement(startTarget, implicitWait, {command, parameters: finalParameters}, context), hooks,
-        getAndWaitForElement(endTarget, implicitWait, {command, parameters: finalParameters}, context, hooks)
+        getAndWaitForElement(startTarget, implicitWait, { command, parameters: finalParameters }, context), hooks,
+        getAndWaitForElement(endTarget, implicitWait, { command, parameters: finalParameters }, context, hooks)
       ]).then(([el, _]) => el.dragAndDrop(getSelector(endTarget)))
 
     case 'http': {
@@ -232,7 +232,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'mouseOver': {
       const { target } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.moveTo())
     }
 
@@ -242,7 +242,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
       return ['mouseover', 'mousedown', 'mouseup', 'click']
         .reduce(
           (acc, cv) => acc.then(() => browser.execute(getExecElString(sel) + '.dispatchEvent(new MouseEvent("' + cv + '", { bubbles: true }))')),
-          getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+          getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         )
         .catch(e => {
           if (!e.message.includes('Cannot read property \'dispatchEvent\' of null')) {
@@ -269,14 +269,14 @@ export async function runCommand ({ command, parameters }, context, implicitWait
     case 'select': {
       const { target, value } = finalParameters
       const text = value.replace(/^label=/, '')
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.selectByVisibleText(text))
     }
 
     case 'selectAndWait': {
       const { target, value } = finalParameters
       const text = value.replace(/^label=/, '')
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.selectByVisibleText(text))
         .then(() => browser.pause(3000))
     }
@@ -330,7 +330,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'storeValue': {
       const { target, key } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(
           el => Promise.all([
             el.getText(),
@@ -345,7 +345,7 @@ export async function runCommand ({ command, parameters }, context, implicitWait
 
     case 'type': {
       const { target, value } = finalParameters
-      return getAndWaitForElement(target, implicitWait, {command, parameters: finalParameters}, context, hooks)
+      return getAndWaitForElement(target, implicitWait, { command, parameters: finalParameters }, context, hooks)
         .then(el => el.setValue(value))
     }
 

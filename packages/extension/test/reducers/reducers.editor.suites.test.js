@@ -1,8 +1,7 @@
-import reducer from '../../src/reducers/editor';
-import {initialState} from '../../src/reducers/editor';
-import {types} from '../../src/actions/action_types';
-import * as C from '../../src/common/constant';
-import {newCommand} from '../../src/common/commands';
+import reducer, { initialState } from '../../src/reducers/editor';
+import { types } from '../../src/actions/action_types'
+import * as C from '../../src/common/constant'
+import { newCommand } from '../../src/common/commands'
 
 describe('editor reducer', () => {
   it('should save suite editing as existed', () => {
@@ -28,7 +27,7 @@ describe('editor reducer', () => {
           name: 'newSuite'
         }
       ]
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -49,7 +48,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should save suite editing as new', () => {
     const init = Object.assign({},
@@ -81,7 +80,7 @@ describe('editor reducer', () => {
           name: 'newSuite'
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -107,7 +106,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should set suite', () => {
     const action = {
@@ -118,7 +117,7 @@ describe('editor reducer', () => {
           name: 'newSuite'
         }
       ]
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -142,7 +141,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should edit suite', () => {
     const suites = [
@@ -184,7 +183,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.EDIT_SUITE,
       data: 2
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -204,7 +203,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('edit suite should return default if empty', () => {
     const init = Object.assign({},
@@ -226,7 +225,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.EDIT_SUITE,
       data: undefined
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -243,7 +242,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should rename suite', () => {
     const suites = [
@@ -287,13 +286,13 @@ describe('editor reducer', () => {
     const action = {
       type: types.RENAME_SUITE,
       data: 'renamed suite',
-      suites: suites.map(t => t.id === 2 ? Object.assign({}, t, {name: 'renamed suite'}): t)
+      suites: suites.map(t => t.id === 2 ? Object.assign({}, t, { name: 'renamed suite' }) : t)
 
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
-        suites: suites.map(b => b.id === 2 ? Object.assign({}, b, {name: 'renamed suite'}): b),
+        suites: suites.map(b => b.id === 2 ? Object.assign({}, b, { name: 'renamed suite' }) : b),
         editing: {
           tests: [
             'test2'
@@ -308,7 +307,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
 
   it('should remove current suite', () => {
@@ -353,7 +352,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.REMOVE_CURRENT_SUITE
 
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -372,7 +371,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should remove current suite when only one left', () => {
     const suites = [
@@ -406,7 +405,7 @@ describe('editor reducer', () => {
     )
     const action = {
       type: types.REMOVE_CURRENT_SUITE
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -422,7 +421,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
 
   it('should edit new suite', () => {
@@ -446,7 +445,7 @@ describe('editor reducer', () => {
     )
     const action = {
       type: types.EDIT_NEW_SUITE
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -462,7 +461,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should add test to suite', () => {
     const init = Object.assign({},
@@ -485,7 +484,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.ADD_SUITE_TEST,
       test: 'test2'
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -504,7 +503,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should remove test from suite', () => {
     const init = Object.assign({},
@@ -528,7 +527,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.REMOVE_SUITE_TEST,
       test: 'test2'
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -546,6 +545,6 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
-});
+})

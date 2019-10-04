@@ -157,7 +157,7 @@ const handleSubstitutionState = (self) => {
   }
   updateSubstitutions(self.props.editing.commands, self.props.editor.blocks).then(cleanedReplacements => {
     if (curId === self.props.editing.meta.src.id) {
-      self.setState({replaced: cleanedReplacements})
+      self.setState({ replaced: cleanedReplacements })
     }
   })
 }
@@ -165,7 +165,7 @@ const handleSubstitutionState = (self) => {
 class CommandTable extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {replaced: []}
+    this.state = { replaced: [] }
   }
 
   onInputChange (e) {
@@ -175,7 +175,7 @@ class CommandTable extends React.Component {
   }
 
   componentWillMount () {
-    this.setState({replaced: []})
+    this.setState({ replaced: [] })
   }
 
   componentDidMount () {
@@ -184,7 +184,7 @@ class CommandTable extends React.Component {
 
   componentWillReceiveProps (props) {
     if (this.props.editing.meta.src && props.editing.meta.src && (props.editing.meta.src.id !== this.props.editing.meta.src.id)) {
-      this.setState({replaced: []})
+      this.setState({ replaced: [] })
     }
 
     // We are making the claim that other blocks will not change while editing a given text/block
@@ -202,9 +202,9 @@ class CommandTable extends React.Component {
             value={searchText}
             onChange={this.onInputChange}
             disabled={!editable}
-            style={{width: 180, marginLeft: 30}}
+            style={{ width: 180, marginLeft: 30 }}
             addonAfter={<Icon type="close"
-              style={{cursor: 'pointer'}}
+              style={{ cursor: 'pointer' }}
               onClick={e => {
                 this.props.removeSearchText()
               }}
@@ -239,7 +239,7 @@ class CommandTable extends React.Component {
           // if they arent, use the keys from the parameters of the actual command object
           const params = commandsMap[record.command] && commandsMap[record.command].parameters
             ? commandsMap[record.command].parameters
-            : (record.parameters && Object.keys(record.parameters).map(p => ({name: p}))) || []
+            : (record.parameters && Object.keys(record.parameters).map(p => ({ name: p }))) || []
           return <div key={record.key}>
             {
               params.map(
@@ -249,11 +249,11 @@ class CommandTable extends React.Component {
                   const value = (param.type === 'object' && param.key !== undefined)
                     ? record.parameters[param.name] && record.parameters[param.name][param.key]
                     : record.parameters[param.name]
-                  const warning = <Tooltip title={`${param.name} is missing`}><Icon type='warning' style={{color: 'red'}}/></Tooltip>
-                  const optional = <Tooltip title={`${param.name} is optional`}><Icon type='question-circle' style={{color: 'blue'}}/></Tooltip>
+                  const warning = <Tooltip title={`${param.name} is missing`}><Icon type='warning' style={{ color: 'red' }}/></Tooltip>
+                  const optional = <Tooltip title={`${param.name} is optional`}><Icon type='question-circle' style={{ color: 'blue' }}/></Tooltip>
                   const maxLength = 30
                   const shorten = s => s.length > maxLength ? s.substring(0, maxLength - 3) + '...' : s
-                  return <span key={param.name} style={{marginRight: '20px'}}>
+                  return <span key={param.name} style={{ marginRight: '20px' }}>
                     <strong>{param.name}:</strong> {value ? shorten(`${value}`) : (param.optional ? optional : warning)}
                   </span>
                 }
@@ -304,7 +304,7 @@ class CommandTable extends React.Component {
                   type='danger'
                   icon='minus'
                   shape='circle'
-                  style={{marginRight: '5px'}}
+                  style={{ marginRight: '5px' }}
                 />
               </Tooltip>
               <Tooltip title='Add Command' mouseEnterDelay={0.5}>

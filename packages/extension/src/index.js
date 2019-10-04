@@ -2,20 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { message, LocaleProvider } from 'antd'
 import enUS from 'antd/lib/locale-provider/en_US'
-import {replaceAllFields, expandBlocks} from '@replayweb/utils'
+import { replaceAllFields, expandBlocks } from '@replayweb/utils'
 
 import App from './app'
 import { Provider, createStore } from './redux'
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux'
 import csIpc from './common/ipc/ipc_cs'
-import {commandWithoutBaseUrl } from './models/test_case_model'
+import { commandWithoutBaseUrl } from './models/test_case_model'
 import projectModel from './models/project_model'
 import storage from './common/storage'
 import { getPlayer, MODE } from './common/player'
-import {updateIn} from './common/utils'
+import { updateIn } from './common/utils'
 import * as C from './common/constant'
 import log from './common/log'
-import { collapseExpandedTestCase } from './common/blocks';
+import { collapseExpandedTestCase } from './common/blocks'
 import appReducer from './reducers/app'
 import editorReducer from './reducers/editor'
 import playerReducer from './reducers/player'
@@ -45,9 +45,9 @@ import {
   clearContext,
   getUser,
   reloadProjectFiles
-} from './actions';
-import { setEditorStatus } from './actions/editor';
-import { nativeMessage } from './actions/utilities';
+} from './actions'
+import { setEditorStatus } from './actions/editor'
+import { nativeMessage } from './actions/utilities'
 import config from './config'
 
 const rootReducer = combineReducers({
@@ -63,9 +63,9 @@ const rootReducer = combineReducers({
 const store = createStore(
   rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+)
 
-const rootEl = document.getElementById('root');
+const rootEl = document.getElementById('root')
 const render = Component =>
   ReactDOM.render(
     <LocaleProvider locale={enUS}>
@@ -74,37 +74,37 @@ const render = Component =>
       </Provider>
     </LocaleProvider>,
     rootEl
-  );
+  )
 
 // Note: listen to any db changes and restore all data from db to redux store
 // All test cases are stored in indexeddb (dexie)
 const bindDB = () => {
   function restoreProjects () {
     return projectModel.list().then(projects => {
-      store.dispatch(listProjects(projects));
+      store.dispatch(listProjects(projects))
       store.dispatch(selectProject(projects.find(p => store.getState().editor.project.id === p.id)))
-    });
+    })
   }
 
   ['updating', 'creating', 'deleting'].forEach(evt => {
     projectModel.table.hook(evt, () => {
       setTimeout(restoreProjects, 50)
-    });
-  });
+    })
+  })
 
-  restoreProjects();
+  restoreProjects()
 
   return storage.get('project').then(projectId => {
     if (projectId) {
-      return projectModel.get(projectId);
+      return projectModel.get(projectId)
     } else {
       return projectModel.list().then(projects => {
-        return projects[0];
+        return projects[0]
       })
     }
   }).then(project => {
     if (project) {
-      store.dispatch(selectProject(project));
+      store.dispatch(selectProject(project))
     } else {
       store.dispatch(changeModalState('projectSetup', true))
     }
@@ -116,9 +116,9 @@ const restoreEditing = () => {
   return storage.get('editing')
     .then(editing => {
       if (editing) {
-        let finalEditing = {...editing, filterCommands:[]}
+        let finalEditing = { ...editing, filterCommands: [] }
         if (editing && editing.baseUrl) {
-          finalEditing = {...editing, filterCommands:[]}
+          finalEditing = { ...editing, filterCommands: [] }
           finalEditing.commands = finalEditing.commands.map(
             commandWithoutBaseUrl(editing.baseUrl)
           )
@@ -186,16 +186,16 @@ class TimeTracker {
 
 // Note: initialize the player, and listen to all events it emits
 const bindPlayer = () => {
-  const runBlockPreprocessor = ({resources,config}) => {
+  const runBlockPreprocessor = ({ resources, config }) => {
     try {
-      const originalStartIndex = config.startIndex || 0;
-      const blocks = store.getState().editor.blocks;
-      const resourcesResult = expandBlocks(resources, blocks);
+      const originalStartIndex = config.startIndex || 0
+      const blocks = store.getState().editor.blocks
+      const resourcesResult = expandBlocks(resources, blocks)
 
       // Find the actual start Index from the original Start index
-      const result = collapseExpandedTestCase(resourcesResult);
+      const result = collapseExpandedTestCase(resourcesResult)
       // after collapsing the test case, we have a field key called "expanded Index" which is the index after expanding all the blocks
-      const { expandedIndex: foundIndex } = result[originalStartIndex];
+      const { expandedIndex: foundIndex } = result[originalStartIndex]
 
       // IF we're trying to run a block, then switch it to a STRAIGHT mode and run until endIndex
       if (config.mode === MODE.SINGLE && resources[originalStartIndex].command === 'runBlock') {
@@ -206,7 +206,7 @@ const bindPlayer = () => {
           nextIndex: foundIndex,
           endIndex: foundIndex + foundBlock.data.commands.length - 1,
           mode: MODE.STRAIGHT
-        };
+        }
       } return {
         resources: resourcesResult,
         endIndex: resourcesResult.length - 1,
@@ -214,7 +214,7 @@ const bindPlayer = () => {
         nextIndex: foundIndex
       }
     } catch (e) {
-      if (e.message.indexOf("does not exist") !== -1) {
+      if (e.message.indexOf('does not exist') !== -1) {
         message.error(e.message, 3)
         store.dispatch(addLog('error', e.message))
         throw e
@@ -225,19 +225,18 @@ const bindPlayer = () => {
     }
   }
 
-  const tracker     = new TimeTracker()
-  const player      = getPlayer({
+  const tracker = new TimeTracker()
+  const player = getPlayer({
     prepare (state) {
       tracker.reset()
 
-      const opts = state.partial ? {} : {url: state.startUrl};
+      const opts = state.partial ? {} : { url: state.startUrl }
       return csIpc.ask('PANEL_START_PLAYING', opts)
     },
     preprocessors: [runBlockPreprocessor],
     run (command, state) {
-
       if (command.command === 'open') {
-        command = {...command, href: state.startUrl};
+        command = { ...command, href: state.startUrl }
       }
 
       // add timeout info to each command's extra
@@ -246,25 +245,25 @@ const bindPlayer = () => {
       // the rest of commands
       command = updateIn(['extra'], extra => ({
         ...(extra || {}),
-        timeoutPageLoad:  60,
-        timeoutElement:   10,
-        errorIgnore:      false
-      }), command);
+        timeoutPageLoad: 60,
+        timeoutElement: 10,
+        errorIgnore: false
+      }), command)
       return replaceAllFields(command.parameters, store.getState().player.context)
         .then(finalParameters => {
-          const com = {command: command.command, parameters: finalParameters, context: store.getState().player.context, extra: command.extra}
+          const com = { command: command.command, parameters: finalParameters, context: store.getState().player.context, extra: command.extra }
           return csIpc.ask('PANEL_RUN_COMMAND', { command: com })
         })
     },
     handleResult (result, command, state) {
       if (result && result.context && result.context.forEach) {
-        result.context.forEach(({key, value}) => store.dispatch(setContext(key, value)))
+        result.context.forEach(({ key, value }) => store.dispatch(setContext(key, value)))
       }
 
-      let hasError = false;
+      let hasError = false
 
       if (result && result.log) {
-        if (result.log.info)  store.dispatch(addLog('info', result.log.info))
+        if (result.log.info) store.dispatch(addLog('info', result.log.info))
         if (result.log.error) {
           store.dispatch(addPlayerErrorCommandIndex(state.nextIndex))
           store.dispatch(addLog('error', result.log.error))
@@ -281,25 +280,25 @@ const bindPlayer = () => {
     }
   }, {
     preDelay: 0
-  });
+  })
 
   player.on('LOOP_RESTART', ({ currentLoop }) => {
     csIpc.ask('PANEL_STOP_PLAYING', {})
     csIpc.ask('PANEL_START_PLAYING', {})
     store.dispatch(addLog('info', `Current loop: ${currentLoop}`))
-  });
+  })
 
   player.on('START', ({ title }) => {
-    log('START');
+    log('START')
     store.dispatch(clearContext())
-    store.dispatch(startPlaying());
+    store.dispatch(startPlaying())
 
     store.dispatch(setPlayerState({
       status: C.PLAYER_STATUS.PLAYING,
       nextCommandIndex: null,
       errorCommandIndices: [],
       doneCommandIndices: []
-    }));
+    }))
 
     store.dispatch(addLog('info', `Playing test case ${title}`))
   })
@@ -310,7 +309,7 @@ const bindPlayer = () => {
       status: C.PLAYER_STATUS.PAUSED
     }))
 
-    store.dispatch(addLog('info', `Test case paused`))
+    store.dispatch(addLog('info', 'Test case paused'))
   })
 
   player.on('RESUMED', () => {
@@ -319,12 +318,12 @@ const bindPlayer = () => {
       status: C.PLAYER_STATUS.PLAYING
     }))
 
-    store.dispatch(addLog('info', `Test case resumed`))
+    store.dispatch(addLog('info', 'Test case resumed'))
   })
 
   player.on('END', (obj) => {
-    const {status} = store.getState().editor;
-    const isTestCase = status === C.EDITOR_STATUS.TESTS;
+    const { status } = store.getState().editor
+    const isTestCase = status === C.EDITOR_STATUS.TESTS
     log('END', obj)
     csIpc.ask('PANEL_STOP_PLAYING', {})
 
@@ -372,8 +371,8 @@ const bindPlayer = () => {
   })
 
   player.on('TO_PLAY', ({ index, currentLoop, loops, resource, playedCommands }) => {
-    const collapsedTestCase = collapseExpandedTestCase(playedCommands);
-    const testCaseIndex = collapsedTestCase.length - 1;
+    const collapsedTestCase = collapseExpandedTestCase(playedCommands)
+    const testCaseIndex = collapsedTestCase.length - 1
     log('TO_PLAYER', testCaseIndex)
     store.dispatch(setPlayerState({
       timeoutStatus: null,
@@ -382,8 +381,8 @@ const bindPlayer = () => {
       loops
     }))
 
-    const triple  = [resource.command, JSON.stringify(resource.parameters)]
-    const str     = ['', ...triple, ''].join(' | ')
+    const triple = [resource.command, JSON.stringify(resource.parameters)]
+    const str = ['', ...triple, ''].join(' | ')
     store.dispatch(addLog('info', `Executing: ${str}`))
 
     // Note: show in badage the current command index (start from 1)
@@ -394,7 +393,7 @@ const bindPlayer = () => {
   })
 
   player.on('PLAYED_LIST', ({ indices, playedCommands }) => {
-    log('PLAYED_LIST', {indices, playedCommands})
+    log('PLAYED_LIST', { indices, playedCommands })
     const collapsedTestCase = collapseExpandedTestCase(playedCommands)
     const newIndices = collapsedTestCase.map((_, index) => index)
     store.dispatch(setPlayerState({
@@ -403,7 +402,7 @@ const bindPlayer = () => {
   })
 
   player.on('ERROR', ({ msg, playedCommands }) => {
-    const nonBlockPlayedCommandIndex = playedCommands.filter(({isBlock}) => !isBlock).length + 1;
+    const nonBlockPlayedCommandIndex = playedCommands.filter(({ isBlock }) => !isBlock).length + 1
     log.error(`command index: ${nonBlockPlayedCommandIndex}, Error: ${msg}`)
     store.dispatch(addPlayerErrorCommandIndex(nonBlockPlayedCommandIndex))
     store.dispatch(addLog('error', msg))
@@ -421,13 +420,13 @@ const bindPlayer = () => {
 }
 
 const bindIpcEvent = () => {
-  if (!csIpc) return;
+  if (!csIpc) return
   csIpc.onAsk((cmd, args) => {
     switch (cmd) {
       case 'INSPECT_RESULT':
         store.dispatch(doneInspecting())
-        const {inspectTarget} = store.getState().editor
-        store.dispatch(updateSelectedCommand({ parameters: {[inspectTarget]: args.xpath} }))
+        const { inspectTarget } = store.getState().editor
+        store.dispatch(updateSelectedCommand({ parameters: { [inspectTarget]: args.xpath } }))
         return true
 
       case 'RECORD_ADD_COMMAND':
@@ -457,7 +456,7 @@ const bindIpcEvent = () => {
         return true
 
       case 'TIMEOUT_STATUS':
-        if (store.getState().app.status !== C.APP_STATUS.PLAYER)  return false
+        if (store.getState().app.status !== C.APP_STATUS.PLAYER) return false
 
         store.dispatch(setPlayerState({
           timeoutStatus: args
@@ -487,28 +486,28 @@ const bindWindowEvents = () => {
     }
     store.dispatch(updateConfig({
       size: {
-        ...size,
+        ...size
       }
     }))
   })
 
-  window.setLogging = state => store.dispatch(updateConfig({logging: state === true}))
+  window.setLogging = state => store.dispatch(updateConfig({ logging: state === true }))
 }
 
 const updateNativeHost = () => {
   return nativeMessage({
     type: 'version'
   })
-  .then(version => {
-    if (version !== config.hostVersion) {
-      return nativeMessage({
-        type: 'update',
-        tag: config.hostVersion
-      })
-    }
-    return Promise.resolve()
-  })
-  .catch(e => console.error(`Error Updating Native Host: ${e}`))
+    .then(version => {
+      if (version !== config.hostVersion) {
+        return nativeMessage({
+          type: 'update',
+          tag: config.hostVersion
+        })
+      }
+      return Promise.resolve()
+    })
+    .catch(e => console.error(`Error Updating Native Host: ${e}`))
 }
 
 bindDB()
@@ -521,9 +520,8 @@ restoreConfig()
 updateNativeHost()
 
 // register the tab ID with the background script
-if (csIpc && csIpc.ask) csIpc.ask('I_AM_PANEL', {});
+if (csIpc && csIpc.ask) csIpc.ask('I_AM_PANEL', {})
 
+render(App)
 
-render(App);
-
-if (module.hot) module.hot.accept('./app', () => render(App));
+if (module.hot) module.hot.accept('./app', () => render(App))

@@ -11,8 +11,8 @@ export const logFactory = (enabled) => {
   }, {})
 
   return Object.assign(obj.log, obj, {
-    enable:   () => { isEnabled = true },
-    disable:  () => { isEnabled = false }
+    enable: () => { isEnabled = true },
+    disable: () => { isEnabled = false }
   })
 }
 

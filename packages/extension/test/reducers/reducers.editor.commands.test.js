@@ -1,8 +1,7 @@
-import reducer from '../../src/reducers/editor';
-import {initialState} from '../../src/reducers/editor';
-import {types} from '../../src/actions/action_types';
-import * as C from '../../src/common/constant';
-import {newCommand} from '../../src/common/commands';
+import reducer, { initialState } from '../../src/reducers/editor'
+import { types } from '../../src/actions/action_types'
+import * as C from '../../src/common/constant'
+import { newCommand } from '../../src/common/commands'
 
 describe('editor reducer', () => {
   it('should append command', () => {
@@ -16,7 +15,7 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -47,7 +46,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should append a command after an existen command', () => {
     const init = Object.assign({},
@@ -68,7 +67,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[
+          filterCommands: [
             {
               command: 'open',
               index: 0,
@@ -102,7 +101,7 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -158,7 +157,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should duplicate command', () => {
     const init = Object.assign({},
@@ -173,7 +172,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -187,7 +186,7 @@ describe('editor reducer', () => {
       data: {
         index: 0
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -206,7 +205,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[
+          filterCommands: [
             {
               command: 'open',
               index: 0,
@@ -230,7 +229,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should duplicate newCommand', () => {
     const action = {
@@ -238,7 +237,7 @@ describe('editor reducer', () => {
       data: {
         index: 0
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -247,7 +246,7 @@ describe('editor reducer', () => {
             newCommand,
             newCommand
           ],
-          filterCommands:[
+          filterCommands: [
             {
               command: '',
               index: 0,
@@ -270,7 +269,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should reorder command', () => {
     const init = Object.assign({},
@@ -291,7 +290,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -306,7 +305,7 @@ describe('editor reducer', () => {
         oldIndex: 0,
         newIndex: 1
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -349,7 +348,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should insert command', () => {
     const init = Object.assign({},
@@ -377,7 +376,7 @@ describe('editor reducer', () => {
             hasUnsaved: true,
             selectedIndex: -1
           }
-        },
+        }
       }
     )
     const action = {
@@ -391,7 +390,7 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -447,7 +446,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should update command', () => {
     const init = Object.assign({},
@@ -462,7 +461,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -482,7 +481,7 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -512,7 +511,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should remove command', () => {
     const init = Object.assign({},
@@ -568,12 +567,12 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
         editing: {
-          commands: [ 
+          commands: [
             {
               command: 'open',
               parameters: {
@@ -598,7 +597,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should remove last command with newCommand', () => {
     const init = Object.assign({},
@@ -633,18 +632,18 @@ describe('editor reducer', () => {
           }
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
         editing: {
-          commands: [ 
+          commands: [
             newCommand
           ],
           filterCommands: [
-            {command: "", 
-            index: 0, 
-            parameters: {}}
+            { command: '',
+              index: 0,
+              parameters: {} }
           ],
           meta: {
             src: null,
@@ -654,7 +653,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should select command', () => {
     const init = Object.assign({},
@@ -684,7 +683,7 @@ describe('editor reducer', () => {
       data: {
         index: 0
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -714,7 +713,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should force select command', () => {
     const init = Object.assign({},
@@ -744,7 +743,7 @@ describe('editor reducer', () => {
         index: 2,
         forceClick: true
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -774,7 +773,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should fallback select command', () => {
     const init = Object.assign({},
@@ -803,7 +802,7 @@ describe('editor reducer', () => {
       data: {
         index: 0
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -833,7 +832,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should cut command', () => {
     const init = Object.assign({},
@@ -861,7 +860,7 @@ describe('editor reducer', () => {
       data: {
         indices: [0]
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -886,7 +885,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should copy command', () => {
     const init = Object.assign({},
@@ -901,7 +900,7 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[],
+          filterCommands: [],
           meta: {
             src: null,
             hasUnsaved: true,
@@ -915,7 +914,7 @@ describe('editor reducer', () => {
       data: {
         indices: [0]
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -955,7 +954,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should paste command', () => {
     const init = Object.assign({},
@@ -995,7 +994,7 @@ describe('editor reducer', () => {
       data: {
         index: 0
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -1045,11 +1044,11 @@ describe('editor reducer', () => {
               }
             }
           ],
-          filterCommands:[],
+          filterCommands: []
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should normalize commands', () => {
     const init = Object.assign({},
@@ -1076,7 +1075,7 @@ describe('editor reducer', () => {
     )
     const action = {
       type: types.NORMALIZE_COMMANDS
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -1106,7 +1105,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should update selected command', () => {
     const init = Object.assign({},
@@ -1125,7 +1124,7 @@ describe('editor reducer', () => {
             {
               command: 'open',
               parameters: {
-                url: 'some website',
+                url: 'some website'
               },
               index: 0
             }
@@ -1145,7 +1144,7 @@ describe('editor reducer', () => {
           url: 'a new target'
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -1175,14 +1174,14 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
-});
+})
 it('should select one commands', () => {
   const init = Object.assign({},
     initialState,
     {
-      selectedCmds:[]
+      selectedCmds: []
     }
   )
   const action = {
@@ -1190,20 +1189,20 @@ it('should select one commands', () => {
     data: {
       index: 2
     }
-  };
+  }
   const expected = Object.assign({},
     initialState,
     {
-      selectedCmds: [2],
+      selectedCmds: [2]
     }
   )
-  expect(reducer(init, action)).toEqual(expected);
+  expect(reducer(init, action)).toEqual(expected)
 })
 it('should remove duplicate selection commands', () => {
   const init = Object.assign({},
     initialState,
     {
-      selectedCmds:[2]
+      selectedCmds: [2]
     }
   )
   const action = {
@@ -1211,14 +1210,14 @@ it('should remove duplicate selection commands', () => {
     data: {
       index: 2
     }
-  };
+  }
   const expected = Object.assign({},
     initialState,
     {
-      selectedCmds: [],
+      selectedCmds: []
     }
   )
-  expect(reducer(init, action)).toEqual(expected);
+  expect(reducer(init, action)).toEqual(expected)
 })
 it('should do group selection commands', () => {
   const init = Object.assign({},
@@ -1227,19 +1226,19 @@ it('should do group selection commands', () => {
       editing: {
         filterCommands: [
           {
-            index: 0,
+            index: 0
           },
           {
-            index: 1,
+            index: 1
           },
           {
-            index: 2,
+            index: 2
           },
           {
-            index: 3,
+            index: 3
           },
           {
-            index: 4,
+            index: 4
           }
         ],
         meta: {
@@ -1253,36 +1252,36 @@ it('should do group selection commands', () => {
     data: {
       index: 4
     }
-  };
+  }
   const expected = Object.assign({},
     initialState,
     {
       editing: {
         filterCommands: [
           {
-            index: 0,
+            index: 0
           },
           {
-            index: 1,
+            index: 1
           },
           {
-            index: 2,
+            index: 2
           },
           {
-            index: 3,
+            index: 3
           },
           {
-            index: 4,
+            index: 4
           }
         ],
         meta: {
           selectedIndex: 1
         }
       },
-      selectedCmds: [1,2,3,4],
+      selectedCmds: [1, 2, 3, 4]
     }
   )
-  expect(reducer(init, action)).toEqual(expected);
+  expect(reducer(init, action)).toEqual(expected)
 })
 it('should do group selection commands', () => {
   const init = Object.assign({},
@@ -1291,19 +1290,19 @@ it('should do group selection commands', () => {
       editing: {
         filterCommands: [
           {
-            index: 0,
+            index: 0
           },
           {
-            index: 1,
+            index: 1
           },
           {
-            index: 2,
+            index: 2
           }
         ],
         meta: {
           selectedIndex: 2
         }
-      },
+      }
     }
   )
   const action = {
@@ -1311,46 +1310,46 @@ it('should do group selection commands', () => {
     data: {
       index: 0
     }
-  };
+  }
   const expected = Object.assign({},
     initialState,
     {
       editing: {
         filterCommands: [
           {
-            index: 0,
+            index: 0
           },
           {
-            index: 1,
+            index: 1
           },
           {
-            index: 2,
+            index: 2
           }
         ],
         meta: {
           selectedIndex: 2
         }
       },
-      selectedCmds: [0,1,2],
+      selectedCmds: [0, 1, 2]
     }
   )
-  expect(reducer(init, action)).toEqual(expected);
+  expect(reducer(init, action)).toEqual(expected)
 })
 it('should empty selectedCmds array commands', () => {
   const init = Object.assign({},
     initialState,
     {
-      selectedCmds:[1,2,3,4,5]
+      selectedCmds: [1, 2, 3, 4, 5]
     }
   )
   const action = {
     type: types.EMPTY_ARRAY
-  };
+  }
   const expected = Object.assign({},
     initialState,
     {
-      selectedCmds: [],
+      selectedCmds: []
     }
   )
-  expect(reducer(init, action)).toEqual(expected);
+  expect(reducer(init, action)).toEqual(expected)
 })

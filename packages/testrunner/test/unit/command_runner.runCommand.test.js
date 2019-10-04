@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock'
 
-import {runCommand, __RewireAPI__ as runCommandRewire} from '../../src/command_runner'
+import { runCommand, __RewireAPI__ as runCommandRewire } from '../../src/command_runner'
 
 const hookMock = {
   beforeCommand: {

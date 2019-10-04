@@ -1,6 +1,6 @@
-import {exec} from 'child_process'
-import {expandHome} from './filesystem'
-import {LOCATION} from './common'
+import { exec } from 'child_process'
+import { expandHome } from './filesystem'
+import { LOCATION } from './common'
 /**
  * Wraps `exec` in a promise
  * @private
@@ -45,6 +45,6 @@ export function checkExecutable (executable) {
  * @param {string} dir - The directory to build in
  * @returns {Promise<string>} - The output of the build command
  */
-export function buildPackage(dir = LOCATION) {
+export function buildPackage (dir = LOCATION) {
   return promiseExec(`cd ${expandHome(dir)} && npm run build`)
 }

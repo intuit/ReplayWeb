@@ -55,7 +55,7 @@ describe('Docker', () => {
         modem: {
           followProgress: (s, f, p) => {
             p() // call the progress callback
-            f(undefined, {success: true})
+            f(undefined, { success: true })
           }
         }
       })
@@ -69,9 +69,9 @@ describe('Docker', () => {
     it('should find images with matching RepoTags', () => {
       dockerRewire.__Rewire__('docker', {
         listImages: () => Promise.resolve([
-          {RepoTags: ['wrongtag']},
-          {RepoTags: ['replay/crossbrowser-local-orchestrator:12']},
-          {RepoTags: ['replay/crossbrowser-local-orchestrator:latest']}
+          { RepoTags: ['wrongtag'] },
+          { RepoTags: ['replay/crossbrowser-local-orchestrator:12'] },
+          { RepoTags: ['replay/crossbrowser-local-orchestrator:latest'] }
         ])
       })
       return expect(findLocalImages('replay/crossbrowser-local-orchestrator:latest')).to.eventually.have.property('length', 1)
@@ -90,7 +90,7 @@ describe('Docker', () => {
     it('should pull remote image if no local images', () => {
       dockerRewire.__Rewire__('docker', {
         // make con.start() return the config for validation
-        createContainer: (config) => Promise.resolve({start: () => Promise.resolve(config)})
+        createContainer: (config) => Promise.resolve({ start: () => Promise.resolve(config) })
       })
       dockerRewire.__Rewire__('findLocalImages', () => Promise.resolve([]))
       return expect(startOrchestrator(3000)).to.eventually.have.property('Image', 'remote')
@@ -98,7 +98,7 @@ describe('Docker', () => {
     it('should use local image if available', () => {
       dockerRewire.__Rewire__('docker', {
         // make con.start() return the config for validation
-        createContainer: (config) => Promise.resolve({start: () => Promise.resolve(config)})
+        createContainer: (config) => Promise.resolve({ start: () => Promise.resolve(config) })
       })
       dockerRewire.__Rewire__('findLocalImages', () => Promise.resolve(['local']))
       return expect(startOrchestrator(3000)).to.eventually.have.property('Image', 'local')
@@ -106,7 +106,7 @@ describe('Docker', () => {
     it('should use provided port', () => {
       dockerRewire.__Rewire__('docker', {
         // make con.start() return the config for validation
-        createContainer: (config) => Promise.resolve({start: () => Promise.resolve(config)})
+        createContainer: (config) => Promise.resolve({ start: () => Promise.resolve(config) })
       })
       dockerRewire.__Rewire__('findLocalImages', () => Promise.resolve(['local']))
       return startOrchestrator(5467)

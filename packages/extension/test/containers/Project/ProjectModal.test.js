@@ -18,7 +18,7 @@ describe('ProjectModal store', () => {
       connect: mockConnect
     }))
     require('../../../src/containers/Project/ProjectModal')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       modals: {

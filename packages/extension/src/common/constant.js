@@ -1,6 +1,6 @@
 
 const mk = (list) => list.reduce((prev, key) => {
-  prev[key] = key;
+  prev[key] = key
   return prev
 }, {})
 

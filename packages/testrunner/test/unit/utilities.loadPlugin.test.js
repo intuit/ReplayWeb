@@ -13,8 +13,8 @@ describe('loadPlugin', () => {
   it('should load a array plugin definition', () => {
     const mock = jest.fn()
     utilitiesRewire.__Rewire__('tryRequire', mock)
-    const plugin = loadPlugin(['testplugin', {option: 'value'}])
-    expect(mock).toHaveBeenCalledWith('testplugin', {option: 'value'})
+    const plugin = loadPlugin(['testplugin', { option: 'value' }])
+    expect(mock).toHaveBeenCalledWith('testplugin', { option: 'value' })
   })
   it('should throw an error for an invalid plugin definition', () => {
     const mock = jest.spyOn(console, 'error')
@@ -29,7 +29,7 @@ describe('tryRequire', () => {
   })
   it('should construct a plugin if the package is found', () => {
     global.require = () => class FakePlugin {
-      constructor(parameter) {
+      constructor (parameter) {
         this.data = parameter
       }
     }

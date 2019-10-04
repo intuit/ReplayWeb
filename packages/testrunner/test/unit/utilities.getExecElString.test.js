@@ -1,4 +1,4 @@
-import {getExecElString} from '../../src/utilities'
+import { getExecElString } from '../../src/utilities'
 
 describe('getExecElString', () => {
   it('should get exec string for xpath selector', () => {

@@ -1,8 +1,8 @@
-const webpack = require('webpack');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HardSourcePlugin = require('hard-source-webpack-plugin');
+const webpack = require('webpack')
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const HardSourcePlugin = require('hard-source-webpack-plugin')
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -60,10 +60,10 @@ module.exports = {
     ])
   ],
   devtool: 'inline-source-map'
-};
+}
 
 if (process.env.NODE_ENV === 'production') {
-  delete module.exports.devtool;
+  delete module.exports.devtool
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -83,5 +83,5 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ]);
+  ])
 }

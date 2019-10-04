@@ -15,7 +15,7 @@ import {
   logMessage
 } from '../actions'
 import Header from '../components/Header'
-import * as C from '../common/constant';
+import * as C from '../common/constant'
 
 const mapStateToProps = (state) => {
   return {
@@ -57,8 +57,8 @@ const mapDispatchToProps = (dispatch) => {
     normalizeCommands: () => dispatch(normalizeCommands()),
     startRecording: () => dispatch(startRecording()),
     logMessage: (message) => dispatch(logMessage(message))
-  };
-};
+  }
+}
 
 export default connect(
   mapStateToProps,

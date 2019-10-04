@@ -1,15 +1,5 @@
-import {types as T} from '../../src/actions/action_types';
-import {mockStore} from '../utils'
-jest.mock('../../src/actions/editor')
-jest.mock('../../src/actions/filesystem')
-jest.mock('../../src/actions/utilities')
-jest.mock('../../src/actions/app')
-jest.mock('../../src/common/storage')
-jest.mock('../../src/models/project_model')
-jest.mock('../../src/models/test_case_model')
-jest.mock('../../src/models/suite_model')
-jest.mock('../../src/models/block-model')
-jest.mock('antd')
+import { types as T } from '../../src/actions/action_types'
+import { mockStore } from '../utils'
 import {
   existingConfig,
   setPathPurpose,
@@ -28,7 +18,17 @@ import {
   selectProject,
   __RewireAPI__ as projectRewire
 } from '../../src/actions/project'
-import * as C from '../../src/common/constant';
+import * as C from '../../src/common/constant'
+jest.mock('../../src/actions/editor')
+jest.mock('../../src/actions/filesystem')
+jest.mock('../../src/actions/utilities')
+jest.mock('../../src/actions/app')
+jest.mock('../../src/common/storage')
+jest.mock('../../src/models/project_model')
+jest.mock('../../src/models/test_case_model')
+jest.mock('../../src/models/suite_model')
+jest.mock('../../src/models/block-model')
+jest.mock('antd')
 
 describe('project actions', () => {
   afterEach(() => {
@@ -63,7 +63,7 @@ describe('project actions', () => {
       expect(action.type).toEqual(T.FILE_ERROR)
     })
     it('should format object correctly for listProjects', () => {
-      const action = listProjects([1,2,3])
+      const action = listProjects([1, 2, 3])
       expect(action.type).toEqual(T.LIST_PROJECTS)
       expect(action.data.length).toEqual(3)
     })
@@ -75,7 +75,7 @@ describe('project actions', () => {
   describe('thunk actions', () => {
     describe('createProject', () => {
       it('createProject should fire create action', async () => {
-        projectRewire.__Rewire__('writeProjectConfig', () => ({type: 'WRITE_PROJECT'}))
+        projectRewire.__Rewire__('writeProjectConfig', () => ({ type: 'WRITE_PROJECT' }))
         const store = mockStore({
           projectSetup: {
             suites: []
@@ -90,10 +90,10 @@ describe('project actions', () => {
     })
     describe('updateProject', () => {
       it('update should dispatch selectProject and writeProjectConfig', async () => {
-        projectRewire.__Rewire__('writeProjectConfig', () => ({type: 'WRITE_PROJECT'}))
-        projectRewire.__Rewire__('selectProject', () => ({type: T.SELECT_PROJECT}))
+        projectRewire.__Rewire__('writeProjectConfig', () => ({ type: 'WRITE_PROJECT' }))
+        projectRewire.__Rewire__('selectProject', () => ({ type: T.SELECT_PROJECT }))
         const store = mockStore()
-        await store.dispatch(updateProject({id: 1, name: 'potato'}))
+        await store.dispatch(updateProject({ id: 1, name: 'potato' }))
         const actions = store.getActions()
         expect(actions[0].type).toEqual(T.SELECT_PROJECT)
         expect(actions[1].type).toEqual('WRITE_PROJECT')
@@ -103,7 +103,7 @@ describe('project actions', () => {
     describe('removeProject', () => {
       it('remove should dispatch delete project', async () => {
         const store = mockStore()
-        await store.dispatch(removeProject({id: 1, name: 'potato'}))
+        await store.dispatch(removeProject({ id: 1, name: 'potato' }))
         const actions = store.getActions()
         expect(actions[0].type).toEqual(T.DELETE_PROJECT)
         expect(actions[1].type).toEqual('LOG_MESSAGE')
@@ -119,7 +119,7 @@ describe('project actions', () => {
     })
     describe('listDirectory', () => {
       it('listDirectory should dispatch select', async () => {
-        projectRewire.__Rewire__('fileError', () => ({type: T.FILE_ERROR}))
+        projectRewire.__Rewire__('fileError', () => ({ type: T.FILE_ERROR }))
         const store = mockStore()
         await store.dispatch(listDirectory('./test'))
         const actions = store.getActions()
@@ -127,7 +127,7 @@ describe('project actions', () => {
       })
       it('listDirectory should dispatch fileerror if it fails', async () => {
         require('../../src/actions/utilities').default.__setFail(true)
-        projectRewire.__Rewire__('fileError', () => ({type: T.FILE_ERROR}))
+        projectRewire.__Rewire__('fileError', () => ({ type: T.FILE_ERROR }))
         const store = mockStore()
         await store.dispatch(listDirectory('./test'))
         const actions = store.getActions()
@@ -136,7 +136,7 @@ describe('project actions', () => {
     })
     describe('selectProjectFolder', () => {
       it('selectProjectFolder should dispatch checkForExistingConfig when purpose is PROJECT_PATH', async () => {
-        projectRewire.__Rewire__('checkForExistingConfig', () => ({type: T.EXISTING_CONFIG}))
+        projectRewire.__Rewire__('checkForExistingConfig', () => ({ type: T.EXISTING_CONFIG }))
         const store = mockStore({
           projectSetup: {
             purpose: T.PROJECT_PATH
@@ -152,7 +152,7 @@ describe('project actions', () => {
         expect(actions[2].type).toEqual(T.MODAL_STATE)
       })
       it('selectProjectFolder should not dispatch checkForExistingConfig when purpose is not PROJECT_PATH', async () => {
-        projectRewire.__Rewire__('checkForExistingConfig', () => ({type: T.EXISTING_CONFIG}))
+        projectRewire.__Rewire__('checkForExistingConfig', () => ({ type: T.EXISTING_CONFIG }))
         const store = mockStore({
           projectSetup: {
             purpose: T.TEST_PATH
@@ -169,11 +169,11 @@ describe('project actions', () => {
     })
     describe('writeProjectConfig', () => {
       beforeEach(() => {
-        projectRewire.__Rewire__('nativeMessage', async ({type}) => {
-          switch(type) {
+        projectRewire.__Rewire__('nativeMessage', async ({ type }) => {
+          switch (type) {
             case 'listDir':
               return [
-                {name: 'replay.config.json'}
+                { name: 'replay.config.json' }
               ]
             case 'readFile':
               return {
@@ -212,8 +212,8 @@ describe('project actions', () => {
         expect(actions[0].exists).toEqual(false)
       })
       it('checkForExistingConfig should dispatch EXISTING_CONFIG true if found', async () => {
-        require('../../src/actions/utilities').default.__setReturn('listDir', [{name: 'replay.config.json'}])
-        require('../../src/actions/utilities').default.__setReturn('readFile', {data: {testPath: './test', blockPath: './block'}})
+        require('../../src/actions/utilities').default.__setReturn('listDir', [{ name: 'replay.config.json' }])
+        require('../../src/actions/utilities').default.__setReturn('readFile', { data: { testPath: './test', blockPath: './block' } })
         const store = mockStore()
         await store.dispatch(checkForExistingConfig('/'))
         const actions = store.getActions()
@@ -227,21 +227,23 @@ describe('project actions', () => {
     })
     describe('reloadProjectFiles', () => {
       it('reloadProjectFiles should dispatch imports for updated files', async () => {
-        require('../../src/actions/utilities').default.__setReturn('listDir', [{name: 'testA.json'}])
-        require('../../src/actions/utilities').default.__setReturn('readFiles', {files: [
-          {
-            testName: 'testA',
-            data: {
-              Commands:[
-                {
-                  Command: 'open',
-                  Target: 'example.com',
-                  Value: '{}'
-                }
-              ]
+        require('../../src/actions/utilities').default.__setReturn('listDir', [{ name: 'testA.json' }])
+        require('../../src/actions/utilities').default.__setReturn('readFiles', {
+          files: [
+            {
+              testName: 'testA',
+              data: {
+                Commands: [
+                  {
+                    Command: 'open',
+                    Target: 'example.com',
+                    Value: '{}'
+                  }
+                ]
+              }
             }
-          }
-        ]})
+          ]
+        })
         require('../../src/actions/utilities').default.__setReturn('readFile', {
           testPath: './test',
           blockPath: './block',
@@ -264,21 +266,23 @@ describe('project actions', () => {
         expect(actions[2].type).toEqual(T.SET_SUITES)
       })
       it('reloadProjectFiles should dispatch imports for updated files for passed in project', async () => {
-        require('../../src/actions/utilities').default.__setReturn('listDir', [{name: 'testA.json'}])
-        require('../../src/actions/utilities').default.__setReturn('readFiles', {files: [
-          {
-            testName: 'testA',
-            data: {
-              Commands:[
-                {
-                  Command: 'open',
-                  Target: 'example.com',
-                  Value: '{}'
-                }
-              ]
+        require('../../src/actions/utilities').default.__setReturn('listDir', [{ name: 'testA.json' }])
+        require('../../src/actions/utilities').default.__setReturn('readFiles', {
+          files: [
+            {
+              testName: 'testA',
+              data: {
+                Commands: [
+                  {
+                    Command: 'open',
+                    Target: 'example.com',
+                    Value: '{}'
+                  }
+                ]
+              }
             }
-          }
-        ]})
+          ]
+        })
         require('../../src/actions/utilities').default.__setReturn('readFile', {
           testPath: './test',
           blockPath: './block',
@@ -305,13 +309,13 @@ describe('project actions', () => {
         expect(actions[0].type).toEqual(T.SELECT_PROJECT)
       })
       it('selectProject should reload project files if projectPath exists', async () => {
-        projectRewire.__Rewire__('reloadProjectFiles', () => ({type: 'RELOAD_PROJECT'}))
+        projectRewire.__Rewire__('reloadProjectFiles', () => ({ type: 'RELOAD_PROJECT' }))
         const store = mockStore()
-        await store.dispatch(selectProject({projectPath: '/'}))
+        await store.dispatch(selectProject({ projectPath: '/' }))
         const actions = store.getActions()
         expect(actions[0].type).toEqual(T.SELECT_PROJECT)
         expect(actions[1].type).toEqual('RELOAD_PROJECT')
       })
     })
   })
-});
+})

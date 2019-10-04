@@ -6,12 +6,12 @@ import {
   Checkbox,
   Select
 } from 'antd'
-import {commandsMap} from '../../../common/commands'
+import { commandsMap } from '../../../common/commands'
 import CommandButtons from './CommandButtons'
 
 const OneField = (props) => {
   const params = props.selectedCmd && commandsMap[props.selectedCmd.command] && commandsMap[props.selectedCmd.command].parameters
-  const updateParameter = (name, value) => props.updateSelectedCommand({parameters: {[name]: value}})
+  const updateParameter = (name, value) => props.updateSelectedCommand({ parameters: { [name]: value } })
   return <Form>
     {params && params.map(param => {
       const value = props.selectedCmd && props.selectedCmd.parameters && props.selectedCmd.parameters[param.name]

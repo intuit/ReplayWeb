@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import {changeModalState, duplicate} from '../../actions'
-import * as C from '../../common/constant';
+import { changeModalState, duplicate } from '../../actions'
+import * as C from '../../common/constant'
 import DuplicateModal from '../../components/Modals/DuplicateModal'
 const mapStateToProps = (state) => {
   return {

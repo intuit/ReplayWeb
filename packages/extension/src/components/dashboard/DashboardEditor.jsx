@@ -42,7 +42,8 @@ class DashboardEditor extends React.Component {
     const { src } = meta
     const toConvert = {
       commands: commands.filter(c => !!c),
-      name: src ? src.name : 'Untitled' }
+      name: src ? src.name : 'Untitled'
+    }
 
     const text = JSON.stringify(toConvert, null, 2)
 
@@ -54,7 +55,7 @@ class DashboardEditor extends React.Component {
   }
 
   onDetailChange (key, value) {
-    this.props.updateSelectedCommand({[key]: value})
+    this.props.updateSelectedCommand({ [key]: value })
   }
 
   onChangeCommandsView (type) {
@@ -75,8 +76,8 @@ class DashboardEditor extends React.Component {
   onSourceBlur () {
     try {
       const { sourceTextModified } = this.state
-      const {name, commands} = JSON.parse(sourceTextModified)
-      const obj = {name, data: {commands}}
+      const { name, commands } = JSON.parse(sourceTextModified)
+      const obj = { name, data: { commands } }
 
       this.setState({
         sourceErrMsg: null
@@ -148,7 +149,7 @@ class DashboardEditor extends React.Component {
     const dw = document.documentElement.clientWidth
     const mw = 240
     let x = contextMenu.x + window.scrollX
-    let y = contextMenu.y + window.scrollY
+    const y = contextMenu.y + window.scrollY
     const inSearch = searchText !== ''
     const inSelection = selectedCmds.length !== 0
 

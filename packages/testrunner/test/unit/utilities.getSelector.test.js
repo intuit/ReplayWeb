@@ -1,4 +1,4 @@
-import {getSelector} from '../../src/utilities'
+import { getSelector } from '../../src/utilities'
 
 describe('getSelector', () => {
   it('should throw error for no parameters', () => {

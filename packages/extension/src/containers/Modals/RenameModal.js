@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import {changeModalState, renameTestCase, renameBlock, renameSuite} from '../../actions'
+import { changeModalState, renameTestCase, renameBlock, renameSuite } from '../../actions'
 import RenameModal from '../../components/Modals/RenameModal'
-import * as C from '../../common/constant';
+import * as C from '../../common/constant'
 const mapStateToProps = (state) => {
   return {
     visible: state.modals.rename,

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Icon} from 'antd'
+import { Button, Icon } from 'antd'
 import { getPlayer } from '../../common/player'
 
 const PauseButton = (props) => {
@@ -7,13 +7,13 @@ const PauseButton = (props) => {
     getPlayer().pause()
   }
   return (
-      <Button
-        shape='circle'
-        onClick={pause}
-        style={{'marginLeft': '5px', 'marginRight': '5px', background: '#f4dc42'}}
-      >
-        <Icon type="pause" />
-      </Button>
+    <Button
+      shape='circle'
+      onClick={pause}
+      style={{ marginLeft: '5px', marginRight: '5px', background: '#f4dc42' }}
+    >
+      <Icon type="pause" />
+    </Button>
   )
 }
 

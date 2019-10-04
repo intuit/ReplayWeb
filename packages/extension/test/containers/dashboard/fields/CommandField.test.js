@@ -18,7 +18,7 @@ describe('CommandField store', () => {
       connect: mockConnect
     }))
     require('../../../../src/containers/dashboard/fields/CommandField')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       editor: {

@@ -1,8 +1,7 @@
-import reducer from '../../src/reducers/editor';
-import {initialState} from '../../src/reducers/editor';
-import {types} from '../../src/actions/action_types';
-import * as C from '../../src/common/constant';
-import {newCommand} from '../../src/common/commands';
+import reducer, { initialState } from '../../src/reducers/editor';
+import { types } from '../../src/actions/action_types'
+import * as C from '../../src/common/constant'
+import { newCommand } from '../../src/common/commands'
 
 describe('editor reducer', () => {
   it('should save block editing as existed', () => {
@@ -33,7 +32,7 @@ describe('editor reducer', () => {
           name: 'newBlock'
         }
       ]
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -59,7 +58,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should save block editing as new', () => {
     const init = Object.assign({},
@@ -95,7 +94,7 @@ describe('editor reducer', () => {
           name: 'newBlock'
         }
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -115,10 +114,10 @@ describe('editor reducer', () => {
           ],
           filterCommands: [
             {
-              cmd: "open",
+              cmd: 'open',
               index: 0,
-              target: "some website",
-              value: "{}"
+              target: 'some website',
+              value: '{}'
             }
           ],
           meta: {
@@ -133,7 +132,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should set blocks', () => {
     const action = {
@@ -144,7 +143,7 @@ describe('editor reducer', () => {
           name: 'newBlock'
         }
       ]
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -168,7 +167,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should edit block', () => {
     const blocks = [
@@ -183,7 +182,7 @@ describe('editor reducer', () => {
               value: '{}'
             }
           ],
-          filterCommands:[]
+          filterCommands: []
         }
       },
       {
@@ -197,7 +196,7 @@ describe('editor reducer', () => {
               value: '{}'
             }
           ],
-          filterCommands:[]
+          filterCommands: []
         }
       }
     ]
@@ -220,7 +219,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.EDIT_BLOCK,
       data: 2
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -237,7 +236,7 @@ describe('editor reducer', () => {
           filterCommands: [
             {
               cmd: 'open',
-              index:0,
+              index: 0,
               target: 'another website',
               value: '{}'
             }
@@ -253,7 +252,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('edit block should return default if empty', () => {
     const init = Object.assign({},
@@ -276,7 +275,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.EDIT_BLOCK,
       data: undefined
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -294,15 +293,15 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('update block status should return default if no index', () => {
     const action = {
       type: types.UPDATE_BLOCK_STATUS,
       data: {
-        id: undefined,
+        id: undefined
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -321,15 +320,15 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('update block status should return default if index does not match', () => {
     const action = {
       type: types.UPDATE_BLOCK_STATUS,
       data: {
-        id: 2,
+        id: 2
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -348,7 +347,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(initialState, action)).toEqual(expected);
+    expect(reducer(initialState, action)).toEqual(expected)
   })
   it('should update block status', () => {
     const blocks = [
@@ -405,11 +404,11 @@ describe('editor reducer', () => {
         id: 2,
         status: 'tomato'
       }
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
-        blocks: blocks.map(b => b.id === 2 ? Object.assign({}, b, {status: 'tomato'}) : b),
+        blocks: blocks.map(b => b.id === 2 ? Object.assign({}, b, { status: 'tomato' }) : b),
         editing: {
           commands: [
           ],
@@ -422,7 +421,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should rename block', () => {
     const blocks = [
@@ -479,13 +478,13 @@ describe('editor reducer', () => {
     const action = {
       type: types.RENAME_BLOCK,
       data: 'renamed block',
-      blocks: blocks.map(t => t.id === 2 ? Object.assign({}, t, {name: 'renamed block'}): t)
+      blocks: blocks.map(t => t.id === 2 ? Object.assign({}, t, { name: 'renamed block' }) : t)
 
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
-        blocks: blocks.map(b => b.id === 2 ? Object.assign({}, b, {name: 'renamed block'}): b),
+        blocks: blocks.map(b => b.id === 2 ? Object.assign({}, b, { name: 'renamed block' }) : b),
         editing: {
           commands: [
             {
@@ -505,7 +504,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
 
   it('should remove current block', () => {
@@ -563,7 +562,7 @@ describe('editor reducer', () => {
     const action = {
       type: types.REMOVE_CURRENT_BLOCK
 
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -595,7 +594,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
   it('should remove current block when only one left', () => {
     const blocks = [
@@ -638,7 +637,7 @@ describe('editor reducer', () => {
     )
     const action = {
       type: types.REMOVE_CURRENT_BLOCK
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -649,8 +648,8 @@ describe('editor reducer', () => {
           ],
           filterCommands: [
             {
-              command: "", 
-              index: 0, 
+              command: '',
+              index: 0,
               parameters: {}
             }
           ],
@@ -663,7 +662,7 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
 
   it('should edit new block', () => {
@@ -691,7 +690,7 @@ describe('editor reducer', () => {
     )
     const action = {
       type: types.EDIT_NEW_BLOCK
-    };
+    }
     const expected = Object.assign({},
       initialState,
       {
@@ -709,6 +708,6 @@ describe('editor reducer', () => {
         }
       }
     )
-    expect(reducer(init, action)).toEqual(expected);
+    expect(reducer(init, action)).toEqual(expected)
   })
-});
+})

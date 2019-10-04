@@ -90,7 +90,7 @@ export function saveFile (folder, fileName, data) {
   const fullpath = path.resolve(expandHome(folder), `${fileName}.json`)
   const JSONdata = JSON.stringify(data, null, 2)
   fs.writeFileSync(fullpath, JSONdata)
-  return {fullpath, JSONdata}
+  return { fullpath, JSONdata }
 }
 
 /**
@@ -99,7 +99,7 @@ export function saveFile (folder, fileName, data) {
  * @param {string} fileName - The name of the file to delete
  * @throws {Error} - Thrown if there is a problem deleting from the filesystem
  */
-export function deleteFile(folder, fileName) {
+export function deleteFile (folder, fileName) {
   const fullpath = path.resolve(expandHome(folder), `${fileName}.json`)
   fs.unlinkSync(fullpath)
 }

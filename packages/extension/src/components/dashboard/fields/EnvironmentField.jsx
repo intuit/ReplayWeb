@@ -16,14 +16,14 @@ class EnvironmentField extends React.Component {
 
   updateParameters (e) {
     this.setState(
-      {rawValue: e.target.value},
+      { rawValue: e.target.value },
       () => {
         if (this.state.rawValue.includes('=')) {
           const pairs = this.state.rawValue.split(',')
             .map(split => {
               if (split.indexOf('=') !== -1) {
                 const pair = split.split('=')
-                return {[pair[0]]: pair[1]}
+                return { [pair[0]]: pair[1] }
               }
             })
           if (pairs.length === pairs.filter(i => i !== undefined).length) {
@@ -32,14 +32,14 @@ class EnvironmentField extends React.Component {
             }, true)
           }
         } else if (this.state.rawValue === '') {
-          this.props.updateSelectedCommand({parameters: {}}, true)
+          this.props.updateSelectedCommand({ parameters: {} }, true)
         }
       }
     )
   }
 
   componentWillMount () {
-    this.setState({rawValue: this.getValue(this.props.selectedCmd.parameters)})
+    this.setState({ rawValue: this.getValue(this.props.selectedCmd.parameters) })
   }
 
   render () {

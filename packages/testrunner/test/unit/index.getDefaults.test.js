@@ -2,7 +2,7 @@ import {
   getDefaults,
   getDefaultsVideoPlusAllure,
   __RewireAPI__ as getDefaultsRewire,
-  __RewireAPI__ as getDefaultsVideoPlusAllureRewire,
+  __RewireAPI__ as getDefaultsVideoPlusAllureRewire
 } from '../../src'
 
 describe('getDefaults', () => {

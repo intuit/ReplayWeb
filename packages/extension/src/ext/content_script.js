@@ -5,14 +5,14 @@ import * as C from '../common/constant'
 import { setIn, updateIn, until } from '../common/utils'
 import { run, getElementByLocator } from '../common/command_runner'
 import log from '../common/log'
-import {getSelector} from './cssSelector'
+import { getSelector } from './cssSelector'
 import { message } from 'antd'
 import storage from '../common/storage'
 
 const MASK_CLICK_FADE_TIMEOUT = 2000
 const oops = process.env.NODE_ENV === 'production'
-                ? () => {}
-                : (e) => log.error(e.stack)
+  ? () => {}
+  : (e) => log.error(e.stack)
 
 const state = {
   status: C.CONTENT_SCRIPT_STATUS.NORMAL,
@@ -42,17 +42,17 @@ const superCsIpc =
     }
 
 const calcSelectFrameCmds = (frameStack) => {
-  const xs  = state.recordingFrameStack;
-  const ys  = frameStack;
-  const len = Math.min(xs.length, ys.length);
+  const xs = state.recordingFrameStack
+  const ys = frameStack
+  const len = Math.min(xs.length, ys.length)
   const tpl = {
     command: 'selectFrame',
     parameters: {
       url: window.location.href
     }
-  };
-  const ret = [];
-  let i;
+  }
+  const ret = []
+  let i
 
   for (i = 0; i < len; i++) {
     if (xs[i] !== ys[i]) {
@@ -82,57 +82,57 @@ const calcSelectFrameCmds = (frameStack) => {
 // 1. mask on click
 // 2. mask on hover
 const getMask = (function () {
-  let mask, factory;
+  let mask, factory
 
   return (remove) => {
-    if (remove && factory)  return factory.clear();
-    if (mask)               return mask;
+    if (remove && factory) return factory.clear()
+    if (mask) return mask
 
-    factory = inspector.maskFactory();
+    factory = inspector.maskFactory()
 
-    const maskClick   = factory.gen({ background: 'green' });
-    const maskHover   = factory.gen({ background: '#ffa800' });
+    const maskClick = factory.gen({ background: 'green' })
+    const maskHover = factory.gen({ background: '#ffa800' })
 
-    mask = { maskClick, maskHover };
+    mask = { maskClick, maskHover }
 
-    document.body.appendChild(maskClick);
-    document.body.appendChild(maskHover);
+    document.body.appendChild(maskClick)
+    document.body.appendChild(maskHover)
 
-    return mask;
+    return mask
   }
 })()
 
 const addWaitInCommand = (cmdObj) => {
-  const { command } = cmdObj;
+  const { command } = cmdObj
 
   switch (command) {
     case 'click':
-      return {...cmdObj, command: 'clickAndWait'};
+      return { ...cmdObj, command: 'clickAndWait' }
 
     case 'select':
-      return {...cmdObj, command: 'selectAndWait'};
+      return { ...cmdObj, command: 'selectAndWait' }
 
     default:
-      return cmdObj;
+      return cmdObj
   }
 }
 
 // report recorded commands to background.
 // transform `leave` event to clickAndWait / selectAndWait event based on the last command
 const reportCommand = (function () {
-  const LEAVE_INTERVAL  = 500;
-  let last              = null;
-  let lastTime          = null;
-  let timer             = null;
+  const LEAVE_INTERVAL = 500
+  let last = null
+  let lastTime = null
+  let timer = null
 
   return (obj) => {
-    obj = {...obj, url: window.location.href};
+    obj = { ...obj, url: window.location.href }
 
-    log('to report', obj);
+    log('to report', obj)
 
     // Change back to top frame if it was recording inside
     if (state.recordingFrameStack.length > 0) {
-      state.recordingFrameStack = [];
+      state.recordingFrameStack = []
 
       superCsIpc.ask('CS_RECORD_ADD_COMMAND', {
         command: 'selectFrame',
@@ -141,19 +141,19 @@ const reportCommand = (function () {
           url: window.location.href
         }
       })
-      .catch(oops);
+        .catch(oops)
     }
 
     switch (obj.command) {
       case 'leave': {
         if (timer) {
-          clearTimeout(timer);
+          clearTimeout(timer)
         }
 
         if ((new Date() - lastTime) < LEAVE_INTERVAL) {
-          obj = addWaitInCommand(last);
+          obj = addWaitInCommand(last)
         } else {
-          return;
+          return
         }
 
         break
@@ -170,11 +170,11 @@ const reportCommand = (function () {
         // we need to add code here to remove the duplication issue....
         timer = setTimeout(() => {
           superCsIpc.ask('CS_RECORD_ADD_COMMAND', obj)
-          .catch(oops);
+            .catch(oops)
         }, LEAVE_INTERVAL)
 
-        last      = obj;
-        lastTime  = new Date();
+        last = obj
+        lastTime = new Date()
         return
       }
 
@@ -182,11 +182,11 @@ const reportCommand = (function () {
         break
     }
 
-    last      = obj;
-    lastTime  = new Date();
+    last = obj
+    lastTime = new Date()
 
     superCsIpc.ask('CS_RECORD_ADD_COMMAND', obj)
-    .catch(oops);
+      .catch(oops)
   }
 })()
 
@@ -208,18 +208,18 @@ const isValidClick = (el) => {
 }
 
 const isValidSelect = (el) => {
-  const tag = el.tagName.toLowerCase();
+  const tag = el.tagName.toLowerCase()
 
-  if (['option', 'select'].indexOf(tag) !== -1) return true;
-  return false;
+  if (['option', 'select'].indexOf(tag) !== -1) return true
+  return false
 }
 
 const isValidType = (el) => {
-  const tag   = el.tagName.toLowerCase()
-  const type  = el.getAttribute('type')
+  const tag = el.tagName.toLowerCase()
+  const type = el.getAttribute('type')
 
-  if (tag === 'textarea') return true;
-  if (tag === 'input' && ['radio', 'checkbox'].indexOf(type) === -1)  return true;
+  if (tag === 'textarea') return true
+  if (tag === 'input' && ['radio', 'checkbox'].indexOf(type) === -1) return true
 
   return false
 }
@@ -235,7 +235,7 @@ const highlightDom = ($dom, timeout) => {
 }
 
 const onClick = async (e) => {
-  if (!isValidClick(e.target))  return
+  if (!isValidClick(e.target)) return
 
   const selector = await getDtmSelector(e)
   reportCommand({
@@ -281,21 +281,21 @@ const getDtmSelector = async (e) => {
 
   e.target.setAttribute('data-get-css-for-this', 'myElem')
   const postData = getSelector()
-  const dtmResponse = await csIpc.ask('PANEL_GET_SELECTOR', {body: postData})
+  const dtmResponse = await csIpc.ask('PANEL_GET_SELECTOR', { body: postData })
   if (dtmResponse.state === 'fail') {
     console.error(`error while fetching dtm selector--falling back to default getLocator function: ${JSON.stringify(dtmResponse)}`)
-    return {target: inspector.getLocator(e.target, false, ignorePatterns)}
+    return { target: inspector.getLocator(e.target, false, ignorePatterns) }
   }
   e.target.removeAttribute('data-get-css-for-this')
-  if (dtmResponse.selectors && dtmResponse.selectors['myElem'] && dtmResponse['selectors_list'] && dtmResponse['selectors_list'].length > 0) {
+  if (dtmResponse.selectors && dtmResponse.selectors.myElem && dtmResponse.selectors_list && dtmResponse.selectors_list.length > 0) {
     console.log('returning dtm css selector...')
     return {
-      target: `css=${dtmResponse.selectors['myElem']}`,
-      targetOptions: dtmResponse['selectors_list'].map(t => 'css=' + t)
+      target: `css=${dtmResponse.selectors.myElem}`,
+      targetOptions: dtmResponse.selectors_list.map(t => 'css=' + t)
     }
   } else {
     console.log('returning replay selector...')
-    return {target: inspector.getLocator(e.target, false, ignorePatterns)}
+    return { target: inspector.getLocator(e.target, false, ignorePatterns) }
   }
 }
 
@@ -310,8 +310,8 @@ const onDragDrop = (function () {
       }
       case 'drop': {
         if (!dragStart) return
-        const tmp   = inspector.getLocator(e.target, true)
-        const drop  = {
+        const tmp = inspector.getLocator(e.target, true)
+        const drop = {
           value: tmp.target,
           valueOptions: tmp.targetOptions
         }
@@ -428,17 +428,17 @@ const bindIPCListener = () => {
 
       case 'RUN_COMMAND':
         return runCommand(args.command)
-        .catch(e => {
-          log.error(e.stack)
-          throw e
-        })
-        .then(data => {
-          if (state.playingFrame !== window) {
-            return { data, isIFrame: true }
-          }
+          .catch(e => {
+            log.error(e.stack)
+            throw e
+          })
+          .then(data => {
+            if (state.playingFrame !== window) {
+              return { data, isIFrame: true }
+            }
 
-          return { data }
-        })
+            return { data }
+          })
 
       case 'FIND_DOM': {
         try {
@@ -489,7 +489,7 @@ const bindEventsToInspect = () => {
 
           xpath: inspector.getLocator(e.target)
         })
-        .catch(oops)
+          .catch(oops)
       }
 
       default:
@@ -501,13 +501,13 @@ const bindEventsToInspect = () => {
   document.addEventListener('mouseover', (e) => {
     if (state.status === C.CONTENT_SCRIPT_STATUS.NORMAL) {
       return superCsIpc.ask('CS_ACTIVATE_ME', {})
-      .catch(oops)
+        .catch(oops)
     }
   })
 
   // bind mouse move event to show hover mask in inspecting
   document.addEventListener('mousemove', (e) => {
-    if (state.status !== C.CONTENT_SCRIPT_STATUS.INSPECTING)  return
+    if (state.status !== C.CONTENT_SCRIPT_STATUS.INSPECTING) return
 
     const mask = getMask()
     inspector.showMaskOver(mask.maskHover, e.target)
@@ -549,7 +549,7 @@ const bindOnMessage = () => {
           if (window.top === window) {
             calcSelectFrameCmds(data.ipcData.frameStack).forEach(cmd => {
               csIpc.ask('CS_RECORD_ADD_COMMAND', cmd)
-              .catch(oops)
+                .catch(oops)
             })
 
             state.recordingFrameStack = data.ipcData.frameStack
@@ -558,7 +558,7 @@ const bindOnMessage = () => {
 
         if (window.top === window) {
           return csIpc.ask(data.ipcAction, data.ipcData)
-          .catch(oops)
+            .catch(oops)
         } else {
           return postMessage(window.parent, window, { action, data })
         }
@@ -601,7 +601,7 @@ const hackAlertConfirmPrompt = (doc = document) => {
       return answer
     }
   `
-  const s     = doc.constructor.prototype.createElement.call(doc, 'script')
+  const s = doc.constructor.prototype.createElement.call(doc, 'script')
 
   s.setAttribute('type', 'text/javascript')
   s.text = script
@@ -616,7 +616,7 @@ const restoreAlertConfirmPrompt = () => {
     if (window.oldConfirm)  window.confirm = window.oldConfirm
     if (window.oldPrompt)   window.prompt = window.oldPrompt
   `
-  const s     = document['constructor'].prototype.createElement.call(document, 'script')
+  const s = document.constructor.prototype.createElement.call(document, 'script')
 
   s.setAttribute('type', 'text/javascript')
   s.text = script
@@ -680,7 +680,7 @@ const runCommand = (command) => {
       }
     }
 
-    return Promise.resolve(ret).then(wrapResult);
+    return Promise.resolve(ret).then(wrapResult)
   } else {
     // log('passing command to frame...', state.playingFrame, '...', window.location.href)
     // Note: pass on the command if our window is not the current playing one

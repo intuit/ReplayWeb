@@ -7,5 +7,5 @@ if (!version) {
   throw new Error('npm_package_version not defined in environment, this script should only be run from npm')
 } else {
   const manifestContents = JSON.parse(fs.readFileSync(manifestPath))
-  fs.writeFileSync(manifestPath, JSON.stringify({...manifestContents, version}, null, 4))
+  fs.writeFileSync(manifestPath, JSON.stringify({ ...manifestContents, version }, null, 4))
 }

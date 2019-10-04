@@ -42,7 +42,7 @@ describe('git', () => {
     it('should resolve if there is no error', () => {
       gitRewire.__Rewire__('git', {
         fetch: () => Promise.resolve({
-          raw: "Fetching origin"
+          raw: 'Fetching origin'
         })
       })
       return expect(fetchChanges()).to.eventually.have.property('raw', 'Fetching origin')
@@ -57,9 +57,9 @@ describe('git', () => {
     })
     it('should resolve if there is no error', () => {
       gitRewire.__Rewire__('git', {
-        tags: (_, cb) => cb(undefined, {all: [1,2,3]})
+        tags: (_, cb) => cb(undefined, { all: [1, 2, 3] })
       })
-      return expect(fetchTags()).to.eventually.become([1,2,3])
+      return expect(fetchTags()).to.eventually.become([1, 2, 3])
     })
   })
   describe('checkoutTag', () => {
@@ -93,13 +93,13 @@ describe('git', () => {
     })
     it('should resolve if tag is found', () => {
       gitRewire.__Rewire__('fetchChanges', () => Promise.resolve())
-      gitRewire.__Rewire__('fetchTags', () => Promise.resolve([1,2,3]))
+      gitRewire.__Rewire__('fetchTags', () => Promise.resolve([1, 2, 3]))
       gitRewire.__Rewire__('checkoutTag', (t) => Promise.resolve(`Checked out ${t}`))
       return expect(switchToTag(1)).to.eventually.become('Checked out 1')
     })
     it('should reject if tag is not found', () => {
       gitRewire.__Rewire__('fetchChanges', () => Promise.resolve())
-      gitRewire.__Rewire__('fetchTags', () => Promise.resolve([1,2,3]))
+      gitRewire.__Rewire__('fetchTags', () => Promise.resolve([1, 2, 3]))
       gitRewire.__Rewire__('checkoutTag', (t) => Promise.resolve(`Checked out ${t}`))
       return expect(switchToTag(4)).to.eventually.be.rejectedWith('Tag not found: 4')
     })

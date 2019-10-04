@@ -1,5 +1,5 @@
 module.exports = class FakePlugin {
-  constructor(v) {
+  constructor (v) {
     this.data = v
   }
 }

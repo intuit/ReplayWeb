@@ -50,12 +50,12 @@ async function resolveMatches (string, defaults, context) {
     // with context like {someObject: {someProperty: 'a'}}
     const currentContext = parts.slice(0, parts.length - 1).reduce((acc, cv) => acc[cv], context)
     if (process && process.env && process.env[match[1]]) {
-      return {old: match[0], new: process.env[match[1]]}
+      return { old: match[0], new: process.env[match[1]] }
     } else if (defaults[match[1]]) {
       const result = await defaults[match[1]].action()
-      return {old: match[0], new: result}
+      return { old: match[0], new: result }
     } else if (currentContext[parts[parts.length - 1]]) {
-      return {old: match[0], new: currentContext[parts[parts.length - 1]]}
+      return { old: match[0], new: currentContext[parts[parts.length - 1]] }
     }
   }))
 }
@@ -87,7 +87,7 @@ export async function doReplace (string, context = {}, defaults = availableRepla
  */
 export const replaceAllFields = (obj, context) => Object.keys(obj)
   .reduce(
-    async (acc, cv) => ({...(await acc), [cv]: typeof obj[cv] === 'object' ? await replaceAllFields(obj[cv], context) : await doReplace(obj[cv], context)}),
+    async (acc, cv) => ({ ...(await acc), [cv]: typeof obj[cv] === 'object' ? await replaceAllFields(obj[cv], context) : await doReplace(obj[cv], context) }),
     Promise.resolve({})
   )
 
@@ -101,12 +101,12 @@ export function expandBlocks (commands = [], blocks = []) {
   return commands.reduce((current, nextCommand, index) => {
     if (nextCommand.command === 'runBlock') {
       const blockName = nextCommand.parameters.block
-      const block = blocks.find(({name}) => name === blockName)
+      const block = blocks.find(({ name }) => name === blockName)
       if (!block) {
         throw new Error(`Block "${blockName}" does not exist`)
       }
       // Also label this command so that we know that this is a block
-      const commands = block.data.commands.map(command => Object.assign({}, command, {isBlock: true}))
+      const commands = block.data.commands.map(command => Object.assign({}, command, { isBlock: true }))
       return current.concat(expandBlocks(commands, blocks))
     }
     return current.concat(nextCommand)
@@ -371,7 +371,7 @@ export const filterJson = (json, propertyChainList) => {
     }
   }
 
-  let jsonCopy = cloneJson(json)
+  const jsonCopy = cloneJson(json)
   propertyChainList.forEach((propertyChain) => {
     traverseDelete(jsonCopy, propertyChain)
   })

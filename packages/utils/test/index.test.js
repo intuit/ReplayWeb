@@ -39,19 +39,19 @@ describe('String replacements', () => {
       .then(result => expect(result).toEqual('potatoes'))
   })
   it('should replace a static string from context', () => {
-    return doReplace('{potato}', {potato: 'potatoes'})
+    return doReplace('{potato}', { potato: 'potatoes' })
       .then(result => expect(result).toEqual('potatoes'))
   })
   it('should replace a static string from context with special pattern', () => {
-    return doReplace('{potato}', {potato: 'potatoe$$'})
+    return doReplace('{potato}', { potato: 'potatoe$$' })
       .then(result => expect(result).toEqual('potatoe$$'))
   })
   it('should replace a static string from nested context', () => {
-    return doReplace('{potato.type}', {potato: {type: 'pancakes'}})
+    return doReplace('{potato.type}', { potato: { type: 'pancakes' } })
       .then(result => expect(result).toEqual('pancakes'))
   })
   it('should replace a static string from nested context with array', () => {
-    return doReplace('{potato.type.0}', {potato: {type: ['pancakes']}})
+    return doReplace('{potato.type.0}', { potato: { type: ['pancakes'] } })
       .then(result => expect(result).toEqual('pancakes'))
   })
   it('should not replace a static string if no context', () => {
@@ -65,7 +65,7 @@ describe('String replacements', () => {
   })
   it('should replace a string double nested braces in a JSON string', () => {
     const todaysDate = moment().format('MM/D/YYYY')
-    return doReplace('{"test": "{{t}sDate}"}', {'t': 'today'})
+    return doReplace('{"test": "{{t}sDate}"}', { t: 'today' })
       .then(result => expect(result).toEqual(`{"test": "${todaysDate}"}`))
   })
   it('should ignore a json valid string that is not an object', () => {
@@ -163,7 +163,7 @@ describe('Expand blocks testrunner', () => {
       }
     })
     // use map to add 'isBlock' property to expected output
-    const expected = baseCommands.concat(blocks[0].data.commands.map(c => Object.assign({}, c, {isBlock: true})))
+    const expected = baseCommands.concat(blocks[0].data.commands.map(c => Object.assign({}, c, { isBlock: true })))
     expect(expandBlocks(testCommands, blocks)).toEqual(expected)
   })
   it('should expand nested blocks', () => {
@@ -215,7 +215,7 @@ describe('Expand blocks testrunner', () => {
     ]
     // use map to add 'isBlock' property to expected output
     const blockCommands = [testBlocks[0].data.commands[0], ...testBlocks[1].data.commands]
-    const expected = baseCommands.concat(blockCommands.map(c => Object.assign({}, c, {isBlock: true})))
+    const expected = baseCommands.concat(blockCommands.map(c => Object.assign({}, c, { isBlock: true })))
     expect(expandBlocks(testCommands, testBlocks)).toEqual(expected)
   })
   it('should error if an unknown block is asked for', () => {
@@ -305,23 +305,26 @@ describe('xpath', () => {
     expect(xpath(el)).toEqual('/html/body')
   })
   it('should climb up and find the nearest id', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      id: 'parent'
-    })
+    const el = divBuilder({
+      parentNode: divBuilder({
+        id: 'parent'
+      })
     })
     expect(xpath(el)).toEqual('//*[@id=\"parent\"]/div')
   })
   it('should climb up and find the nearest name', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      'name': 'parent'
-    })
+    const el = divBuilder({
+      parentNode: divBuilder({
+        name: 'parent'
+      })
     })
     expect(xpath(el)).toEqual('//*[@name=\"parent\"]/div')
   })
   it('should climb up and find the nearest data automation id', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      'data-automation-id': 'parent'
-    })
+    const el = divBuilder({
+      parentNode: divBuilder({
+        'data-automation-id': 'parent'
+      })
     })
     expect(xpath(el)).toEqual('//*[@data-automation-id=\"parent\"]/div')
   })
@@ -614,10 +617,10 @@ describe('Regex Replace', () => {
 
 describe('traverseJson', () => {
   it('should traverse to node speficied by property-chain', () => {
-    expect(traverseJson({a: {b: {c: 'test'}}}, ['a', 'b', 'c'])).toEqual('test')
+    expect(traverseJson({ a: { b: { c: 'test' } } }, ['a', 'b', 'c'])).toEqual('test')
   })
   it('should get original json if property-chain is empty', () => {
-    const json = {a: 'test'}
+    const json = { a: 'test' }
     expect(traverseJson(json, [])).toEqual(json)
   })
 })
@@ -631,7 +634,7 @@ describe('filterJson', () => {
     ))
   })
   it('expect no change if property-chain is empty', () => {
-    const json = {a: 'test'}
+    const json = { a: 'test' }
     expect(JSON.stringify(
       filterJson(json, [])
     )).toEqual(JSON.stringify(json))
@@ -644,8 +647,8 @@ describe('filterJson', () => {
 describe('cloneJson', () => {
   it('should clone JSON', () => {
     expect(JSON.stringify(
-      cloneJson({a: 'test'})
-    )).toEqual(JSON.stringify({a: 'test'}))
+      cloneJson({ a: 'test' })
+    )).toEqual(JSON.stringify({ a: 'test' }))
   })
 })
 

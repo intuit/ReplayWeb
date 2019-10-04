@@ -17,7 +17,7 @@ export const delay = (fn, timeout) => {
 // `name` is for a meaningful error message
 export const until = (name, check, interval = 1000, expire = 10000, errorMsg) => {
   const start = new Date()
-  const go    = () => {
+  const go = () => {
     if (expire && new Date() - start >= expire) {
       const msg = errorMsg || `until: ${name} expired!`
       throw new Error(msg)
@@ -47,7 +47,7 @@ export const asyncUntil = (name, check, interval = 1000, expire = 7000, errorMsg
     }
 
     return check()
-      .then(({pass, result}) => {
+      .then(({ pass, result }) => {
         if (pass) {
           return Promise.resolve(result)
         } else {
@@ -70,7 +70,7 @@ export const range = (start, end, step = 1) => {
 
 // create a curry version of the passed in function
 export const partial = (fn) => {
-  const len = fn.length;
+  const len = fn.length
   let arbitary
 
   arbitary = (curArgs, leftArgCnt) => (...args) => {
@@ -151,7 +151,7 @@ export const setIn = partial((keys, value, obj) => {
 // return part of the object with a few keys deep inside
 export const getIn = partial((keys, obj) => {
   return keys.reduce((prev, key) => {
-    if (!prev)  return prev
+    if (!prev) return prev
     return prev[key]
   }, obj)
 })
@@ -172,12 +172,12 @@ export const uid = () => {
 }
 
 export const flatten = (list) => {
-  return [].concat.apply([], list);
+  return [].concat.apply([], list)
 }
 
 export const splitIntoTwo = (pattern, str) => {
   const index = str.indexOf(pattern)
-  if (index === -1)  return [str]
+  if (index === -1) return [str]
 
   return [
     str.substr(0, index),
@@ -186,8 +186,8 @@ export const splitIntoTwo = (pattern, str) => {
 }
 
 export const splitKeep = (pattern, str) => {
-  const result    = []
-  let startIndex  = 0
+  const result = []
+  let startIndex = 0
   let reg, match, lastMatchIndex
 
   if (pattern instanceof RegExp) {
@@ -210,8 +210,8 @@ export const splitKeep = (pattern, str) => {
     }
 
     result.push(match[0])
-    startIndex      = match.index + match[0].length
-    lastMatchIndex  = match.index
+    startIndex = match.index + match[0].length
+    lastMatchIndex = match.index
   }
 
   if (startIndex < str.length) {
@@ -221,15 +221,15 @@ export const splitKeep = (pattern, str) => {
   return result
 }
 
-export const filtering = (commands, text) => commands.map((command, index) => Object.assign({}, command, {index}))
+export const filtering = (commands, text) => commands.map((command, index) => Object.assign({}, command, { index }))
   .filter((command) => {
-    const reg = new RegExp(text, 'gi');
+    const reg = new RegExp(text, 'gi')
     return text === '' ? true : reg.test(JSON.stringify(command.parameters))
   })
 
-export const removeArrayItem = (array, item) => array.includes(item) ?
-[
-  ...array.slice(0, array.indexOf(item)),
-  ...array.slice(array.indexOf(item) + 1)
-] :
-array
+export const removeArrayItem = (array, item) => array.includes(item)
+  ? [
+    ...array.slice(0, array.indexOf(item)),
+    ...array.slice(array.indexOf(item) + 1)
+  ]
+  : array

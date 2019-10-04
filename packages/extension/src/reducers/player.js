@@ -1,9 +1,8 @@
-import { types } from '../actions/action_types';
-import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils';
-import * as C from '../common/constant';
+import { types } from '../actions/action_types'
+import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils'
+import * as C from '../common/constant'
 
-const T = types; // so that auto complete in webstorm doesn't go crazy
-
+const T = types // so that auto complete in webstorm doesn't go crazy
 
 const initialState = {
   context: {},
@@ -20,9 +19,9 @@ const initialState = {
     total: null,
     past: null
   }
-};
+}
 
-export {initialState}
+export { initialState }
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
@@ -75,12 +74,12 @@ export default function reducer (state = initialState, action) {
         ['errorCommandIndices'],
         indices => [...indices, action.data],
         state
-      );
+      )
     case T.CLEAR_CONTEXT:
-      return setIn(['context'], {}, state);
+      return setIn(['context'], {}, state)
     case T.SET_CONTEXT:
-      return setIn(['context', action.key], action.value, state);
+      return setIn(['context', action.key], action.value, state)
     default:
-      return state;
+      return state
   }
 }
