@@ -1,3 +1,15 @@
+# v0.1.2 (Fri Oct 04 2019)
+
+#### 🐛  Bug Fix
+
+- Bump webpack-dev-server from 2.11.5 to 3.8.2 in /packages/extension [#6](https://github.com/intuit/ReplayWeb/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v0.1.1 (Fri Oct 04 2019)
 
 #### 🐛  Bug Fix
