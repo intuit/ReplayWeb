@@ -60,6 +60,19 @@ jobs:
           paths:
             - .
 
+  package_extension:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/replay
+      - run:
+          name: Release
+          command: yarn lerna run package
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
   lint:
     <<: *defaults
     steps:
@@ -94,6 +107,10 @@ workflows:
           requires:
             - install
 
+      - package_extension:
+          requires:
+            - build
+
       - lint:
           requires:
             - build
@@ -104,5 +121,6 @@ workflows:
 
       - release:
           requires:
+            - package_extension
             - test
             - lint

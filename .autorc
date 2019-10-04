@@ -1,6 +1,7 @@
 {
   "plugins": [
     "npm",
-    "released"
+    "released",
+    ["upload-assets", ["./packages/extension/dist/replayui.crx"]]
   ]
 }
