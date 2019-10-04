@@ -34,8 +34,18 @@ For additional details see the [readme](packages/extension/README.md) for the Ch
 
 Available through npm, `@replayweb/testrunner` converts your JSON tests recorded from the Chrome extension into webdriverio tests. To get started, install the required dependencies into your project:
 
+*If you're using npm 5+*
+
 ```sh
-yarn add -D @replayweb/testrunner @wdio/cli @wdio/local-runner @wdio/junit-reporter @wdio/mocha-framework @wdio/selenium-standalone-service @wdio/spec-reporter webdriverio chai
+npx install-peerdeps --dev @replayweb/testrunner
+```
+
+If using `yarn`, you can also use the shortcut described above if you have npm 5+ installed on your machine, as the command will detect that you are using yarn and will act accordingly.
+
+*If you're using npm <5 intall the deps listed from the following command*
+
+```sh
+npm info "eslint-config-airbnb@latest" peerDependencies
 ```
 
 And add a simple `wdio.conf.js`:
