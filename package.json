@@ -1,7 +1,7 @@
 {
   "name": "replayweb",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "author": "Harris Borawski",
@@ -11,7 +11,8 @@
     "test:watch": "jest --watch",
     "version": "git add .",
     "lint": "eslint '**/*.{js,jsx}' --ignore-pattern '**/lib/**/*'",
-    "lint:fix": "eslint --fix '**/*.{js,jsx}'"
+    "lint:fix": "eslint --fix '**/*.{js,jsx}'",
+    "release": "auto shipit"
   },
   "repository": {
     "type": "git",
