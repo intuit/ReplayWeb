@@ -1,3 +1,15 @@
+# v0.1.3 (Fri Oct 04 2019)
+
+#### 🐛  Bug Fix
+
+- Add crx to release [#9](https://github.com/intuit/ReplayWeb/pull/9) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v0.1.2 (Fri Oct 04 2019)
 
 #### 🐛  Bug Fix
