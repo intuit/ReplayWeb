@@ -6,6 +6,7 @@
   "main": "index.js",
   "author": "Harris Borawski",
   "scripts": {
+    "build": "lerna run build",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "version": "git add .",
