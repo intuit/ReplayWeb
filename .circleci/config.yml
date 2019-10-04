@@ -16,4 +16,4 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: $(yarn global bin)/lerna run build
-      - run: yarn test
+      - run: yarn test -w 1
