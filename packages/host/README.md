@@ -8,7 +8,7 @@ Run this bash command to setup the host repository. It installs to `~/.replay-ho
 
 In a terminal, run one of the following commands based on how you authenticate with github:
 
-- Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.ssh | bash`
+- Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.sh | bash`
 - SSH Keys: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup-ssh.sh | bash`
 
 ## Usage details

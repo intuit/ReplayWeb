@@ -25,7 +25,7 @@ ReplayWeb is a all-in-one toolbox that allows developers to focus on writing and
 2. In Chrome navigate to the [extension management page](chrome://extensions) (`chrome://extensions`)
 3. Drag and drop the `.crx` file over the page to install
 4. In a terminal, run one of the following commands based on how you authenticate with github:
-   - Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.ssh | bash`
+   - Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.sh | bash`
    - SSH Keys: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup-ssh.sh | bash`
 
 For additional details see the [readme](packages/extension/README.md) for the Chrome Extension
