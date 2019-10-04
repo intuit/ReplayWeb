@@ -80,7 +80,7 @@
     "svg-react-loader": "^0.4.4",
     "webpack": "~4.15.1",
     "webpack-cli": "~3.0.8",
-    "webpack-dev-server": "^2.11.0",
+    "webpack-dev-server": "^3.8.2",
     "webpack-permissions-plugin": "0.0.2"
   }
 }
