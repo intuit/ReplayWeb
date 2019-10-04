@@ -1,6 +1,6 @@
 {
   "name": "@replayweb/testrunner",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run tests generated via ReplayWeb",
   "main": "lib/index.js",
   "publishConfig": {
