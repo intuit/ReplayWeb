@@ -184,6 +184,15 @@
     "@auto-it/core" "^7.8.0"
     deepmerge "^4.0.0"
 
+"@auto-it/upload-assets@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@auto-it/upload-assets/-/upload-assets-7.8.0.tgz#5b7e914b22b46c486a9e8555f5bbd1eec9eb9700"
+  integrity sha512-EQYyHlZd0J11kedn5RF5BeJU8xvpru4W62u/D+5zvr9prN8L/I+p/FiECi9yoFtfw149NZo9IspqFp5FavPpvw==
+  dependencies:
+    "@auto-it/core" "^7.8.0"
+    dedent "^0.7.0"
+    file-type "^12.1.0"
+
 "@babel/cli@^7.2.3", "@babel/cli@^7.4.4":
   version "7.6.2"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.6.2.tgz#4ce8b5b4b2e4b4c1b7bd841cec62085e2dfc4465"
@@ -2002,7 +2011,7 @@
     universal-user-agent "^4.0.0"
 
 "@replayweb/utils@link:packages/utils":
-  version "0.1.0"
+  version "0.1.1"
   dependencies:
     enumify "~1.0.4"
     moment "~2.20.1"
@@ -7559,6 +7568,11 @@ file-set@^2.0.0:
   dependencies:
     array-back "^2.0.0"
     glob "^7.1.3"
+
+file-type@^12.1.0:
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-12.3.0.tgz#74d755e5dc9c5cbc7ee6f182529b453906ac88c2"
+  integrity sha512-4E4Esq9KLwjYCY32E7qSmd0h7LefcniZHX+XcdJ4Wfx1uGJX7QCigiqw/U0yT7WOslm28yhxl87DJ0wHYv0RAA==
 
 file-type@^7.7.1:
   version "7.7.1"
