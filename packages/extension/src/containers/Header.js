@@ -15,9 +15,9 @@ import {
   logMessage
 } from '../actions'
 import Header from '../components/Header'
-import * as C from '../common/constant';
+import * as C from '../common/constant'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     status: state.app.status,
     editing: state.editor.editing,
@@ -30,7 +30,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     editNew: type => {
       switch (type) {
@@ -56,9 +56,9 @@ const mapDispatchToProps = (dispatch) => {
     stopRecording: () => dispatch(stopRecording()),
     normalizeCommands: () => dispatch(normalizeCommands()),
     startRecording: () => dispatch(startRecording()),
-    logMessage: (message) => dispatch(logMessage(message))
-  };
-};
+    logMessage: message => dispatch(logMessage(message))
+  }
+}
 
 export default connect(
   mapStateToProps,

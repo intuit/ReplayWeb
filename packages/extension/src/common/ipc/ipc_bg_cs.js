@@ -6,12 +6,12 @@ const TIMEOUT = 1000 * 60
 
 // Note: `cuid` is a kind of unique id so that you can create multiple
 // ipc promise instances between the same two end points
-export const openBgWithCs = (cuid) => {
-  const wrap = (str) => str + '_' + cuid
+export const openBgWithCs = cuid => {
+  const wrap = str => str + '_' + cuid
 
   // factory function to generate ipc promise instance for background
   // `tabId` is needed to identify which tab to send messages to
-  const ipcBg = (tabId) => {
+  const ipcBg = tabId => {
     let bgListeners = []
 
     // `sender` contains tab info. Background may need this to store the corresponding
@@ -31,7 +31,7 @@ export const openBgWithCs = (cuid) => {
 
     return ipcPromise({
       timeout: TIMEOUT,
-      ask: function (uid, cmd, args) {
+      ask: function(uid, cmd, args) {
         Ext.tabs.sendMessage(tabId, {
           type: wrap('BG_ASK_CS'),
           uid,
@@ -39,7 +39,7 @@ export const openBgWithCs = (cuid) => {
           args
         })
       },
-      onAnswer: function (fn) {
+      onAnswer: function(fn) {
         bgListeners.push((req, sender, response) => {
           if (req.type !== wrap('CS_ANSWER_BG')) {
             return
@@ -47,7 +47,7 @@ export const openBgWithCs = (cuid) => {
           fn(req.uid, req.err, addSender(req.data, sender))
         })
       },
-      onAsk: function (fn) {
+      onAsk: function(fn) {
         bgListeners.push((req, sender, response) => {
           if (req.type !== wrap('CS_ASK_BG')) {
             return
@@ -55,7 +55,7 @@ export const openBgWithCs = (cuid) => {
           fn(req.uid, req.cmd, addSender(req.args, sender))
         })
       },
-      answer: function (uid, err, data) {
+      answer: function(uid, err, data) {
         Ext.tabs.sendMessage(tabId, {
           type: wrap('BG_ANSWER_CS'),
           uid,
@@ -63,7 +63,7 @@ export const openBgWithCs = (cuid) => {
           data
         })
       },
-      destroy: function () {
+      destroy: function() {
         bgListeners = []
       }
     })
@@ -80,7 +80,7 @@ export const openBgWithCs = (cuid) => {
 
     return ipcPromise({
       timeout: TIMEOUT,
-      ask: function (uid, cmd, args) {
+      ask: function(uid, cmd, args) {
         // log('cs ask', uid, cmd, args)
         Ext.runtime.sendMessage({
           type: wrap('CS_ASK_BG'),
@@ -89,19 +89,19 @@ export const openBgWithCs = (cuid) => {
           args
         })
       },
-      onAnswer: function (fn) {
+      onAnswer: function(fn) {
         csListeners.push((req, sender, response) => {
           if (req.type !== wrap('BG_ANSWER_CS')) return
           fn(req.uid, req.err, req.data)
         })
       },
-      onAsk: function (fn) {
+      onAsk: function(fn) {
         csListeners.push((req, sender, response) => {
           if (req.type !== wrap('BG_ASK_CS')) return
           fn(req.uid, req.cmd, req.args)
         })
       },
-      answer: function (uid, err, data) {
+      answer: function(uid, err, data) {
         Ext.runtime.sendMessage({
           type: wrap('CS_ANSWER_BG'),
           uid,
@@ -109,7 +109,7 @@ export const openBgWithCs = (cuid) => {
           data
         })
       },
-      destroy: function () {
+      destroy: function() {
         csListeners = []
       }
     })
@@ -148,7 +148,7 @@ export const csInit = () => {
 
 // Helper function to init ipc promise instance for background
 // it accepts a `fn` function to handle CONNECT message from content scripts
-export const bgInit = (fn) => {
+export const bgInit = fn => {
   Ext.runtime.onMessage.addListener((req, sender) => {
     if (req.type === 'CONNECT' && req.cuid) {
       fn(sender.tab.id, openBgWithCs(req.cuid).ipcBg(sender.tab.id))

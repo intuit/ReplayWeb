@@ -15,7 +15,9 @@ jest.mock('../../../src/actions', () => ({
 jest.mock('../../../src/common/ipc/ipc_cs', () => {})
 
 // eslint-disable-next-line react/display-name
-jest.mock('../../../src/components/dashboard/CommandTable', () => () => <p>CommandTable</p>)
+jest.mock('../../../src/components/dashboard/CommandTable', () => () => (
+  <p>CommandTable</p>
+))
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -28,7 +30,7 @@ describe('CommandButtons store', () => {
       connect: mockConnect
     }))
     require('../../../src/containers/dashboard/CommandTable')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       editor: {

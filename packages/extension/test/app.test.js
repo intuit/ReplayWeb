@@ -24,9 +24,9 @@ afterEach(() => {
 describe('App', () => {
   it('renders', () => {
     const mockReadBlockShareConfig = jest.fn()
-    const wrapper = shallow(<App
-      readBlockShareConfig={mockReadBlockShareConfig}
-    />)
+    const wrapper = shallow(
+      <App readBlockShareConfig={mockReadBlockShareConfig} />
+    )
     expect(mockReadBlockShareConfig).toHaveBeenCalledTimes(1)
     expect(wrapper.find('Adapter').length).not.toBeNull()
     expect(wrapper.find('Component').length).not.toBeNull()

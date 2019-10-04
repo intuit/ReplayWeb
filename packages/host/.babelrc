@@ -1,7 +1,8 @@
 {
   "presets": [
     [
-      "env", {
+      "env",
+      {
         "targets": {
           "node": "current"
         }
@@ -10,9 +11,7 @@
   ],
   "env": {
     "test": {
-      "plugins": [
-        "rewire"
-      ]
+      "plugins": ["rewire"]
     }
   }
 }

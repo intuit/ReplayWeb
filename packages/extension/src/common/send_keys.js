@@ -6,7 +6,7 @@ const keyboard = Keysim.Keyboard.US_ENGLISH
 const findParentByTag = (el, tag) => {
   let p = el
   // eslint-disable-next-line no-cond-assign
-  while (p = p.parentNode) {
+  while ((p = p.parentNode)) {
     if (p.tagName === tag.toUpperCase()) {
       return p
     }
@@ -14,12 +14,22 @@ const findParentByTag = (el, tag) => {
   return null
 }
 
-const splitStringToChars = (str) => {
+const splitStringToChars = str => {
   const specialKeys = [
-    'KEY_LEFT', 'KEY_UP', 'KEY_RIGHT', 'KEY_DOWN',
-    'KEY_PGUP', 'KEY_PAGE_UP', 'KEY_PGDN', 'KEY_PAGE_DOWN',
-    'KEY_BKSP', 'KEY_BACKSPACE', 'KEY_DEL', 'KEY_DELETE',
-    'KEY_ENTER', 'KEY_TAB'
+    'KEY_LEFT',
+    'KEY_UP',
+    'KEY_RIGHT',
+    'KEY_DOWN',
+    'KEY_PGUP',
+    'KEY_PAGE_UP',
+    'KEY_PGDN',
+    'KEY_PAGE_DOWN',
+    'KEY_BKSP',
+    'KEY_BACKSPACE',
+    'KEY_DEL',
+    'KEY_DELETE',
+    'KEY_ENTER',
+    'KEY_TAB'
   ]
   const reg = new RegExp(`\\$\\{(${specialKeys.join('|')})\\}`)
   const parts = splitKeep(reg, str)
@@ -35,12 +45,12 @@ const splitStringToChars = (str) => {
   }, [])
 }
 
-const getKeyStrokeAction = (str) => {
+const getKeyStrokeAction = str => {
   const reg = /^\$\{([^}]+)\}$/
   let match
 
   // eslint-disable-next-line no-cond-assign
-  if (match = str.match(reg)) {
+  if ((match = str.match(reg))) {
     switch (match[1]) {
       case 'KEY_LEFT':
         return 'LEFT'
@@ -81,7 +91,7 @@ const getKeyStrokeAction = (str) => {
   return str
 }
 
-const isEditable = (el) => {
+const isEditable = el => {
   if (el.getAttribute('readonly') !== null) return false
   const tag = el.tagName.toUpperCase()
   const type = (el.getAttribute('type') || '').toLowerCase()
@@ -105,8 +115,10 @@ const maybeEditText = (target, c) => {
   if (!isEditable(target)) return
   if (c.length === 1) {
     const lastStart = target.selectionStart
-    target.value = target.value.substring(0, target.selectionStart) + c +
-                      target.value.substring(target.selectionEnd)
+    target.value =
+      target.value.substring(0, target.selectionStart) +
+      c +
+      target.value.substring(target.selectionEnd)
 
     target.selectionStart = target.selectionEnd = lastStart + 1
   } else {
@@ -119,15 +131,17 @@ const maybeEditText = (target, c) => {
         break
       case 'BACKSPACE': {
         const pos = target.selectionStart
-        target.value = target.value.substring(0, target.selectionStart - 1) +
-                        target.value.substring(target.selectionEnd)
+        target.value =
+          target.value.substring(0, target.selectionStart - 1) +
+          target.value.substring(target.selectionEnd)
         target.selectionStart = target.selectionEnd = pos - 1
         break
       }
       case 'DELETE': {
         const pos = target.selectionEnd
-        target.value = target.value.substring(0, target.selectionStart) +
-                        target.value.substring(target.selectionEnd + 1)
+        target.value =
+          target.value.substring(0, target.selectionStart) +
+          target.value.substring(target.selectionEnd + 1)
         target.selectionStart = target.selectionEnd = pos
         break
       }
@@ -145,7 +159,7 @@ const maybeSubmitForm = (target, key) => {
   form.submit()
 }
 
-export default function sendKeys (target, str) {
+export default function sendKeys(target, str) {
   const chars = splitStringToChars(str)
 
   target.focus()

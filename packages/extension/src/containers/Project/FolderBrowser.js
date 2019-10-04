@@ -1,5 +1,9 @@
 import { connect } from 'react-redux'
-import {listDirectory, changeModalState, selectProjectFolder} from '../../actions'
+import {
+  listDirectory,
+  changeModalState,
+  selectProjectFolder
+} from '../../actions'
 import FolderBrowser from '../../components/Project/FolderBrowser.jsx'
 
 const mapStateToProps = state => {
@@ -8,13 +12,15 @@ const mapStateToProps = state => {
     error: state.files.error,
     contents: state.files.contents,
     visible: state.modals.browser,
-    top: state.projectSetup.projectPath ? state.files.folder === state.projectSetup.projectPath : state.files.folder === '~'
+    top: state.projectSetup.projectPath
+      ? state.files.folder === state.projectSetup.projectPath
+      : state.files.folder === '~'
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    listDirectory: (dir) => dispatch(listDirectory(dir)),
+    listDirectory: dir => dispatch(listDirectory(dir)),
     closeModal: () => dispatch(changeModalState('browser', false)),
     selectFolder: () => dispatch(selectProjectFolder())
   }

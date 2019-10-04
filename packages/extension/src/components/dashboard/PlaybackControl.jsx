@@ -6,10 +6,13 @@ import ResumeButton from './ResumeButton'
 import StopButton from './StopButton'
 import PlayButton from '../../containers/dashboard/PlayButton'
 
-const PlaybackControl = (props) => {
-  const playStopButton = props.status === C.PLAYER_STATUS.STOPPED
-    ? <PlayButton />
-    : <StopButton stopped={props.status === C.PLAYER_STATUS.STOPPED} />
+const PlaybackControl = props => {
+  const playStopButton =
+    props.status === C.PLAYER_STATUS.STOPPED ? (
+      <PlayButton />
+    ) : (
+      <StopButton stopped={props.status === C.PLAYER_STATUS.STOPPED} />
+    )
   if (props.status === C.PLAYER_STATUS.PLAYING) {
     return (
       <span>
@@ -25,11 +28,7 @@ const PlaybackControl = (props) => {
       </span>
     )
   } else {
-    return (
-      <span>
-        {playStopButton}
-      </span>
-    )
+    return <span>{playStopButton}</span>
   }
 }
 

@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const name = 'replay-utils'
 module.exports = {
   target: 'node',
-  entry: path.join(__dirname, 'src','index.js'),
+  entry: path.join(__dirname, 'src', 'index.js'),
   resolve: {
     extensions: ['.js']
   },
@@ -28,7 +28,7 @@ module.exports = {
     new CleanWebpackPlugin(path.resolve(__dirname, 'lib')),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
-};
+}
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.plugins = [...module.exports.plugins, new UglifyJsPlugin()]

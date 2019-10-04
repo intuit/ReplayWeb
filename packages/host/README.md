@@ -7,14 +7,13 @@ This repository contains code for the native host for the ReplayWeb Extension. T
 Run this bash command to setup the host repository. It installs to `~/.replay-host`
 
 In a terminal, run one of the following commands based on how you authenticate with github:
-   - Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.ssh | bash`
-   - SSH Keys: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup-ssh.sh | bash`
 
+- Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.ssh | bash`
+- SSH Keys: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup-ssh.sh | bash`
 
 ## Usage details
 
 See the [docs](src/lib/README.md) for reference on what the methods do.
-
 
 ## Developing
 

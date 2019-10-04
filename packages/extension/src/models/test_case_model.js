@@ -1,20 +1,26 @@
 import { uid, pick, compose, updateIn, on, map } from '../common/utils'
 import db from './db'
-import {commandsMap} from '../common/commands'
-const table = db.testCases;
+import { commandsMap } from '../common/commands'
+const table = db.testCases
 
 const model = {
   table,
-  list () {
-    return table.toArray();
+  list() {
+    return table.toArray()
   },
-  listByProject (project) {
-    return table.where('projectId').equals(project.id).toArray();
+  listByProject(project) {
+    return table
+      .where('projectId')
+      .equals(project.id)
+      .toArray()
   },
-  removeByProject (project) {
-    return table.where('projectId').equals(project.id).delete();
+  removeByProject(project) {
+    return table
+      .where('projectId')
+      .equals(project.id)
+      .delete()
   },
-  insert (data) {
+  insert(data) {
     if (!data.name) {
       throw new Error('Model TestCase - insert: missing name')
     }
@@ -24,10 +30,10 @@ const model = {
     }
 
     data.updateTime = new Date() * 1
-    data.id         = uid()
+    data.id = uid()
     return table.add(normalizeTestCase(data))
   },
-  bulkInsert (tcs) {
+  bulkInsert(tcs) {
     const list = tcs.map(data => {
       if (!data.name) {
         throw new Error('Model TestCase - insert: missing name')
@@ -38,14 +44,14 @@ const model = {
       }
 
       data.updateTime = new Date() * 1
-      data.id         = uid()
+      data.id = uid()
 
       return normalizeTestCase(data)
     })
 
     return table.bulkAdd(list)
   },
-  bulkUpdate (tcs) {
+  bulkUpdate(tcs) {
     const list = tcs.map(data => {
       if (!data.name) {
         throw new Error('Model TestCase - insert: missing name')
@@ -63,29 +69,34 @@ const model = {
 
     return table.bulkPut(list)
   },
-  update (id, data) {
+  update(id, data) {
     return table.update(id, normalizeTestCase(data))
   },
   bulkRemove(tcs) {
-    return tcs.reduce((acc, cv) => acc.then(() => table.delete(cv.id)), Promise.resolve())
+    return tcs.reduce(
+      (acc, cv) => acc.then(() => table.delete(cv.id)),
+      Promise.resolve()
+    )
   },
-  remove (id) {
+  remove(id) {
     return table.delete(id)
   },
   clear() {
-    return table.clear();
+    return table.clear()
   }
 }
 
 export default model
 
-export const normalizeCommand = (command) => {
+export const normalizeCommand = command => {
   return compose(
     cmd => {
       return updateIn(
         ['parameters'],
         params => {
-          return commandsMap[cmd.command] && commandsMap[cmd.command].parameters ? pick(commandsMap[cmd.command].parameters.map(f => f.name), params) : params
+          return commandsMap[cmd.command] && commandsMap[cmd.command].parameters
+            ? pick(commandsMap[cmd.command].parameters.map(f => f.name), params)
+            : params
         },
         cmd
       )
@@ -94,7 +105,7 @@ export const normalizeCommand = (command) => {
   )(command)
 }
 
-export const normalizeTestCase = (testCase) => {
+export const normalizeTestCase = testCase => {
   return compose(
     on('data'),
     on('commands'),
@@ -102,7 +113,7 @@ export const normalizeTestCase = (testCase) => {
   )(normalizeCommand)(testCase)
 }
 
-export const commandWithoutBaseUrl = (baseUrl) => (command) => {
+export const commandWithoutBaseUrl = baseUrl => command => {
   if (command.command !== 'open') return command
 
   return {
@@ -114,8 +125,8 @@ export const commandWithoutBaseUrl = (baseUrl) => (command) => {
   }
 }
 
-export const eliminateBaseUrl = (testCase) => {
-  if (!testCase.baseUrl)  return testCase
+export const eliminateBaseUrl = testCase => {
+  if (!testCase.baseUrl) return testCase
   return compose(
     on('data'),
     on('commands'),

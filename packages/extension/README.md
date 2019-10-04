@@ -1,6 +1,5 @@
 # ReplayWeb Extension
 
-
 ReplayWeb extension allows you to record and playback functional tests for web applications from within your Chrome browser. These tests can later be fed into webdriverio using [@replayweb/testrunner](../testrunner) and saved into your repositiory using [@replayweb/host](../host) to be run in your CI/CD pipeline.
 
 ## Installation
@@ -34,36 +33,37 @@ For example:
 
 ```json
 {
-    "command": "setContext",
-    "parameters": {
-        "key": "test",
-        "value": "{random}"
-    }
+  "command": "setContext",
+  "parameters": {
+    "key": "test",
+    "value": "{random}"
+  }
 }
 ```
 
 You could then have a `type` command that uses `{test}` that would contain the same number every time, where using `{random}` would have a different value every time.
 
 ### Environment variables
+
 Text substitution always prioritizes environment variables for replacement, to support more dynamic testing. For example, an environment variable can be used to change the URL of your test so the same test is reused in multiple environments.
 
 ##### Example
 
 ```json
 [
-    {
-        "command": "setContext",
-        "parameters": {
-            "key": "ENVIRONMENT",
-            "value": "dev"
-		}
-    },
-    {
-        "command": "open",
-        "parameters": {
-            "url": "https://{ENVIRONMENT}.app.example.com"
-        }
+  {
+    "command": "setContext",
+    "parameters": {
+      "key": "ENVIRONMENT",
+      "value": "dev"
     }
+  },
+  {
+    "command": "open",
+    "parameters": {
+      "url": "https://{ENVIRONMENT}.app.example.com"
+    }
+  }
 ]
 ```
 

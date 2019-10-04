@@ -32,18 +32,20 @@ describe('SaveModal.jsx', () => {
 
   describe('SaveBlockModal', () => {
     it('renders', () => {
-      const wrapper = shallow(<SaveBlockModal
-        src={{}}
-        saveEditingBlockAsExisted={jest.fn()}
-        saveEditingBlockAsNew={jest.fn()}
-        editNext={jest.fn()}
-        selectProject={jest.fn()}
-        project={{}}
-        clearNext={jest.fn()}
-        closeModal={jest.fn()}
-        newSave={false}
-        visible={true}
-      />)
+      const wrapper = shallow(
+        <SaveBlockModal
+          src={{}}
+          saveEditingBlockAsExisted={jest.fn()}
+          saveEditingBlockAsNew={jest.fn()}
+          editNext={jest.fn()}
+          selectProject={jest.fn()}
+          project={{}}
+          clearNext={jest.fn()}
+          closeModal={jest.fn()}
+          newSave={false}
+          visible={true}
+        />
+      )
       expect(wrapper.find('GenericSaveModal')).not.toBeNull()
     })
 
@@ -52,11 +54,13 @@ describe('SaveModal.jsx', () => {
 
   describe('SaveMultiSelectModal', () => {
     it('renders', () => {
-      const wrapper = shallow(<SaveMultiSelectModal
-        saveMultiSelectAsNewBlock={jest.fn()}
-        closeModal={jest.fn()}
-        visible={true}
-      />)
+      const wrapper = shallow(
+        <SaveMultiSelectModal
+          saveMultiSelectAsNewBlock={jest.fn()}
+          closeModal={jest.fn()}
+          visible={true}
+        />
+      )
       expect(wrapper.find('GenericSaveModal')).not.toBeNull()
     })
 
@@ -65,18 +69,20 @@ describe('SaveModal.jsx', () => {
 
   describe('SaveTestCaseModal', () => {
     it('renders', () => {
-      const wrapper = shallow(<SaveTestCaseModal
-        src={{}}
-        saveEditingAsExisted={jest.fn()}
-        saveEditingAsNew={jest.fn()}
-        editNext={jest.fn()}
-        selectProject={jest.fn()}
-        project={{}}
-        clearNext={jest.fn()}
-        closeModal={jest.fn()}
-        newSave={false}
-        visible={true}
-      />)
+      const wrapper = shallow(
+        <SaveTestCaseModal
+          src={{}}
+          saveEditingAsExisted={jest.fn()}
+          saveEditingAsNew={jest.fn()}
+          editNext={jest.fn()}
+          selectProject={jest.fn()}
+          project={{}}
+          clearNext={jest.fn()}
+          closeModal={jest.fn()}
+          newSave={false}
+          visible={true}
+        />
+      )
       expect(wrapper.find('GenericSaveModal')).not.toBeNull()
     })
 
@@ -85,18 +91,20 @@ describe('SaveModal.jsx', () => {
 
   describe('SaveSuiteModal', () => {
     it('renders', () => {
-      const wrapper = shallow(<SaveSuiteModal
-        src={{}}
-        saveEditingSuiteAsExisted={jest.fn()}
-        saveEditingSuiteAsNew={jest.fn()}
-        editNext={jest.fn()}
-        selectProject={jest.fn()}
-        project={{}}
-        clearNext={jest.fn()}
-        closeModal={jest.fn()}
-        newSave={false}
-        visible={true}
-      />)
+      const wrapper = shallow(
+        <SaveSuiteModal
+          src={{}}
+          saveEditingSuiteAsExisted={jest.fn()}
+          saveEditingSuiteAsNew={jest.fn()}
+          editNext={jest.fn()}
+          selectProject={jest.fn()}
+          project={{}}
+          clearNext={jest.fn()}
+          closeModal={jest.fn()}
+          newSave={false}
+          visible={true}
+        />
+      )
       expect(wrapper.find('GenericSaveModal')).not.toBeNull()
     })
 

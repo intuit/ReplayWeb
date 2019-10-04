@@ -10,22 +10,16 @@ module.exports = {
     ],
     '@babel/preset-react'
   ],
-  plugins: [
-    '@babel/plugin-proposal-class-properties'
-  ],
+  plugins: ['@babel/plugin-proposal-class-properties'],
   env: {
     test: {
-      plugins: [
-        'rewire'
-      ]
+      plugins: ['rewire']
     }
   },
   overrides: [
     {
       test: /.*packages\/.*plugin?\//,
-      plugins: [
-        'add-module-exports'
-      ]
+      plugins: ['add-module-exports']
     }
   ]
 }

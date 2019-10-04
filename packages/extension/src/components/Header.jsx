@@ -20,25 +20,25 @@ import ShareBlockModal from '../containers/Modals/ShareBlockModal'
 const SubMenu = Menu.SubMenu
 
 class Header extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       current: 'new-test'
     }
   }
 
-  handleClick (e) {
+  handleClick(e) {
     this.setState({
       current: e.key
     })
   }
 
-  getTestCaseName () {
+  getTestCaseName() {
     const { src } = this.props.editing.meta
     return src && src.name && src.name.length ? src.name : 'Untitled'
-  };
+  }
 
-  onClickNew () {
+  onClickNew() {
     const { hasUnsaved } = this.props.editing.meta
     const go = () => {
       this.props.editNew(this.props.editorType)
@@ -58,9 +58,9 @@ class Header extends React.Component {
     }
 
     go()
-  };
+  }
 
-  onClickSave () {
+  onClickSave() {
     const meta = this.props.editing.meta
     const { src, hasUnsaved } = meta
 
@@ -71,9 +71,9 @@ class Header extends React.Component {
     } else {
       this.props.changeModalState('save', true)
     }
-  };
+  }
 
-  componentWillMount () {
+  componentWillMount() {
     window.addEventListener('keydown', e => {
       if (e.keyCode === 83 && (e.ctrlKey || e.metaKey)) {
         this.onClickSave()
@@ -89,7 +89,7 @@ class Header extends React.Component {
     })
   }
 
-  onToggleRecord () {
+  onToggleRecord() {
     if (this.props.status === C.APP_STATUS.RECORDER) {
       this.props.stopRecording()
       // Note: remove targetOptions from all commands
@@ -99,13 +99,13 @@ class Header extends React.Component {
     }
 
     this.setState({ lastOperation: 'record' })
-  };
+  }
 
-  isPlayerStopped () {
+  isPlayerStopped() {
     return this.props.player.status === C.PLAYER_STATUS.STOPPED
   }
 
-  render () {
+  render() {
     const { status, editing } = this.props
     const { meta } = editing
     const { src, hasUnsaved } = meta
@@ -128,19 +128,43 @@ class Header extends React.Component {
           mode="horizontal"
           theme="dark"
         >
-          <SubMenu title={<span><Icon type="menu-unfold" />Menu</span>} className="header-items">
-            <Menu.Item key="new-test" disabled={!isPlayerStopped} onClick={this.onClickNew}>
-              <span><Icon type="file" /> New </span> <span>⌘N</span>
+          <SubMenu
+            title={
+              <span>
+                <Icon type="menu-unfold" />
+                Menu
+              </span>
+            }
+            className="header-items"
+          >
+            <Menu.Item
+              key="new-test"
+              disabled={!isPlayerStopped}
+              onClick={this.onClickNew}
+            >
+              <span>
+                <Icon type="file" /> New{' '}
+              </span>{' '}
+              <span>⌘N</span>
             </Menu.Item>
-            <Menu.Item key="save-test" disabled={!isPlayerStopped && saveBtnState.disabled}
-              onClick={this.onClickSave}>
-              <span><Icon type="save" />{saveBtnState.text}</span> <span>⌘S</span>
+            <Menu.Item
+              key="save-test"
+              disabled={!isPlayerStopped && saveBtnState.disabled}
+              onClick={this.onClickSave}
+            >
+              <span>
+                <Icon type="save" />
+                {saveBtnState.text}
+              </span>{' '}
+              <span>⌘S</span>
             </Menu.Item>
             <TestcaseDropdown />
           </SubMenu>
         </Menu>
         <div className="status-bar">
-          <span className={testcaseClass}>{hasUnsaved ? 'Unsaved Changes' : '' }</span>
+          <span className={testcaseClass}>
+            {hasUnsaved ? 'Unsaved Changes' : ''}
+          </span>
         </div>
         <div className="play-ops">
           <span>
@@ -149,7 +173,11 @@ class Header extends React.Component {
                 disabled={!isPlayerStopped}
                 onClick={this.onToggleRecord}
                 shape="circle"
-                style={isRecording ? { color: '#ffffff', background: '#1a98ec' } : { color: '#ffffff', background: '#d82923' }}
+                style={
+                  isRecording
+                    ? { color: '#ffffff', background: '#1a98ec' }
+                    : { color: '#ffffff', background: '#d82923' }
+                }
               >
                 <Icon type="video-camera" />
               </Button>

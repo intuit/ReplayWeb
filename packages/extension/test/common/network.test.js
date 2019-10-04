@@ -15,7 +15,7 @@ describe('network', () => {
       ]
       expect(getHeaders('https://app.example.com', headers)).toEqual(headers)
     })
-    it('should return same headers for URL in CORB whitelist if it doesn\'t have the CORS header', () => {
+    it("should return same headers for URL in CORB whitelist if it doesn't have the CORS header", () => {
       const headers = [
         {
           name: 'Authorization',
@@ -45,7 +45,9 @@ describe('network', () => {
           value: '*'
         }
       ]
-      expect(getHeaders('https://another.app.example.com/api/endpoint', headers)).toEqual(expectedHeaders)
+      expect(
+        getHeaders('https://another.app.example.com/api/endpoint', headers)
+      ).toEqual(expectedHeaders)
     })
   })
 })

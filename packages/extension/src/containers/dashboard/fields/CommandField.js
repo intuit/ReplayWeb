@@ -13,14 +13,16 @@ const mapStateToProps = state => {
   const defaultDataSource = [newCommand]
   const index = state.editor.editing.meta.selectedIndex
   const selectedCmd =
-    state.editor.editing.filterCommands && state.editor.editing.filterCommands.length
+    state.editor.editing.filterCommands &&
+    state.editor.editing.filterCommands.length
       ? state.editor.editing.filterCommands[index]
       : defaultDataSource[index]
   return {
     selectedCmd: selectedCmd,
     commands: state.editor.editing.commands,
     isCmdEditable:
-      state.player.status === C.PLAYER_STATUS.STOPPED && selectedCmd !== undefined,
+      state.player.status === C.PLAYER_STATUS.STOPPED &&
+      selectedCmd !== undefined,
     editing: state.editor.editing,
     filterCommands: state.editor.editing.filterCommands,
     blocks: state.editor.blocks,
@@ -32,11 +34,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateSelectedCommand: (obj, overwrite) => dispatch(updateSelectedCommand(obj, overwrite)),
+    updateSelectedCommand: (obj, overwrite) =>
+      dispatch(updateSelectedCommand(obj, overwrite)),
     startInspecting: () => dispatch(startInspecting()),
     stopInspecting: () => dispatch(stopInspecting()),
-    setInspectTarget: (target) => dispatch(setInspectTarget(target))
+    setInspectTarget: target => dispatch(setInspectTarget(target))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommandField)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommandField)

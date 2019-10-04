@@ -11,19 +11,21 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <CommandButtons
-    stopInspecting={props.stopInspecting || jest.fn()}
-    setInspectTarget={props.setInspectTarget || jest.fn()}
-    startInspecting={props.startInspecting || jest.fn()}
-    isInspecting={props.isInspecting || false}
-    inspectTarget={props.inspectTarget || ''}
-    name={props.name || ''}
-    canTarget={props.canTarget || false}
-    isCmdEditable={props.isCmdEditable || false}
-    command={props.command || ''}
-    value={props.value || ''}
-    updateParameter={props.updateParameter || jest.fn()}
-  />
+  return (
+    <CommandButtons
+      stopInspecting={props.stopInspecting || jest.fn()}
+      setInspectTarget={props.setInspectTarget || jest.fn()}
+      startInspecting={props.startInspecting || jest.fn()}
+      isInspecting={props.isInspecting || false}
+      inspectTarget={props.inspectTarget || ''}
+      name={props.name || ''}
+      canTarget={props.canTarget || false}
+      isCmdEditable={props.isCmdEditable || false}
+      command={props.command || ''}
+      value={props.value || ''}
+      updateParameter={props.updateParameter || jest.fn()}
+    />
+  )
   /* eslint-enable react/prop-types */
 }
 

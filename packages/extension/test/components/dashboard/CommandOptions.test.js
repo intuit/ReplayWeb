@@ -6,10 +6,8 @@ jest.mock('../../../src/common/ipc/ipc_cs.js', () => {})
 jest.mock('../../../src/actions/index.js', () => {})
 jest.mock('../../../src/containers/dashboard/fields/CommandField.js', () => {
   // eslint-disable-next-line react/display-name
-  return function () {
-    return (
-      <p>CommandField component</p>
-    )
+  return function() {
+    return <p>CommandField component</p>
   }
 })
 
@@ -20,16 +18,18 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <CommandOptions
-    updateSelectedCommand={props.updateSelectedCommand || jest.fn()}
-    setEditorStatus={props.setEditorStatus || jest.fn()}
-    editor={props.editor || {}}
-    editing={props.editing || { meta: { selectedIndex: 0 } }}
-    setNextBlock={props.setNextBlock || jest.fn()}
-    changeModalState={props.changeModalState || jest.fn()}
-    editBlock={props.editBlock || jest.fn()}
-    player={props.player || {}}
-  />
+  return (
+    <CommandOptions
+      updateSelectedCommand={props.updateSelectedCommand || jest.fn()}
+      setEditorStatus={props.setEditorStatus || jest.fn()}
+      editor={props.editor || {}}
+      editing={props.editing || { meta: { selectedIndex: 0 } }}
+      setNextBlock={props.setNextBlock || jest.fn()}
+      changeModalState={props.changeModalState || jest.fn()}
+      editBlock={props.editBlock || jest.fn()}
+      player={props.player || {}}
+    />
+  )
   /* eslint-enable react/prop-types */
 }
 

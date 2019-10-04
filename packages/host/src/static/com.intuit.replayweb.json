@@ -1,9 +1,7 @@
 {
-    "name":"com.intuit.replayweb",
-    "description":"replayweb",
-    "path":"/<PATH TO REPLAYKIT>/dist/nativeHost.sh",
-    "type":"stdio",
-    "allowed_origins": [
-        "chrome-extension://kdkncplbcfaiieokihnlffldgaicdkpk/"
-    ]
+  "name": "com.intuit.replayweb",
+  "description": "replayweb",
+  "path": "/<PATH TO REPLAYKIT>/dist/nativeHost.sh",
+  "type": "stdio",
+  "allowed_origins": ["chrome-extension://kdkncplbcfaiieokihnlffldgaicdkpk/"]
 }

@@ -1,7 +1,7 @@
 import gitP from 'simple-git/promise'
 import path from 'path'
-import {LOCATION} from './common'
-import {expandHome} from './filesystem'
+import { LOCATION } from './common'
+import { expandHome } from './filesystem'
 
 const git = gitP(LOCATION)
 
@@ -21,7 +21,7 @@ export async function getCurrentVersion() {
  * @returns {string} - stdout from the git command
  */
 export async function fetchChanges() {
-  return await git.fetch({'--all': null})
+  return await git.fetch({ '--all': null })
 }
 
 /**

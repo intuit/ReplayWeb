@@ -1,7 +1,6 @@
-import suiteModel from '../models/suite_model';
-import {setSuites} from './editor'
-import {types as T} from './action_types'
-
+import suiteModel from '../models/suite_model'
+import { setSuites } from './editor'
+import { types as T } from './action_types'
 
 export function addTestToSuite(test) {
   return {
@@ -17,33 +16,34 @@ export function removeTestFromSuite(test) {
   }
 }
 
-
 // Thunk Actions
 
-export function createSuite (newSuite) {
+export function createSuite(newSuite) {
   return (dispatch, getState) => {
     const projectId = getState().editor.project.id
-    return suiteModel.insert({...newSuite, projectId})
-    .then(() => suiteModel.listByProject(projectId))
-    .then(suites => dispatch(setSuites(suites)))
-  };
+    return suiteModel
+      .insert({ ...newSuite, projectId })
+      .then(() => suiteModel.listByProject(projectId))
+      .then(suites => dispatch(setSuites(suites)))
+  }
 }
 
-export function updateSuite (suite) {
+export function updateSuite(suite) {
   return (dispatch, getState) => {
     const projectId = getState().editor.project.id
-    return suiteModel.update(suite.id, suite)
-    .then(() => suiteModel.listByProject(projectId))
-    .then(suites => dispatch(setSuites(suites)))
-
-  };
+    return suiteModel
+      .update(suite.id, suite)
+      .then(() => suiteModel.listByProject(projectId))
+      .then(suites => dispatch(setSuites(suites)))
+  }
 }
 
-export function removeSuite (suite) {
+export function removeSuite(suite) {
   return (dispatch, getState) => {
     const projectId = getState().editor.project.id
-    return suiteModel.remove(suite.id)
-    .then(() => suiteModel.listByProject(projectId))
-    .then(suites => dispatch(setSuites(suites)))
-  };
+    return suiteModel
+      .remove(suite.id)
+      .then(() => suiteModel.listByProject(projectId))
+      .then(suites => dispatch(setSuites(suites)))
+  }
 }

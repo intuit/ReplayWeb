@@ -18,7 +18,7 @@ afterEach(() => {
 describe('ipc_bg_cs', () => {
   describe('openBgWithCs', () => {
     it('returns value', async () => {
-      ipcRewire.__Rewire__('Ext', ({
+      ipcRewire.__Rewire__('Ext', {
         runtime: {
           onMessage: {
             addListener: jest.fn()
@@ -28,7 +28,7 @@ describe('ipc_bg_cs', () => {
         tabs: {
           sendMessage: jest.fn()
         }
-      }))
+      })
       const res = openBgWithCs('')
       expect(res).toEqual({
         ipcCs: expect.any(Function),
@@ -51,12 +51,12 @@ describe('ipc_bg_cs', () => {
   describe('csInit', () => {
     it('exits early if no url', () => {
       const mockSendMessage = jest.fn()
-      ipcRewire.__Rewire__('Ext', ({
+      ipcRewire.__Rewire__('Ext', {
         extension: {},
         runtime: {
           sendMessage: mockSendMessage
         }
-      }))
+      })
       const res = csInit()
       expect(res).toBe(undefined)
       expect(mockSendMessage).not.toHaveBeenCalled()
@@ -64,14 +64,14 @@ describe('ipc_bg_cs', () => {
 
     it('returns value', () => {
       const mockSendMessage = jest.fn()
-      ipcRewire.__Rewire__('Ext', ({
+      ipcRewire.__Rewire__('Ext', {
         extension: {
           getURL: jest.fn()
         },
         runtime: {
           sendMessage: mockSendMessage
         }
-      }))
+      })
       const mockOpenBgWithCs = jest.fn()
       ipcRewire.__Rewire__('openBgWithCs', mockOpenBgWithCs)
       const res = csInit()
@@ -89,13 +89,13 @@ describe('ipc_bg_cs', () => {
   describe('bgInit', () => {
     it('returns value', () => {
       const mockAddListener = jest.fn()
-      ipcRewire.__Rewire__('Ext', ({
+      ipcRewire.__Rewire__('Ext', {
         runtime: {
           onMessage: {
             addListener: mockAddListener
           }
         }
-      }))
+      })
       const mockFn = jest.fn()
       const res = bgInit(mockFn)
       expect(res).toBe(undefined)

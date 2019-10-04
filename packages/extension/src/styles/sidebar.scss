@@ -1,12 +1,16 @@
-
 .side-bar {
-  .ant-menu-item, .ant-layout-sider, .ant-menu-inline, .ant-layout-sider-trigger{
+  .ant-menu-item,
+  .ant-layout-sider,
+  .ant-menu-inline,
+  .ant-layout-sider-trigger {
     /* Menu */
     min-width: 300px !important;
     flex: 0 0 300px !important;
   }
 
-  .ant-layout-sider, .ant-layout-sider-dark, .ant-layout-sider-has-trigger {
+  .ant-layout-sider,
+  .ant-layout-sider-dark,
+  .ant-layout-sider-has-trigger {
     height: 100vh !important;
   }
   .ant-layout-sider-collapsed {
@@ -63,8 +67,8 @@
   }
 }
 
-.folder-sidebar{
-  .ant-menu-vertical.ant-menu-sub{
+.folder-sidebar {
+  .ant-menu-vertical.ant-menu-sub {
     overflow: scroll;
     width: 300px !important;
   }
@@ -79,8 +83,9 @@
   }
 }
 
-.test-sidebar, .block-sidebar {
-  .ant-menu-vertical.ant-menu-sub{
+.test-sidebar,
+.block-sidebar {
+  .ant-menu-vertical.ant-menu-sub {
     overflow: scroll;
     height: 100vh !important;
     width: 300px !important;

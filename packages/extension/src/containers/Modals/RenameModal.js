@@ -1,8 +1,13 @@
 import { connect } from 'react-redux'
-import {changeModalState, renameTestCase, renameBlock, renameSuite} from '../../actions'
+import {
+  changeModalState,
+  renameTestCase,
+  renameBlock,
+  renameSuite
+} from '../../actions'
 import RenameModal from '../../components/Modals/RenameModal'
-import * as C from '../../common/constant';
-const mapStateToProps = (state) => {
+import * as C from '../../common/constant'
+const mapStateToProps = state => {
   return {
     visible: state.modals.rename,
     src: state.editor.editing.meta.src,
@@ -11,11 +16,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    renameSuite: (name) => dispatch(renameSuite(name)),
-    renameTestCase: (name) => dispatch(renameTestCase(name)),
-    renameBlock: (name) => dispatch(renameBlock(name)),
+    renameSuite: name => dispatch(renameSuite(name)),
+    renameTestCase: name => dispatch(renameTestCase(name)),
+    renameBlock: name => dispatch(renameBlock(name)),
     closeModal: () => dispatch(changeModalState('rename', false))
   }
 }

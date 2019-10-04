@@ -4,7 +4,7 @@ import { Menu, Modal, message, Icon } from 'antd'
 import * as C from '../../common/constant'
 import { pick } from '../../common/utils'
 
-export default function Dropdown (props) {
+export default function Dropdown(props) {
   switch (props.editorStatus) {
     case C.EDITOR_STATUS.TESTS:
       return <TestcaseDropdown {...props} />
@@ -19,7 +19,7 @@ Dropdown.propTypes = {
   editorStatus: PropTypes.string.isRequired
 }
 
-export function BlockDropdown (props) {
+export function BlockDropdown(props) {
   const onDelete = () => {
     const go = () => {
       return props.removeCurrentBlock().then(() => {
@@ -54,11 +54,7 @@ export function BlockDropdown (props) {
   )
 
   return (
-    <GenericDropdown
-      {...selectedProps}
-      onDelete={onDelete}
-      onShare={onShare}
-    />
+    <GenericDropdown {...selectedProps} onDelete={onDelete} onShare={onShare} />
   )
 }
 
@@ -67,7 +63,7 @@ BlockDropdown.propTypes = {
   changeModalState: PropTypes.func.isRequired
 }
 
-export function TestcaseDropdown (props) {
+export function TestcaseDropdown(props) {
   const onDelete = () => {
     const go = () => {
       return props.removeCurrentTestCase().then(() => {
@@ -96,19 +92,14 @@ export function TestcaseDropdown (props) {
     props
   )
 
-  return (
-    <GenericDropdown
-      {...selectedProps}
-      onDelete={onDelete}
-    />
-  )
+  return <GenericDropdown {...selectedProps} onDelete={onDelete} />
 }
 
 TestcaseDropdown.propTypes = {
   removeCurrentTestCase: PropTypes.func.isRequired
 }
 
-export function SuiteDropdown (props) {
+export function SuiteDropdown(props) {
   const onDelete = () => {
     const go = () => {
       return props.removeCurrentSuite().then(() => {
@@ -137,19 +128,14 @@ export function SuiteDropdown (props) {
     props
   )
 
-  return (
-    <GenericDropdown
-      {...selectedProps}
-      onDelete={onDelete}
-    />
-  )
+  return <GenericDropdown {...selectedProps} onDelete={onDelete} />
 }
 
 SuiteDropdown.propTypes = {
   removeCurrentSuite: PropTypes.func.isRequired
 }
 
-function GenericDropdown ({
+function GenericDropdown({
   status,
   editing,
   closeDropdown,
@@ -183,20 +169,31 @@ function GenericDropdown ({
       className="header-items"
     >
       <Menu.Item key="duplicate" disabled={!src}>
-        <span><Icon type="copy" /> Duplicate..</span>
+        <span>
+          <Icon type="copy" /> Duplicate..
+        </span>
       </Menu.Item>
       <Menu.Item key="rename" disabled={!src}>
-        <span><Icon type="edit" /> Rename</span>
+        <span>
+          <Icon type="edit" /> Rename
+        </span>
       </Menu.Item>
       <Menu.Item key="delete" disabled={!src}>
-        <span><Icon type="delete" /> Delete</span>
+        <span>
+          <Icon type="delete" /> Delete
+        </span>
       </Menu.Item>
       <Menu.Item key="share" disabled={!onShare}>
-        <span><Icon type="upload" />Share</span>
+        <span>
+          <Icon type="upload" />
+          Share
+        </span>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="play_settings" disabled={!canPlay}>
-        <span><Icon type="setting" /> Replay settings..</span>
+        <span>
+          <Icon type="setting" /> Replay settings..
+        </span>
       </Menu.Item>
     </Menu>
   )

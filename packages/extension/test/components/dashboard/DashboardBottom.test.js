@@ -9,13 +9,15 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <DashboardBottom
-    logs={props.logs || []}
-    screenshots={props.screenshots || []}
-    clearLogs={props.clearLogs || jest.fn()}
-    clearScreenshots={props.clearScreenshots || jest.fn()}
-    /* eslint-enable react/prop-types */
-  />
+  return (
+    <DashboardBottom
+      logs={props.logs || []}
+      screenshots={props.screenshots || []}
+      clearLogs={props.clearLogs || jest.fn()}
+      clearScreenshots={props.clearScreenshots || jest.fn()}
+      /* eslint-enable react/prop-types */
+    />
+  )
 }
 
 describe('DashboardBottom', () => {

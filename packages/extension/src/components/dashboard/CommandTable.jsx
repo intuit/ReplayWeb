@@ -1,14 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Button,
-  Input,
-  Icon,
-  Table,
-  Tooltip,
-  Popover,
-  Spin
-} from 'antd'
+import { Button, Input, Icon, Table, Tooltip, Popover, Spin } from 'antd'
 import { DragSource, DropTarget } from 'react-dnd'
 import { commandsMap, newCommand } from '../../common/commands'
 import * as C from '../../common/constant'
@@ -17,7 +9,7 @@ import deepEqual from 'deep-equal'
 
 import { updateSubstitutions } from '../../common/substitution_builder'
 
-function dragDirection (
+function dragDirection(
   dragIndex,
   hoverIndex,
   initialClientOffset,
@@ -35,18 +27,18 @@ function dragDirection (
 }
 
 const rowSource = {
-  beginDrag (props) {
+  beginDrag(props) {
     return {
       index: props.index
     }
   },
-  canDrag (props) {
+  canDrag(props) {
     return props.searchText === ''
   }
 }
 
 const rowTarget = {
-  drop (props, monitor) {
+  drop(props, monitor) {
     const dragIndex = monitor.getItem().index
     const hoverIndex = props.index
 
@@ -119,7 +111,7 @@ const CommandRow = props => {
         {...restProps}
         className={className}
         style={style}
-        onClick={(e) => {
+        onClick={e => {
           if (e.altKey || e.metaKey) {
             multiSelect(index)
           } else if (e.shiftKey) {
@@ -147,7 +139,7 @@ const DragDropCommandRow = DropTarget('row', rowTarget, (connect, monitor) => ({
   }))(CommandRow)
 )
 
-const handleSubstitutionState = (self) => {
+const handleSubstitutionState = self => {
   let curId
   try {
     curId = self.props.editing.meta.src.id
@@ -155,43 +147,55 @@ const handleSubstitutionState = (self) => {
     // src not set yet, ignore this attempt
     return
   }
-  updateSubstitutions(self.props.editing.commands, self.props.editor.blocks).then(cleanedReplacements => {
+  updateSubstitutions(
+    self.props.editing.commands,
+    self.props.editor.blocks
+  ).then(cleanedReplacements => {
     if (curId === self.props.editing.meta.src.id) {
-      self.setState({replaced: cleanedReplacements})
+      self.setState({ replaced: cleanedReplacements })
     }
   })
 }
 
 class CommandTable extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = {replaced: []}
+    this.state = { replaced: [] }
   }
 
-  onInputChange (e) {
+  onInputChange(e) {
     const text = e.target.value
     this.props.filterCommands(text)
     this.props.removeSelected()
   }
 
-  componentWillMount () {
-    this.setState({replaced: []})
+  componentWillMount() {
+    this.setState({ replaced: [] })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     handleSubstitutionState(this)
   }
 
-  componentWillReceiveProps (props) {
-    if (this.props.editing.meta.src && props.editing.meta.src && (props.editing.meta.src.id !== this.props.editing.meta.src.id)) {
-      this.setState({replaced: []})
+  componentWillReceiveProps(props) {
+    if (
+      this.props.editing.meta.src &&
+      props.editing.meta.src &&
+      props.editing.meta.src.id !== this.props.editing.meta.src.id
+    ) {
+      this.setState({ replaced: [] })
     }
 
     // We are making the claim that other blocks will not change while editing a given text/block
-    if (this.state.replaced.length !== props.editing.commands.length || !deepEqual(props.editing.commands, this.props.editing.commands)) { handleSubstitutionState(this) }
+    if (
+      this.state.replaced.length !== props.editing.commands.length ||
+      !deepEqual(props.editing.commands, this.props.editing.commands)
+    ) {
+      handleSubstitutionState(this)
+    }
   }
 
-  render () {
+  render() {
     const searchBox = () => {
       return (
         <span className="custom-searchBox">
@@ -202,30 +206,41 @@ class CommandTable extends React.Component {
             value={searchText}
             onChange={this.onInputChange}
             disabled={!editable}
-            style={{width: 180, marginLeft: 30}}
-            addonAfter={<Icon type="close"
-              style={{cursor: 'pointer'}}
-              onClick={e => {
-                this.props.removeSearchText()
-              }}
-            />}
+            style={{ width: 180, marginLeft: 30 }}
+            addonAfter={
+              <Icon
+                type="close"
+                style={{ cursor: 'pointer' }}
+                onClick={e => {
+                  this.props.removeSearchText()
+                }}
+              />
+            }
           />
         </span>
       )
     }
 
     const defaultDataSource = [newCommand]
-    const { editing, editor, player, selectCommand, searchText, multiSelect, groupSelect, removeSelected } = this.props
+    const {
+      editing,
+      editor,
+      player,
+      selectCommand,
+      searchText,
+      multiSelect,
+      groupSelect,
+      removeSelected
+    } = this.props
 
     const { filterCommands } = editing
     const dataSource = (filterCommands && filterCommands.length
       ? filterCommands
       : defaultDataSource
-    )
-      .map((command, i) => ({
-        ...command,
-        key: i
-      }))
+    ).map((command, i) => ({
+      ...command,
+      key: i
+    }))
     const editable = player.status === C.PLAYER_STATUS.STOPPED
     const inSearch = searchText !== ''
     const columns = [
@@ -237,29 +252,51 @@ class CommandTable extends React.Component {
         render: (text, record, index) => {
           // See if parameters are defined in the command map
           // if they arent, use the keys from the parameters of the actual command object
-          const params = commandsMap[record.command] && commandsMap[record.command].parameters
-            ? commandsMap[record.command].parameters
-            : (record.parameters && Object.keys(record.parameters).map(p => ({name: p}))) || []
-          return <div key={record.key}>
-            {
-              params.map(
-                param => {
-                  // The value to render is either the value of the parameter
-                  // or if its an object, its the value of the specified key from that object
-                  const value = (param.type === 'object' && param.key !== undefined)
-                    ? record.parameters[param.name] && record.parameters[param.name][param.key]
+          const params =
+            commandsMap[record.command] &&
+            commandsMap[record.command].parameters
+              ? commandsMap[record.command].parameters
+              : (record.parameters &&
+                  Object.keys(record.parameters).map(p => ({ name: p }))) ||
+                []
+          return (
+            <div key={record.key}>
+              {params.map(param => {
+                // The value to render is either the value of the parameter
+                // or if its an object, its the value of the specified key from that object
+                const value =
+                  param.type === 'object' && param.key !== undefined
+                    ? record.parameters[param.name] &&
+                      record.parameters[param.name][param.key]
                     : record.parameters[param.name]
-                  const warning = <Tooltip title={`${param.name} is missing`}><Icon type='warning' style={{color: 'red'}}/></Tooltip>
-                  const optional = <Tooltip title={`${param.name} is optional`}><Icon type='question-circle' style={{color: 'blue'}}/></Tooltip>
-                  const maxLength = 30
-                  const shorten = s => s.length > maxLength ? s.substring(0, maxLength - 3) + '...' : s
-                  return <span key={param.name} style={{marginRight: '20px'}}>
-                    <strong>{param.name}:</strong> {value ? shorten(`${value}`) : (param.optional ? optional : warning)}
+                const warning = (
+                  <Tooltip title={`${param.name} is missing`}>
+                    <Icon type="warning" style={{ color: 'red' }} />
+                  </Tooltip>
+                )
+                const optional = (
+                  <Tooltip title={`${param.name} is optional`}>
+                    <Icon type="question-circle" style={{ color: 'blue' }} />
+                  </Tooltip>
+                )
+                const maxLength = 30
+                const shorten = s =>
+                  s.length > maxLength
+                    ? s.substring(0, maxLength - 3) + '...'
+                    : s
+                return (
+                  <span key={param.name} style={{ marginRight: '20px' }}>
+                    <strong>{param.name}:</strong>{' '}
+                    {value
+                      ? shorten(`${value}`)
+                      : param.optional
+                      ? optional
+                      : warning}
                   </span>
-                }
-              )
-            }
-          </div>
+                )
+              })}
+            </div>
+          )
         }
       },
       {
@@ -268,13 +305,17 @@ class CommandTable extends React.Component {
         key: 'substitutions',
         width: 250,
         render: (text, record, index) => {
-          if (this.state.replaced.length === 0) { return <Spin /> }
-          if (!this.state.replaced[index]) { return <span></span> }
-          const content = this.state.replaced[index].map((replacement) => {
+          if (this.state.replaced.length === 0) {
+            return <Spin />
+          }
+          if (!this.state.replaced[index]) {
+            return <span></span>
+          }
+          const content = this.state.replaced[index].map(replacement => {
             return (
               <p>
                 <strong>{replacement[0]}</strong>
-                <span>  replaced with  </span>
+                <span> replaced with </span>
                 <strong>{replacement[1]}</strong>
               </p>
             )
@@ -282,9 +323,11 @@ class CommandTable extends React.Component {
 
           if (content.length == 0) return <span></span>
 
-          return <Popover content={content} title="Substitutions">
-            <Button>Substitutions</Button>
-          </Popover>
+          return (
+            <Popover content={content} title="Substitutions">
+              <Button>Substitutions</Button>
+            </Popover>
+          )
         }
       },
       {
@@ -294,28 +337,28 @@ class CommandTable extends React.Component {
         render: (text, record, index) => {
           return (
             <div key={record.key}>
-              <Tooltip title='Remove Command' mouseEnterDelay={0.5}>
+              <Tooltip title="Remove Command" mouseEnterDelay={0.5}>
                 <Button
-                  disabled={!editable || inSearch }
+                  disabled={!editable || inSearch}
                   onClick={e => {
                     this.props.removeCommand(index)
                     e.stopPropagation()
                   }}
-                  type='danger'
-                  icon='minus'
-                  shape='circle'
-                  style={{marginRight: '5px'}}
+                  type="danger"
+                  icon="minus"
+                  shape="circle"
+                  style={{ marginRight: '5px' }}
                 />
               </Tooltip>
-              <Tooltip title='Add Command' mouseEnterDelay={0.5}>
+              <Tooltip title="Add Command" mouseEnterDelay={0.5}>
                 <Button
-                  disabled={!editable || inSearch }
+                  disabled={!editable || inSearch}
                   onClick={e => {
                     this.props.insertCommand(newCommand, index + 1)
                     e.stopPropagation()
                   }}
-                  icon='plus'
-                  shape='circle'
+                  icon="plus"
+                  shape="circle"
                 />
               </Tooltip>
             </div>
@@ -367,13 +410,16 @@ class CommandTable extends React.Component {
       pagination: false
     }
 
-    return <Table {...tableConfig}
-      expandRowByClick= {true}
-      expandIconAsCell={false}
-      expandedRowRender={(record, index, indent, expanded) =>
-        expanded ? <CommandOptions /> : null
-      }
-    />
+    return (
+      <Table
+        {...tableConfig}
+        expandRowByClick={true}
+        expandIconAsCell={false}
+        expandedRowRender={(record, index, indent, expanded) =>
+          expanded ? <CommandOptions /> : null
+        }
+      />
+    )
   }
 }
 

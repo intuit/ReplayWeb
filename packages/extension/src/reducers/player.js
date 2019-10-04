@@ -1,9 +1,8 @@
-import { types } from '../actions/action_types';
-import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils';
-import * as C from '../common/constant';
+import { types } from '../actions/action_types'
+import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils'
+import * as C from '../common/constant'
 
-const T = types; // so that auto complete in webstorm doesn't go crazy
-
+const T = types // so that auto complete in webstorm doesn't go crazy
 
 const initialState = {
   context: {},
@@ -20,67 +19,67 @@ const initialState = {
     total: null,
     past: null
   }
-};
+}
 
-export {initialState}
+export { initialState }
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case T.EDIT_TEST_CASE: {
-      return ({
+      return {
         ...state,
         status: C.PLAYER_STATUS.STOPPED,
         stopReason: null,
         nextCommandIndex: null,
         errorCommandIndices: [],
         doneCommandIndices: []
-      })
+      }
     }
     case T.EDIT_BLOCK: {
-      return ({
+      return {
         ...state,
         status: C.PLAYER_STATUS.STOPPED,
         stopReason: null,
         nextCommandIndex: null,
         errorCommandIndices: [],
         doneCommandIndices: []
-      })
+      }
     }
 
     case T.EDIT_NEW_TEST_CASE: {
-      return ({
+      return {
         ...state,
         nextCommandIndex: null,
         errorCommandIndices: [],
         doneCommandIndices: []
-      })
+      }
     }
 
     case T.EDIT_NEW_BLOCK:
-      return ({
+      return {
         ...state,
         nextCommandIndex: null,
         errorCommandIndices: [],
         doneCommandIndices: []
-      })
+      }
 
     case T.SET_PLAYER_STATE:
-      return ({
+      return {
         ...state,
         ...action.data
-      })
+      }
 
     case T.PLAYER_ADD_ERROR_COMMAND_INDEX:
       return updateIn(
         ['errorCommandIndices'],
         indices => [...indices, action.data],
         state
-      );
+      )
     case T.CLEAR_CONTEXT:
-      return setIn(['context'], {}, state);
+      return setIn(['context'], {}, state)
     case T.SET_CONTEXT:
-      return setIn(['context', action.key], action.value, state);
+      return setIn(['context', action.key], action.value, state)
     default:
-      return state;
+      return state
   }
 }

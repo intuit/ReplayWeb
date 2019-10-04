@@ -1,53 +1,45 @@
 {
-    "background": {
-        "persistent": true,
-        "scripts": [
-            "background.js"
-        ]
-    },
-    "browser_action": {
-        "default_icon": {
-            "38": "logo.png"
-        }
-    },
-    "content_scripts": [
-        {
-            "all_frames": true,
-            "js": [
-                "content_script.js"
-            ],
-            "match_about_blank": true,
-            "matches": [
-                "<all_urls>"
-            ],
-            "run_at": "document_start"
-        }
-    ],
-    "content_security_policy": "script-src 'self'; object-src 'self'",
-    "description": "Test Automation for CG",
-    "icons": {
-        "128": "logo.png"
-    },
-    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp/Qfsu01ICj2s3YBvGnGkLk2xQ2YEKu54M8RP/7zC5ZNajP2suqc4dtHIoPWXR3d+/Be46ERli2Vm0H24vy50UkK5hM51dpdyucCUtlrvyDrVBxVM82x6kdXXsmCvS4e/Bkuay1Hrmi2GGfp7TZRO0jlhBvLnPxuKHc3bhhrKIAziYNM3ukpiqpYnBC4MnrelpjWVkd/Ufb1NJRFvAj/MXb3TROSEYSuawt0VO8oUjO6JxT4923mU/eVV6iGi+XSqaqlQ56WNoNX6I6A30FetKm9wCAhdBm2hi2WfNKfrDCqYuopnyH2ZOOlchf9AIsZVzLtIxdBWsISKGZuVla8zQIDAQAB",
-    "manifest_version": 2,
-    "name": "Replay",
-    "offline_enabled": true,
-    "permissions": [
-        "webRequest",
-        "webRequestBlocking",
-        "nativeMessaging",
-        "storage",
-        "tabs",
-        "notifications",
-        "cookies",
-        "file:///*",
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
-    ],
-    "short_name": "Replay",
-    "version": "3.49.0",
-    "web_accessible_resources": [
-        "content_script.js"
-    ]
+  "background": {
+    "persistent": true,
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": {
+      "38": "logo.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": ["content_script.js"],
+      "match_about_blank": true,
+      "matches": ["<all_urls>"],
+      "run_at": "document_start"
+    }
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "description": "Test Automation for CG",
+  "icons": {
+    "128": "logo.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp/Qfsu01ICj2s3YBvGnGkLk2xQ2YEKu54M8RP/7zC5ZNajP2suqc4dtHIoPWXR3d+/Be46ERli2Vm0H24vy50UkK5hM51dpdyucCUtlrvyDrVBxVM82x6kdXXsmCvS4e/Bkuay1Hrmi2GGfp7TZRO0jlhBvLnPxuKHc3bhhrKIAziYNM3ukpiqpYnBC4MnrelpjWVkd/Ufb1NJRFvAj/MXb3TROSEYSuawt0VO8oUjO6JxT4923mU/eVV6iGi+XSqaqlQ56WNoNX6I6A30FetKm9wCAhdBm2hi2WfNKfrDCqYuopnyH2ZOOlchf9AIsZVzLtIxdBWsISKGZuVla8zQIDAQAB",
+  "manifest_version": 2,
+  "name": "Replay",
+  "offline_enabled": true,
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "nativeMessaging",
+    "storage",
+    "tabs",
+    "notifications",
+    "cookies",
+    "file:///*",
+    "http://*/*",
+    "https://*/*",
+    "<all_urls>"
+  ],
+  "short_name": "Replay",
+  "version": "3.49.0",
+  "web_accessible_resources": ["content_script.js"]
 }

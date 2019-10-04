@@ -1,4 +1,8 @@
-import { tryRequire, loadPlugin, __RewireAPI__ as utilitiesRewire } from '../../src/utilities'
+import {
+  tryRequire,
+  loadPlugin,
+  __RewireAPI__ as utilitiesRewire
+} from '../../src/utilities'
 jest.mock('realPlugin')
 describe('loadPlugin', () => {
   afterEach(() => {
@@ -13,8 +17,8 @@ describe('loadPlugin', () => {
   it('should load a array plugin definition', () => {
     const mock = jest.fn()
     utilitiesRewire.__Rewire__('tryRequire', mock)
-    const plugin = loadPlugin(['testplugin', {option: 'value'}])
-    expect(mock).toHaveBeenCalledWith('testplugin', {option: 'value'})
+    const plugin = loadPlugin(['testplugin', { option: 'value' }])
+    expect(mock).toHaveBeenCalledWith('testplugin', { option: 'value' })
   })
   it('should throw an error for an invalid plugin definition', () => {
     const mock = jest.spyOn(console, 'error')
@@ -28,11 +32,12 @@ describe('tryRequire', () => {
     expect(tryRequire.bind(null, 'fakepackage')).toThrow()
   })
   it('should construct a plugin if the package is found', () => {
-    global.require = () => class FakePlugin {
-      constructor(parameter) {
-        this.data = parameter
+    global.require = () =>
+      class FakePlugin {
+        constructor(parameter) {
+          this.data = parameter
+        }
       }
-    }
     const p = tryRequire('realPlugin', 'parameterValue')
     expect(p.data).toBe('parameterValue')
   })

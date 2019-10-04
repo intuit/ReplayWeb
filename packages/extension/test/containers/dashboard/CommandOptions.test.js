@@ -10,7 +10,9 @@ jest.mock('../../../src/actions', () => ({
 jest.mock('../../../src/common/ipc/ipc_cs', () => {})
 
 // eslint-disable-next-line react/display-name
-jest.mock('../../../src/components/dashboard/CommandOptions', () => () => <p>CommandOptions</p>)
+jest.mock('../../../src/components/dashboard/CommandOptions', () => () => (
+  <p>CommandOptions</p>
+))
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -18,12 +20,12 @@ afterEach(() => {
 
 describe('CommandButtons store', () => {
   it('operates', () => {
-    const mockConnect = jest.fn().mockImplementation(() => (component) => {})
+    const mockConnect = jest.fn().mockImplementation(() => component => {})
     jest.doMock('react-redux', () => ({
       connect: mockConnect
     }))
     require('../../../src/containers/dashboard/CommandOptions')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       app: {
@@ -44,8 +46,7 @@ describe('CommandButtons store', () => {
     let result = mapStateToProps(state)
     expect(result).toEqual({
       status: 'a',
-      editor:
-      {
+      editor: {
         editing: { meta: expect.any(Object) },
         clipboard: 'd',
         selectedCmds: 'e'

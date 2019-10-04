@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Testcase = props => {
   return (
@@ -8,7 +8,7 @@ const Testcase = props => {
     >
       {props.name}
     </span>
-  );
-};
+  )
+}
 
-export default Testcase;
+export default Testcase

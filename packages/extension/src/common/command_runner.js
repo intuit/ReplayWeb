@@ -19,7 +19,7 @@ const { domText } = inspector
 
 const HIGHLIGHT_TIMEOUT = 500
 
-const getElementByXPath = (xpath) => {
+const getElementByXPath = xpath => {
   const snapshot = document.evaluate(
     xpath,
     document.body,
@@ -32,11 +32,11 @@ const getElementByXPath = (xpath) => {
 }
 
 // Note: parse the locator and return the element found accordingly
-export const getElementByLocator = (str) => {
+export const getElementByLocator = str => {
   const i = str.indexOf('=')
   let el
 
-  if ((/^\//.test(str))) {
+  if (/^\//.test(str)) {
     el = getElementByXPath(str)
   } else if (i === -1) {
     throw new Error('getElementByLocator: invalid locator, ' + str)
@@ -54,7 +54,8 @@ export const getElementByLocator = (str) => {
         break
 
       case 'identifier':
-        el = document.getElementById(value) || document.getElementsByName(value)[0]
+        el =
+          document.getElementById(value) || document.getElementsByName(value)[0]
         break
 
       case 'automation-id':
@@ -97,12 +98,16 @@ export const getElementByLocator = (str) => {
         break
 
       default:
-        throw new Error('getElementByLocator: unsupported locator method, ' + method)
+        throw new Error(
+          'getElementByLocator: unsupported locator method, ' + method
+        )
     }
   }
 
   if (!el) {
-    throw new Error('getElementByLocator: fail to find element based on the locator, ' + str)
+    throw new Error(
+      'getElementByLocator: fail to find element based on the locator, ' + str
+    )
   }
 
   return el
@@ -141,7 +146,9 @@ export const getFrameByLocator = (str, helpers) => {
         const frame = frames[index]
 
         if (!frame) {
-          throw new Error(`Frame index out of range (index ${value} in ${frames.length} frames`)
+          throw new Error(
+            `Frame index out of range (index ${value} in ${frames.length} frames`
+          )
         }
 
         return { frame }
@@ -159,11 +166,17 @@ export const getFrameByLocator = (str, helpers) => {
         throw new Error('Unsupported relative type, ' + value)
       }
       case 'title': {
-        const frameEl = getElementByXPath(`.//*[contains(@${method} ,"${value}")]`)
+        const frameEl = getElementByXPath(
+          `.//*[contains(@${method} ,"${value}")]`
+        )
         const frames = Array.from(window.frames)
         const frame = frames.find(f => f === frameEl.contentWindow)
         if (!frame) {
-          throw new Error(`Frame not found with xpath=${getElementByXPath(`.//*[contains(@${method} ,"${value}")]`)}`)
+          throw new Error(
+            `Frame not found with xpath=${getElementByXPath(
+              `.//*[contains(@${method} ,"${value}")]`
+            )}`
+          )
         }
         return { frame }
       }
@@ -203,29 +216,33 @@ export const getFrameByLocator = (str, helpers) => {
   return { frame: frameDom.contentWindow }
 }
 
-function scrollElementIntoView (el) {
+function scrollElementIntoView(el) {
   el.scrollIntoView()
   window.scrollBy(0, -50)
 }
 
-function getTableHeader (tableElementLocator) {
+function getTableHeader(tableElementLocator) {
   const tableElement = getElementByXPath(tableElementLocator)
   const trs = Array.from(tableElement.getElementsByTagName('tr'))
-  const allThs = trs.map((tr) => Array.from(tr.getElementsByTagName('th')))
-  const tds = allThs.reduce((acc, cv) => acc.concat(cv), [])// reduce 2D array into 1D array
-    .map(th => (domText(th)).trim()) // get the text for all elements
+  const allThs = trs.map(tr => Array.from(tr.getElementsByTagName('th')))
+  const tds = allThs
+    .reduce((acc, cv) => acc.concat(cv), []) // reduce 2D array into 1D array
+    .map(th => domText(th).trim()) // get the text for all elements
   const headerRow = tds.filter(thText => thText !== '') // filter out all empty cells
   return headerRow
 }
 
-export const fetchTable = (tableElementLocator) => {
+export const fetchTable = tableElementLocator => {
   const headerList = getTableHeader(tableElementLocator)
   const tableElement = getElementByXPath(tableElementLocator)
   const trs = Array.from(tableElement.getElementsByTagName('tr'))
-  const allTds = trs.map((tr) => Array.from(tr.getElementsByTagName('td')))
-  const tableMap = allTds.map(tds => tds.map(td => (domText(td)).trim()))
-  const tableWithoutHeader = tableMap.filter((row, i) => { // to remove multiple headers
-    const header = Array.from(row).filter((cellText, index) => headerList[index] === cellText)
+  const allTds = trs.map(tr => Array.from(tr.getElementsByTagName('td')))
+  const tableMap = allTds.map(tds => tds.map(td => domText(td).trim()))
+  const tableWithoutHeader = tableMap.filter((row, i) => {
+    // to remove multiple headers
+    const header = Array.from(row).filter(
+      (cellText, index) => headerList[index] === cellText
+    )
     return header.length !== headerList.length && i !== 0
   })
   return tableWithoutHeader
@@ -269,10 +286,10 @@ export const run = async (commandObject, csIpc, helpers) => {
       }
     })
   }
-  const __getFrameByLocator = wrap(getFrameByLocator, (locator) => ({
+  const __getFrameByLocator = wrap(getFrameByLocator, locator => ({
     errorMsg: `time out when looking for frame '${locator}'`
   }))
-  const __getElementByLocator = wrap(getElementByLocator, (locator) => ({
+  const __getElementByLocator = wrap(getElementByLocator, locator => ({
     errorMsg: `time out when looking for element '${locator}'`
   }))
 
@@ -280,7 +297,9 @@ export const run = async (commandObject, csIpc, helpers) => {
     const tag = el.tagName.toLowerCase()
 
     if (tag !== 'input' && tag !== 'textarea') {
-      throw new Error('run command: element found is neither input nor textarea')
+      throw new Error(
+        'run command: element found is neither input nor textarea'
+      )
     }
 
     if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
@@ -298,7 +317,8 @@ export const run = async (commandObject, csIpc, helpers) => {
     inputEvent.simulated = true // for React 15
     const tracker = el._valueTracker
 
-    if (tracker) { // for React 16
+    if (tracker) {
+      // for React 16
       tracker.setValue(previousValue || value)
     }
 
@@ -315,65 +335,77 @@ export const run = async (commandObject, csIpc, helpers) => {
   switch (command) {
     case 'selectFrame': {
       const { target } = finalParameters
-      return __getFrameByLocator(target, helpers)
-        .then(frameWindow => {
-          if (!frameWindow) {
-            throw new Error('Invalid frame/iframe')
-          }
-          return frameWindow
-        })
+      return __getFrameByLocator(target, helpers).then(frameWindow => {
+        if (!frameWindow) {
+          throw new Error('Invalid frame/iframe')
+        }
+        return frameWindow
+      })
     }
 
     case 'assertAttribute': {
       const { target, attribute, expected } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          const attributeValue = el.getAttribute(attribute)
-          const expectation = expected.match(/^\/.+\/$/) ? regExpMatch(expected, attributeValue) : expected
-          if (attributeValue !== expectation) {
-            throw new Error(`attribute ${attribute} had value: ${attributeValue}, but expected ${expected}`)
-          }
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        const attributeValue = el.getAttribute(attribute)
+        const expectation = expected.match(/^\/.+\/$/)
+          ? regExpMatch(expected, attributeValue)
+          : expected
+        if (attributeValue !== expectation) {
+          throw new Error(
+            `attribute ${attribute} had value: ${attributeValue}, but expected ${expected}`
+          )
+        }
+        return true
+      })
     }
 
     case 'assertCheckboxState': {
       const { target, expected } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          if (!el) { throw new Error(`element ${target} was not found`) } else if (el.type !== 'checkbox' || el.checked !== Boolean(expected)) { throw new Error('element is either not a checkbox or is not the correct state') } else { return true }
-        })
+      return __getElementByLocator(target).then(el => {
+        if (!el) {
+          throw new Error(`element ${target} was not found`)
+        } else if (el.type !== 'checkbox' || el.checked !== Boolean(expected)) {
+          throw new Error(
+            'element is either not a checkbox or is not the correct state'
+          )
+        } else {
+          return true
+        }
+      })
     }
 
     case 'assertClassDoesNotExist': {
       const { target, class: assertClass } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          if (el.classList.contains(assertClass)) {
-            throw new Error(`class ${assertClass} found in classes: "${el.classList.value}"`)
-          }
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        if (el.classList.contains(assertClass)) {
+          throw new Error(
+            `class ${assertClass} found in classes: "${el.classList.value}"`
+          )
+        }
+        return true
+      })
     }
 
     case 'assertClassExists': {
       const { target, class: assertClass } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          if (!el.classList.contains(assertClass)) {
-            throw new Error(`class not found, \n\texpected: "${assertClass}", \n\tactual: "${el.classList.value}"`)
-          }
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        if (!el.classList.contains(assertClass)) {
+          throw new Error(
+            `class not found, \n\texpected: "${assertClass}", \n\tactual: "${el.classList.value}"`
+          )
+        }
+        return true
+      })
     }
 
     case 'assertElementPresent': {
       const { target, timeout } = finalParameters
       return asyncUntil(
         'assertElementPresent',
-        () => __getElementByLocator(target)
-          .then(el => ({ pass: true, result: el }))
-          .catch(e => ({ pass: false })),
+        () =>
+          __getElementByLocator(target)
+            .then(el => ({ pass: true, result: el }))
+            .catch(e => ({ pass: false })),
         500,
         timeout,
         `'${target}' element not present`
@@ -384,9 +416,10 @@ export const run = async (commandObject, csIpc, helpers) => {
       const { target, timeout } = finalParameters
       return asyncUntil(
         'assertElementNotPresent',
-        () => __getElementByLocator(target)
-          .then(el => ({ pass: false, result: el }))
-          .catch(e => ({ pass: true })),
+        () =>
+          __getElementByLocator(target)
+            .then(el => ({ pass: false, result: el }))
+            .catch(e => ({ pass: true })),
         500,
         timeout,
         `'${target}' element is present but was not expected to be`
@@ -397,15 +430,18 @@ export const run = async (commandObject, csIpc, helpers) => {
       const { target, timeout } = finalParameters
       return asyncUntil(
         'assertElementVisible',
-        () => __getElementByLocator(target)
-          .then(el => {
-            if (window.getComputedStyle(el).display !== 'none') {
-              return { pass: true, result: true }
-            } else {
-              throw new Error(`'${target}' is not visible but was expected to be`)
-            }
-          })
-          .catch(e => ({ pass: false })),
+        () =>
+          __getElementByLocator(target)
+            .then(el => {
+              if (window.getComputedStyle(el).display !== 'none') {
+                return { pass: true, result: true }
+              } else {
+                throw new Error(
+                  `'${target}' is not visible but was expected to be`
+                )
+              }
+            })
+            .catch(e => ({ pass: false })),
         500,
         timeout,
         `'${target} is not visible' but was expected to be`
@@ -416,15 +452,18 @@ export const run = async (commandObject, csIpc, helpers) => {
       const { target, timeout } = finalParameters
       return asyncUntil(
         'assertElementNotVisible',
-        () => __getElementByLocator(target)
-          .then(el => {
-            if (window.getComputedStyle(el).display === 'none') {
-              return { pass: true, result: true }
-            } else {
-              throw new Error(`'${target}' is visible but was not expected to be`)
-            }
-          })
-          .catch(e => ({ pass: false })),
+        () =>
+          __getElementByLocator(target)
+            .then(el => {
+              if (window.getComputedStyle(el).display === 'none') {
+                return { pass: true, result: true }
+              } else {
+                throw new Error(
+                  `'${target}' is visible but was not expected to be`
+                )
+              }
+            })
+            .catch(e => ({ pass: false })),
         500,
         timeout,
         `'${target}' is visible but was not expected to be`
@@ -435,7 +474,9 @@ export const run = async (commandObject, csIpc, helpers) => {
       const { key, expected } = finalParameters
       const value = getLocalStorage(key)
       if (value !== expected) {
-        throw new Error(`Local Storage value did not match: \n\texpected: "${expected}", \n\tactual: "${value}"`)
+        throw new Error(
+          `Local Storage value did not match: \n\texpected: "${expected}", \n\tactual: "${value}"`
+        )
       }
       return true
     }
@@ -444,37 +485,43 @@ export const run = async (commandObject, csIpc, helpers) => {
       const { key, expected } = finalParameters
       const value = getSessionStorage(key)
       if (value !== expected) {
-        throw new Error(`Session Storage value did not match: \n\texpected: "${expected}", \n\tactual: "${value}"`)
+        throw new Error(
+          `Session Storage value did not match: \n\texpected: "${expected}", \n\tactual: "${value}"`
+        )
       }
       return true
     }
 
     case 'assertStyle': {
       const { target, property, expected } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          const computed = window.getComputedStyle(el)
-          if (computed[property] === undefined) {
-            throw new Error(`style '${property}' not found on element ${target}`)
-          }
-          if (computed[property] !== expected) {
-            throw new Error(`style did not match, \n\texpected: "${expected}", \n\tactual: "${computed[property]}"`)
-          }
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        const computed = window.getComputedStyle(el)
+        if (computed[property] === undefined) {
+          throw new Error(`style '${property}' not found on element ${target}`)
+        }
+        if (computed[property] !== expected) {
+          throw new Error(
+            `style did not match, \n\texpected: "${expected}", \n\tactual: "${computed[property]}"`
+          )
+        }
+        return true
+      })
     }
 
     case 'assertText': {
       const { target, expected = '' } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          const text = domText(el)
-          const expectation = expected.match(/^\/.+\/$/) ? regExpMatch(expected, text) : expected
-          if (text !== expectation) {
-            throw new Error(`text not matched, \n\texpected: "${expectation}", \n\tactual: "${text}"`)
-          }
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        const text = domText(el)
+        const expectation = expected.match(/^\/.+\/$/)
+          ? regExpMatch(expected, text)
+          : expected
+        if (text !== expectation) {
+          throw new Error(
+            `text not matched, \n\texpected: "${expectation}", \n\tactual: "${text}"`
+          )
+        }
+        return true
+      })
     }
 
     case 'assertTableNotEmpty': {
@@ -488,7 +535,9 @@ export const run = async (commandObject, csIpc, helpers) => {
     case 'assertTitle': {
       const { expected } = finalParameters
       if (expected !== document.title) {
-        throw new Error(`title not matched, \n\texpected: "${expected}", \n\tactual: "${document.title}"`)
+        throw new Error(
+          `title not matched, \n\texpected: "${expected}", \n\tactual: "${document.title}"`
+        )
       }
 
       return true
@@ -516,50 +565,51 @@ export const run = async (commandObject, csIpc, helpers) => {
     // *************************************************************************
 
     case 'captureScreenshot': {
-      return csIpc.ask('CS_CAPTURE_SCREENSHOT', {})
-        .then(url => ({
-          screenshot: {
-            url,
-            name: url.split('/').slice(-1)[0]
-          }
-        }))
+      return csIpc.ask('CS_CAPTURE_SCREENSHOT', {}).then(url => ({
+        screenshot: {
+          url,
+          name: url.split('/').slice(-1)[0]
+        }
+      }))
     }
 
     case 'clearValue': {
       const { target } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => setValueForElement(el, ''))
+      return __getElementByLocator(target).then(el =>
+        setValueForElement(el, '')
+      )
     }
     case 'click':
     case 'clickAndWait': {
       const { target } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          try {
-            if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
-            if (extra.playHighlightElements) helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
-          } catch (e) {
-            log.error('error in scroll and highlight')
-          }
+      return __getElementByLocator(target).then(el => {
+        try {
+          if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
+          if (extra.playHighlightElements)
+            helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
+        } catch (e) {
+          log.error('error in scroll and highlight')
+        }
 
-          el.click()
-          return true
-        })
+        el.click()
+        return true
+      })
     }
 
-    case 'comment' : {
+    case 'comment': {
       return true
     }
 
     // Placeholder, testrunner will actually do browser.debug
-    case 'debug' : {
+    case 'debug': {
       return true
     }
 
     case 'deleteAllCookies': {
-      return csIpc.ask('CS_DELETE_ALL_COOKIES', {
-        url: window.location.origin
-      })
+      return csIpc
+        .ask('CS_DELETE_ALL_COOKIES', {
+          url: window.location.origin
+        })
         .then(() => true)
     }
 
@@ -568,11 +618,10 @@ export const run = async (commandObject, csIpc, helpers) => {
       return Promise.all([
         __getElementByLocator(startTarget),
         __getElementByLocator(endTarget)
-      ])
-        .then(([$src, $tgt]) => {
-          dragMock.dragStart($src).drop($tgt)
-          return true
-        })
+      ]).then(([$src, $tgt]) => {
+        dragMock.dragStart($src).drop($tgt)
+        return true
+      })
     }
 
     case 'http': {
@@ -584,53 +633,51 @@ export const run = async (commandObject, csIpc, helpers) => {
         key,
         text = false
       } = finalParameters
-      return fetch(
-        url,
-        {
-          method,
-          body: body ? JSON.stringify(body) : undefined,
-          headers: new Headers(headers)
-        }
-      )
+      return fetch(url, {
+        method,
+        body: body ? JSON.stringify(body) : undefined,
+        headers: new Headers(headers)
+      })
         .then(res => {
           if (parseInt(res.status) >= 300) {
-            return Promise.reject(new Error(`Error in ${method} call to ${url}:\nResponse code was ${res.status}`))
+            return Promise.reject(
+              new Error(
+                `Error in ${method} call to ${url}:\nResponse code was ${res.status}`
+              )
+            )
           }
           return text ? res.text() : res.json()
         })
         .then(value => ({
-          context: [
-            { key, value }
-          ]
+          context: [{ key, value }]
         }))
     }
 
     case 'mouseOver': {
       const { target } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          try {
-            if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
-            if (extra.playHighlightElements) helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
-          } catch (e) {
-            log.error('error in scroll and highlight', e.message)
-          }
+      return __getElementByLocator(target).then(el => {
+        try {
+          if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
+          if (extra.playHighlightElements)
+            helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
+        } catch (e) {
+          log.error('error in scroll and highlight', e.message)
+        }
 
-          el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
-          return true
-        })
+        el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+        return true
+      })
     }
 
     case 'mouseEvent': {
       const { target } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
-          el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-          el.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
-          el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-          return true
-        })
+      return __getElementByLocator(target).then(el => {
+        el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+        el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+        el.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
+        el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+        return true
+      })
     }
 
     case 'open':
@@ -640,11 +687,10 @@ export const run = async (commandObject, csIpc, helpers) => {
           pass: !!document.body,
           result: document.body
         }
+      }).then(() => {
+        window.location.href = url
+        return true
       })
-        .then(() => {
-          window.location.href = url
-          return true
-        })
 
     case 'pause': {
       const { millis } = finalParameters
@@ -660,53 +706,54 @@ export const run = async (commandObject, csIpc, helpers) => {
     case 'select':
     case 'selectAndWait': {
       const { target, value } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => {
-          const text = value.replace(/^label=/, '')
-          const options = [].slice.call(el.getElementsByTagName('option'))
-          const option = options.find(op => domText(op) === text)
+      return __getElementByLocator(target).then(el => {
+        const text = value.replace(/^label=/, '')
+        const options = [].slice.call(el.getElementsByTagName('option'))
+        const option = options.find(op => domText(op) === text)
 
-          if (!option) {
-            throw new Error(`cannot find option with label '${text}'`)
-          }
+        if (!option) {
+          throw new Error(`cannot find option with label '${text}'`)
+        }
 
-          if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
-          if (extra.playHighlightElements) helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
+        if (extra.playScrollElementsIntoView) scrollElementIntoView(el)
+        if (extra.playHighlightElements)
+          helpers.highlightDom(el, HIGHLIGHT_TIMEOUT)
 
-          el.value = option.value
-          option.selected = true
-          const event = document.createEvent('HTMLEvents')
-          event.initEvent('change', true, true)
-          el.dispatchEvent(event)
+        el.value = option.value
+        option.selected = true
+        const event = document.createEvent('HTMLEvents')
+        event.initEvent('change', true, true)
+        el.dispatchEvent(event)
 
-          return true
-        })
+        return true
+      })
     }
 
     case 'setContext': {
       const { key, value } = finalParameters
       return {
-        context: [
-          { key, value }
-        ]
+        context: [{ key, value }]
       }
     }
 
     case 'setCookie': {
       const { name, value, domain = '.example.com' } = finalParameters
-      return csIpc.ask('CS_SET_COOKIES', {
-        url: window.location.origin,
-        name,
-        value,
-        domain
-      })
+      return csIpc
+        .ask('CS_SET_COOKIES', {
+          url: window.location.origin,
+          name,
+          value,
+          domain
+        })
         .then(() => true)
     }
 
     case 'setEnvironment': {
       return {
-        context: Object.keys(finalParameters)
-          .map(key => ({ key: key, value: finalParameters[key] }))
+        context: Object.keys(finalParameters).map(key => ({
+          key: key,
+          value: finalParameters[key]
+        }))
       }
     }
 
@@ -722,15 +769,14 @@ export const run = async (commandObject, csIpc, helpers) => {
 
     case 'storeValue': {
       const { target, key } = finalParameters
-      return __getElementByLocator(target)
-        .then(el => ({
-          context: [
-            {
-              key,
-              value: domText(el)
-            }
-          ]
-        }))
+      return __getElementByLocator(target).then(el => ({
+        context: [
+          {
+            key,
+            value: domText(el)
+          }
+        ]
+      }))
     }
 
     case 'type': {
@@ -739,7 +785,9 @@ export const run = async (commandObject, csIpc, helpers) => {
         .then(el => setValueForElement(el, value))
         .catch(e => {
           if (/This input element accepts a filename/i.test(e.message)) {
-            throw new Error('Sorry, upload can not be automated Chrome (API limitation).')
+            throw new Error(
+              'Sorry, upload can not be automated Chrome (API limitation).'
+            )
           }
 
           throw e
@@ -751,7 +799,8 @@ export const run = async (commandObject, csIpc, helpers) => {
       let { locateNode = [], deleteNodes = [] } = finalParameters
       // convert objects to arrays
       locateNode = Object.values(locateNode) // locateNode is a property chain
-      deleteNodes = Object.values(deleteNodes).map((nodesToIgnore) => { // deleteNodes is a list of property chains
+      deleteNodes = Object.values(deleteNodes).map(nodesToIgnore => {
+        // deleteNodes is a list of property chains
         return Object.values(nodesToIgnore)
       })
 
@@ -761,9 +810,7 @@ export const run = async (commandObject, csIpc, helpers) => {
       context[resultKey] = filterResult
 
       return {
-        context: [
-          { resultKey, filterResult }
-        ]
+        context: [{ resultKey, filterResult }]
       }
     }
 

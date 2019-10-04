@@ -9,9 +9,9 @@ afterEach(() => {
 
 describe('EnvironmentField', () => {
   it('renders', () => {
-    const { container, getByText } = render(<EnvironmentField
-      selectedCmd={{ parameters: {} }}
-    />)
+    const { container, getByText } = render(
+      <EnvironmentField selectedCmd={{ parameters: {} }} />
+    )
     getByText('Environment')
     expect(container.querySelector('input')).not.toBeNull()
   })

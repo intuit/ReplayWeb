@@ -6,22 +6,22 @@ const table = db.blocks
 
 const model = {
   table,
-  list () {
+  list() {
     return table.toArray()
   },
-  listByProject (project) {
+  listByProject(project) {
     return table
       .where('projectId')
       .equals(project.id)
       .toArray()
   },
-  removeByProject (project) {
+  removeByProject(project) {
     return table
       .where('projectId')
       .equals(project.id)
       .delete()
   },
-  insert (data) {
+  insert(data) {
     if (!data.name) {
       throw new Error('Model Blocks - insert: missing name')
     }
@@ -34,7 +34,7 @@ const model = {
     data.id = uid()
     return table.add(normalizeBlock(data))
   },
-  bulkInsert (blocks) {
+  bulkInsert(blocks) {
     const list = blocks.map(data => {
       if (!data.name) {
         throw new Error('Model Blocks - insert: missing name')
@@ -52,7 +52,7 @@ const model = {
 
     return table.bulkAdd(list)
   },
-  bulkUpdate (blocks) {
+  bulkUpdate(blocks) {
     const list = blocks.map(data => {
       if (!data.name) {
         throw new Error('Model Blocks - insert: missing name')
@@ -70,16 +70,19 @@ const model = {
 
     return table.bulkPut(list)
   },
-  update (id, data) {
+  update(id, data) {
     return table.update(id, normalizeBlock(data))
   },
-  bulkRemove (blocks) {
-    return blocks.reduce((acc, cv) => acc.then(() => table.delete(cv.id)), Promise.resolve())
+  bulkRemove(blocks) {
+    return blocks.reduce(
+      (acc, cv) => acc.then(() => table.delete(cv.id)),
+      Promise.resolve()
+    )
   },
-  remove (id) {
+  remove(id) {
     return table.delete(id)
   },
-  clear () {
+  clear() {
     return table.clear()
   }
 }
@@ -87,5 +90,9 @@ const model = {
 export default model
 
 export const normalizeBlock = block => {
-  return compose(on('data'), on('commands'), map)(normalizeCommand)(block)
+  return compose(
+    on('data'),
+    on('commands'),
+    map
+  )(normalizeCommand)(block)
 }

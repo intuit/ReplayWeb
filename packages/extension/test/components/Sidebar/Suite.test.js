@@ -6,9 +6,7 @@ afterEach(cleanup)
 
 describe('Suite', () => {
   it('renders with defaults', () => {
-    const {container} = render(
-      <Suite disabled={false} name="TEST" />
-    )
+    const { container } = render(<Suite disabled={false} name="TEST" />)
     const span = container.querySelector('span')
     expect(span).not.toBeNull()
     expect(span.innerHTML).toEqual('TEST')
@@ -16,9 +14,7 @@ describe('Suite', () => {
   })
 
   it('renders with disabled', () => {
-    const {container} = render(
-      <Suite disabled={true} name="TEST"/>
-    )
+    const { container } = render(<Suite disabled={true} name="TEST" />)
     const span = container.querySelector('span')
     expect(span).not.toBeNull()
     expect(span.innerHTML).toEqual('TEST')

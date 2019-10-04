@@ -9,22 +9,24 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <ProjectModal
-    updateProject={props.updateProject || jest.fn()}
-    createProject={props.createProject || jest.fn()}
-    closeModal={props.closeModal || jest.fn()}
-    clearProjectSetup={props.clearProjectSetup || jest.fn()}
-    visible={props.visible || true}
-    firstTime={props.firstTime || false}
-    checkForExistingConfig={props.checkForExistingConfig || jest.fn()}
-    browseProject={props.browseProject || jest.fn()}
-    suites={props.suites || {}}
-    id={props.id || false}
-    projectPath={props.projectPath || ''}
-    browseTest={props.browseTest || jest.fn()}
-    existingConfig={props.existingConfig || false}
-    browseBlock={props.browseBlock || jest.fn()}
-  />
+  return (
+    <ProjectModal
+      updateProject={props.updateProject || jest.fn()}
+      createProject={props.createProject || jest.fn()}
+      closeModal={props.closeModal || jest.fn()}
+      clearProjectSetup={props.clearProjectSetup || jest.fn()}
+      visible={props.visible || true}
+      firstTime={props.firstTime || false}
+      checkForExistingConfig={props.checkForExistingConfig || jest.fn()}
+      browseProject={props.browseProject || jest.fn()}
+      suites={props.suites || {}}
+      id={props.id || false}
+      projectPath={props.projectPath || ''}
+      browseTest={props.browseTest || jest.fn()}
+      existingConfig={props.existingConfig || false}
+      browseBlock={props.browseBlock || jest.fn()}
+    />
+  )
   /* eslint-enable react/prop-types */
 }
 

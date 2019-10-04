@@ -10,12 +10,12 @@ afterEach(() => {
 
 describe('FolderBrowser store', () => {
   it('operates', () => {
-    const mockConnect = jest.fn().mockImplementation(() => (component) => {})
+    const mockConnect = jest.fn().mockImplementation(() => component => {})
     jest.doMock('react-redux', () => ({
       connect: mockConnect
     }))
     require('../../../src/containers/Project/FolderBrowser')
-    const [ mapStateToProps, mapDispatchToProps ] = mockConnect.mock.calls[0]
+    const [mapStateToProps, mapDispatchToProps] = mockConnect.mock.calls[0]
 
     const state = {
       files: {

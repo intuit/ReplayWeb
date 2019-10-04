@@ -5,16 +5,22 @@ const table = db.suites
 
 const model = {
   table,
-  list () {
+  list() {
     return table.toArray()
   },
-  listByProject (project) {
-    return table.where('projectId').equals(project.id).toArray()
+  listByProject(project) {
+    return table
+      .where('projectId')
+      .equals(project.id)
+      .toArray()
   },
-  removeByProject (project) {
-    return table.where('projectId').equals(project.id).delete()
+  removeByProject(project) {
+    return table
+      .where('projectId')
+      .equals(project.id)
+      .delete()
   },
-  insert (data) {
+  insert(data) {
     if (!data.name) {
       throw new Error('Model Suite - insert: missing name')
     }
@@ -27,7 +33,7 @@ const model = {
     data.id = uid()
     return table.add(data)
   },
-  bulkInsert (suites) {
+  bulkInsert(suites) {
     const list = suites.map(data => {
       if (!data.name) {
         throw new Error('Model Suite - insert: missing name')
@@ -45,7 +51,7 @@ const model = {
 
     return table.bulkAdd(list)
   },
-  bulkUpdate (suites) {
+  bulkUpdate(suites) {
     const list = suites.map(data => {
       if (!data.name) {
         throw new Error('Model TestCase - insert: missing name')
@@ -62,16 +68,19 @@ const model = {
 
     return table.bulkPut(list)
   },
-  update (id, data) {
+  update(id, data) {
     return table.update(id, data)
   },
-  bulkRemove (suites) {
-    return suites.reduce((acc, cv) => acc.then(() => table.delete(cv.id)), Promise.resolve())
+  bulkRemove(suites) {
+    return suites.reduce(
+      (acc, cv) => acc.then(() => table.delete(cv.id)),
+      Promise.resolve()
+    )
   },
-  remove (id) {
+  remove(id) {
     return table.delete(id)
   },
-  clear () {
+  clear() {
     return table.clear()
   }
 }

@@ -24,18 +24,18 @@ const state = {
   pullback: false
 }
 
-const createTab = (url) => {
+const createTab = url => {
   return Ext.tabs.create({ url, active: true })
 }
 
-const activateTab = (tabId) => {
-  return Ext.tabs.get(tabId)
-  .then(tab => {
-    return Ext.windows.update(tab.windowId, { focused: true })
-    .then(() => {
-      return Ext.tabs.update(tab.id, { active: true })
-    })
-    .then(() => tab)
+const activateTab = tabId => {
+  return Ext.tabs.get(tabId).then(tab => {
+    return Ext.windows
+      .update(tab.windowId, { focused: true })
+      .then(() => {
+        return Ext.tabs.update(tab.id, { active: true })
+      })
+      .then(() => tab)
   })
 }
 
@@ -47,8 +47,7 @@ const genGetTabIpc = (tabIdName, purpose) => () => {
     return Promise.reject(new Error(`No tab for ${purpose} yet`))
   }
 
-  return Ext.tabs.get(tabId)
-  .then(tab => {
+  return Ext.tabs.get(tabId).then(tab => {
     if (!tab) {
       throw new Error(`The ${purpose} tab seems to be closed`)
     }
@@ -65,21 +64,22 @@ const genGetTabIpc = (tabIdName, purpose) => () => {
 
 const getRecordTabIpc = genGetTabIpc('toRecord', 'recording')
 
-const getPlayTabIpc   = genGetTabIpc('toPlay', 'playing commands')
+const getPlayTabIpc = genGetTabIpc('toPlay', 'playing commands')
 
-const getPanelTabIpc  = genGetTabIpc('panel', 'dashboard')
+const getPanelTabIpc = genGetTabIpc('panel', 'dashboard')
 
 // Get the current tab for play, if url provided, it will be loaded in the tab
-const getPlayTab  = (url) => {
-  const theError  = new Error('Either a played tab or a url must be provided to start playing')
-  const createOne = (url) => {
+const getPlayTab = url => {
+  const theError = new Error(
+    'Either a played tab or a url must be provided to start playing'
+  )
+  const createOne = url => {
     if (!url) throw theError
 
-    return createTab(url)
-      .then(tab => {
-        state.tabIds.toPlay = state.tabIds.firstPlay = tab.id
-        return tab
-      })
+    return createTab(url).then(tab => {
+      state.tabIds.toPlay = state.tabIds.firstPlay = tab.id
+      return tab
+    })
   }
 
   if (!state.tabIds.toPlay && !url) {
@@ -90,23 +90,22 @@ const getPlayTab  = (url) => {
     return createOne(url)
   }
 
-  return activateTab(state.tabIds.toPlay)
-    .then(
-      (tab) => {
-        if (!url) {
-          return tab
-        }
+  return activateTab(state.tabIds.toPlay).then(
+    tab => {
+      if (!url) {
+        return tab
+      }
 
-        // Note: must clear ipcCache manually here, so that further messages
-        // won't be sent the old ipc
-        state.ipcCache[tab.id] = null
-        return Ext.tabs.update(tab.id, { url })
-      },
-      ()  => createOne(url)
-    )
+      // Note: must clear ipcCache manually here, so that further messages
+      // won't be sent the old ipc
+      state.ipcCache[tab.id] = null
+      return Ext.tabs.update(tab.id, { url })
+    },
+    () => createOne(url)
+  )
 }
 
-const showBadge = (options) => {
+const showBadge = options => {
   const { clear, text, color, blink } = {
     clear: false,
     text: '',
@@ -124,8 +123,7 @@ const showBadge = (options) => {
 
   if (blink) {
     setTimeout(() => {
-      Ext.browserAction.getBadgeText({})
-      .then(curText => {
+      Ext.browserAction.getBadgeText({}).then(curText => {
         if (curText !== text) return false
         return Ext.browserAction.setBadgeText({ text: '' })
       })
@@ -163,21 +161,24 @@ const togglePlayingBadge = (isPlaying, options) => {
 }
 
 const isUpgradeViewed = () => {
-  return Ext.storage.local.get('upgrade_not_viewed')
-  .then(obj => obj['upgrade_not_viewed'] !== 'not_viewed')
+  return Ext.storage.local
+    .get('upgrade_not_viewed')
+    .then(obj => obj['upgrade_not_viewed'] !== 'not_viewed')
 }
 
-const notifyRecordCommand = (command) => {
+const notifyRecordCommand = command => {
   Ext.notifications.create({
     type: 'basic',
     iconUrl: './logo.png',
     title: 'Record command!',
-    message: (function () {
+    message: (function() {
       const list = []
 
       list.push(`command: ${command.command}`)
       if (command.parameters) {
-        Object.keys(command.parameters).forEach(param => list.push(`${param}: ${command.parameters[param]}`))
+        Object.keys(command.parameters).forEach(param =>
+          list.push(`${param}: ${command.parameters[param]}`)
+        )
       }
 
       return list.join('\n')
@@ -191,39 +192,38 @@ const bindEvents = () => {
     Ext.storage.local.set({
       upgrade_not_viewed: ''
     })
-    return activateTab(state.tabIds.panel)
-    .catch(() => {
+    return activateTab(state.tabIds.panel).catch(() => {
       // we get here because the panel tab hasn't been created yet
-      storage.get('config')
-      .then(config => {
-        config = config || {}
-        return (config.size || {})
-      })
-      .then(size => {
-        size = size || {
-          width: 1500,
-          height: 855
-        }
+      storage
+        .get('config')
+        .then(config => {
+          config = config || {}
+          return config.size || {}
+        })
+        .then(size => {
+          size = size || {
+            width: 1500,
+            height: 855
+          }
 
-        window.open(
-          Ext.extension.getURL('popup.html')
-          , 'idePanel'
-          , `width=${size.width},height=${size.height},toolbar=no,resizable=no,scrollbars=no`
-        )
+          window.open(
+            Ext.extension.getURL('popup.html'),
+            'idePanel',
+            `width=${size.width},height=${size.height},toolbar=no,resizable=no,scrollbars=no`
+          )
 
-        return true
-      })
+          return true
+        })
     })
   })
 
   // Note: set the activated tab as the one to play
-  Ext.tabs.onActivated.addListener((activeInfo) => {
-    if (activeInfo.tabId === state.tabIds.panel)  return;
+  Ext.tabs.onActivated.addListener(activeInfo => {
+    if (activeInfo.tabId === state.tabIds.panel) return
 
     switch (state.status) {
       case C.APP_STATUS.NORMAL:
-        Ext.tabs.get(activeInfo.tabId)
-        .then(tab => {
+        Ext.tabs.get(activeInfo.tabId).then(tab => {
           if (tab.url.indexOf(Ext.extension.getURL('')) === -1) {
             state.tabIds.toPlay = state.tabIds.firstPlay = activeInfo.tabId
           }
@@ -243,66 +243,64 @@ const bindEvents = () => {
             result: state.ipcCache[activeInfo.tabId]
           }
         })
-        // Note: wait for 1 second, expecting commands from original page to be committed
-        .then(ipc => delay(() => ipc, 1000))
-        .then(ipc => {
-          return ipc.ask('SET_STATUS', {
-            status: C.CONTENT_SCRIPT_STATUS.RECORDING
-          })
-        })
-        .then(() => {
-          // Note: set the original tab to NORMAL status
-          // only if the new tab is set to RECORDING status
-          return getRecordTabIpc()
+          // Note: wait for 1 second, expecting commands from original page to be committed
+          .then(ipc => delay(() => ipc, 1000))
           .then(ipc => {
-            ipc.ask('SET_STATUS', {
-              status: C.CONTENT_SCRIPT_STATUS.NORMAL
+            return ipc.ask('SET_STATUS', {
+              status: C.CONTENT_SCRIPT_STATUS.RECORDING
             })
           })
-        })
-        .then(() => {
-          // Note: get window locator & update recording tab
-          const oldTabId = state.tabIds.firstRecord
-          const newTabId = activeInfo.tabId
-
-          return Promise.all([
-            Ext.tabs.get(oldTabId),
-            Ext.tabs.get(newTabId)
-          ])
-          .then(([oldTab, newTab]) => {
-            const result = []
-
-            // update recording tab
-            state.tabIds.toRecord = activeInfo.tabId
-
-            if (oldTab.windowId === newTab.windowId) {
-              result.push(`tab=${newTab.index - oldTab.index}`)
-            }
-
-            result.push(`title=${newTab.title}`)
-
-            return {
-              target: result[0],
-              targetOptions: result
-            }
+          .then(() => {
+            // Note: set the original tab to NORMAL status
+            // only if the new tab is set to RECORDING status
+            return getRecordTabIpc().then(ipc => {
+              ipc.ask('SET_STATUS', {
+                status: C.CONTENT_SCRIPT_STATUS.NORMAL
+              })
+            })
           })
-        })
-        .then(data => {
-          // Note: commit the `selectWindow` command
-          const command = {
-            command: 'selectWindow',
-            parameters: {
-              ...data
-            }
-          }
+          .then(() => {
+            // Note: get window locator & update recording tab
+            const oldTabId = state.tabIds.firstRecord
+            const newTabId = activeInfo.tabId
 
-          return getPanelTabIpc()
-          .then(panelIpc => panelIpc.ask('RECORD_ADD_COMMAND', command))
-          .then(() => notifyRecordCommand(command))
-        })
-        .catch(e => {
-          log.error(e.stack)
-        })
+            return Promise.all([
+              Ext.tabs.get(oldTabId),
+              Ext.tabs.get(newTabId)
+            ]).then(([oldTab, newTab]) => {
+              const result = []
+
+              // update recording tab
+              state.tabIds.toRecord = activeInfo.tabId
+
+              if (oldTab.windowId === newTab.windowId) {
+                result.push(`tab=${newTab.index - oldTab.index}`)
+              }
+
+              result.push(`title=${newTab.title}`)
+
+              return {
+                target: result[0],
+                targetOptions: result
+              }
+            })
+          })
+          .then(data => {
+            // Note: commit the `selectWindow` command
+            const command = {
+              command: 'selectWindow',
+              parameters: {
+                ...data
+              }
+            }
+
+            return getPanelTabIpc()
+              .then(panelIpc => panelIpc.ask('RECORD_ADD_COMMAND', command))
+              .then(() => notifyRecordCommand(command))
+          })
+          .catch(e => {
+            log.error(e.stack)
+          })
         break
       }
     }
@@ -324,7 +322,8 @@ const setInspectorTabId = (tabId, shouldRemove, noNotify) => {
 
       if (noNotify) return Promise.resolve(true)
 
-      return state.ipcCache[state.tabIds.toInspect].ask('STOP_INSPECTING')
+      return state.ipcCache[state.tabIds.toInspect]
+        .ask('STOP_INSPECTING')
         .catch(e => log(e.stack))
     }
     return Promise.resolve(true)
@@ -359,9 +358,9 @@ const onRequest = (cmd, args) => {
     case 'PANEL_STOP_RECORDING':
       log('Stop recording...')
       state.status = C.APP_STATUS.NORMAL
-      state.tabIds.lastRecord   = state.tabIds.toRecord
-      state.tabIds.toRecord     = null
-      state.tabIds.firstRecord  = null
+      state.tabIds.lastRecord = state.tabIds.toRecord
+      state.tabIds.toRecord = null
+      state.tabIds.firstRecord = null
 
       toggleRecordingBadge(false)
       return true
@@ -390,14 +389,20 @@ const onRequest = (cmd, args) => {
       return getPlayTab(args.url)
         .then(tab => {
           // Note: wait for tab to confirm it has loaded
-          return until('ipc of tab to play', () => {
-            return {
-              pass: !!state.ipcCache[tab.id],
-              result: state.ipcCache[tab.id]
-            }
-          }, 1000, 6000 * 10)
-          .then(ipc => {
-            return ipc.ask('SET_STATUS', { status: C.CONTENT_SCRIPT_STATUS.PLAYING })
+          return until(
+            'ipc of tab to play',
+            () => {
+              return {
+                pass: !!state.ipcCache[tab.id],
+                result: state.ipcCache[tab.id]
+              }
+            },
+            1000,
+            6000 * 10
+          ).then(ipc => {
+            return ipc.ask('SET_STATUS', {
+              status: C.CONTENT_SCRIPT_STATUS.PLAYING
+            })
           })
         })
         .catch(e => {
@@ -408,8 +413,7 @@ const onRequest = (cmd, args) => {
 
     case 'PANEL_RUN_COMMAND': {
       const runCommand = (args, retryInfo) => {
-        return getPlayTabIpc()
-        .then(ipc => {
+        return getPlayTabIpc().then(ipc => {
           let gotHeartBeat = false
 
           const checkHeartBeat = () => {
@@ -418,11 +422,15 @@ const onRequest = (cmd, args) => {
             return getPlayTabIpc()
               .then(ipc => ipc.ask('HEART_BEAT', {}))
               .then(
-                () => { gotHeartBeat = true },
-                () => { return null }
+                () => {
+                  gotHeartBeat = true
+                },
+                () => {
+                  return null
+                }
               )
           }
-          const startSendingTimeoutStatus = (timeout) => {
+          const startSendingTimeoutStatus = timeout => {
             let past = 0
 
             state.timer = setInterval(() => {
@@ -440,75 +448,90 @@ const onRequest = (cmd, args) => {
             return () => clearInterval(state.timer)
           }
           // res format: { data, isIFrame }
-          const wait = (res) => {
-            const shouldWait      = /wait/i.test(args.command.command) || args.command.command === 'open'
+          const wait = res => {
+            const shouldWait =
+              /wait/i.test(args.command.command) ||
+              args.command.command === 'open'
             if (!shouldWait) return Promise.resolve(res.data)
 
             log('wait!!!!', res)
-            const timeoutPageLoad = ((res.data && res.data.extra && res.data.extra.timeoutPageLoad) || 60) * 1000
+            const timeoutPageLoad =
+              ((res.data && res.data.extra && res.data.extra.timeoutPageLoad) ||
+                60) * 1000
 
             // Note: put some delay here because there are cases when next command's
             // heart beat request is answered by previous page
-            return delay(() => {}, 2000)
-            // A standlone `checkHeartBeat to make sure we don't have to wait until's
-            // first interval to pass the check
-            .then(() => checkHeartBeat())
-            .then(() => {
-              return until('player tab heart beat check', () => {
-                checkHeartBeat()
+            return (
+              delay(() => {}, 2000)
+                // A standlone `checkHeartBeat to make sure we don't have to wait until's
+                // first interval to pass the check
+                .then(() => checkHeartBeat())
+                .then(() => {
+                  return until(
+                    'player tab heart beat check',
+                    () => {
+                      checkHeartBeat()
 
-                return {
-                  pass: gotHeartBeat,
-                  result: true
-                }
-              }, 100, 1000 * 10)
-            })
-            // Note: must get the new ipc here.
-            // The previous ipc is useless after a new page load
-            .then(() => getPlayTabIpc())
-            .then(ipc => {
-              // Note: send timeout status to dashboard once we get the heart beat
-              // and start to wait for dom ready
-              const clear = startSendingTimeoutStatus(timeoutPageLoad)
-              return ipc.ask('DOM_READY', {}, timeoutPageLoad)
-                .then(
-                  () => {
-                    clear()
-                    // ipc.ask('HACK_ALERT', {})
-                  },
-                  () => {
-                    clear()
-                    throw new Error(`page load ${timeoutPageLoad / 1000} seconds time out`)
-                  }
-                )
-            })
-            .then(() => res.data)
+                      return {
+                        pass: gotHeartBeat,
+                        result: true
+                      }
+                    },
+                    100,
+                    1000 * 10
+                  )
+                })
+                // Note: must get the new ipc here.
+                // The previous ipc is useless after a new page load
+                .then(() => getPlayTabIpc())
+                .then(ipc => {
+                  // Note: send timeout status to dashboard once we get the heart beat
+                  // and start to wait for dom ready
+                  const clear = startSendingTimeoutStatus(timeoutPageLoad)
+                  return ipc.ask('DOM_READY', {}, timeoutPageLoad).then(
+                    () => {
+                      clear()
+                      // ipc.ask('HACK_ALERT', {})
+                    },
+                    () => {
+                      clear()
+                      throw new Error(
+                        `page load ${timeoutPageLoad / 1000} seconds time out`
+                      )
+                    }
+                  )
+                })
+                .then(() => res.data)
+            )
           }
 
-          const { command, parameters } = args.command;
-          if(command === 'pause') {
-            const pauseAmount = parseInt(parameters.millis);
+          const { command, parameters } = args.command
+          if (command === 'pause') {
+            const pauseAmount = parseInt(parameters.millis)
             return new Promise((resolve, reject) => {
               setTimeout(() => {
                 resolve({
                   pass: true,
                   result: true
-                });
-              }, pauseAmount);
-            });
+                })
+              }, pauseAmount)
+            })
           }
 
-          return ipc.ask('DOM_READY', {})
-          .then(() => ipc.ask('RUN_COMMAND', {
-            command: {
-              ...args.command,
-              extra: {
-                ...(args.command.extra || {}),
-                retryInfo
-              }
-            }
-          }))
-          .then(wait)
+          return ipc
+            .ask('DOM_READY', {})
+            .then(() =>
+              ipc.ask('RUN_COMMAND', {
+                command: {
+                  ...args.command,
+                  extra: {
+                    ...(args.command.extra || {}),
+                    retryInfo
+                  }
+                }
+              })
+            )
+            .then(wait)
         })
       }
 
@@ -516,9 +539,9 @@ const onRequest = (cmd, args) => {
         const { timeout, onFirstFail, onFinal, shouldRetry, retryInterval } = {
           timeout: 5000,
           retryInterval: 1000,
-          onFirstFail:  () => {},
-          onFinal:      () => {},
-          shouldRetry:  () => false,
+          onFirstFail: () => {},
+          onFinal: () => {},
+          shouldRetry: () => false,
           ...options
         }
         const wrappedOnFinal = (...args) => {
@@ -529,9 +552,9 @@ const onRequest = (cmd, args) => {
           return onFinal(...args)
         }
 
-        let retryCount    = 0
-        let lastError     = null
-        let timerToClear  = null
+        let retryCount = 0
+        let lastError = null
+        let timerToClear = null
 
         const onError = e => {
           if (!shouldRetry(e)) {
@@ -549,8 +572,7 @@ const onRequest = (cmd, args) => {
               }, timeout)
             }
 
-            delay(run, retryInterval)
-            .then(resolve, onError)
+            delay(run, retryInterval).then(resolve, onError)
           })
         }
 
@@ -558,28 +580,28 @@ const onRequest = (cmd, args) => {
           return fn(...args, { retryCount, retryInterval }).catch(onError)
         }
 
-        return run()
-        .then((result) => {
+        return run().then(result => {
           wrappedOnFinal(null, result)
           return result
         })
       }
 
-      let timer     = null
+      let timer = null
       const timeout = args.command.extra.timeoutElement * 1000
 
       const runCommandWithRetry = retry(runCommand, {
         timeout,
-        shouldRetry: (e) => {
-          return e.message && e.message.indexOf('time out when looking for') !== -1
+        shouldRetry: e => {
+          return (
+            e.message && e.message.indexOf('time out when looking for') !== -1
+          )
         },
         onFirstFail: () => {
-          let past  = 0
+          let past = 0
           state.timer = setInterval(() => {
             past += 1000
 
-            getPanelTabIpc()
-            .then(ipc => {
+            getPanelTabIpc().then(ipc => {
               ipc.ask('TIMEOUT_STATUS', {
                 type: 'Tag waiting',
                 total: timeout,
@@ -594,12 +616,11 @@ const onRequest = (cmd, args) => {
         },
         onFinal: (err, data) => {
           log('onFinal', err, data)
-          if (state.timer)  clearInterval(state.timer)
+          if (state.timer) clearInterval(state.timer)
         }
       })
 
-      return runCommandWithRetry(args)
-      .catch(e => {
+      return runCommandWithRetry(args).catch(e => {
         // Note: if variable !ERRORIGNORE is set to true,
         // it will just log errors instead of a stop of whole macro
         if (args.command.extra && args.command.extra.errorIgnore) {
@@ -640,37 +661,41 @@ const onRequest = (cmd, args) => {
           .then(ipc => ({ ipc, type: 'play' }))
           .catch(() => null)
       ])
-      .then(tuple => {
-        if (!tuple[0] && !tuple[1]) {
-          throw new Error('No where to look for the dom')
-        }
+        .then(tuple => {
+          if (!tuple[0] && !tuple[1]) {
+            throw new Error('No where to look for the dom')
+          }
 
-        return tuple.filter(x => !!x)
-      })
-      .then(list => {
-        return Promise.all(
-          list.map(({ ipc, type }) => {
-            return ipc.ask('FIND_DOM', { locator: args.locator })
-            .then((result) => ({ result, type, ipc }))
-          })
-        )
-      })
-      .then(list => {
-        const foundedList = list.filter(x => x.result)
+          return tuple.filter(x => !!x)
+        })
+        .then(list => {
+          return Promise.all(
+            list.map(({ ipc, type }) => {
+              return ipc
+                .ask('FIND_DOM', { locator: args.locator })
+                .then(result => ({ result, type, ipc }))
+            })
+          )
+        })
+        .then(list => {
+          const foundedList = list.filter(x => x.result)
 
-        if (foundedList.length === 0) {
-          throw new Error('DOM not found')
-        }
+          if (foundedList.length === 0) {
+            throw new Error('DOM not found')
+          }
 
-        const item = foundedList.length === 2
-                        ? foundedList.find(item => item.type === args.lastOperation)
-                        : foundedList[0]
+          const item =
+            foundedList.length === 2
+              ? foundedList.find(item => item.type === args.lastOperation)
+              : foundedList[0]
 
-        const tabId = state.tabIds[item.type === 'record' ? 'lastRecord' : 'toPlay']
+          const tabId =
+            state.tabIds[item.type === 'record' ? 'lastRecord' : 'toPlay']
 
-        return activateTab(tabId)
-        .then(() => item.ipc.ask('HIGHLIGHT_DOM', { locator: args.locator }))
-      })
+          return activateTab(tabId).then(() =>
+            item.ipc.ask('HIGHLIGHT_DOM', { locator: args.locator })
+          )
+        })
     }
 
     case 'PANEL_RESIZE_WINDOW': {
@@ -678,13 +703,15 @@ const onRequest = (cmd, args) => {
         throw new Error('Panel not available')
       }
 
-      return Ext.tabs.get(state.tabIds.panel)
-      .then(tab => {
-        return Ext.windows.update(tab.windowId, pick(['width', 'height'], {
-          ...args.size,
-          width: args.size.width,
-          height: args.size.height
-        }))
+      return Ext.tabs.get(state.tabIds.panel).then(tab => {
+        return Ext.windows.update(
+          tab.windowId,
+          pick(['width', 'height'], {
+            ...args.size,
+            width: args.size.width,
+            height: args.size.height
+          })
+        )
       })
     }
 
@@ -705,14 +732,13 @@ const onRequest = (cmd, args) => {
 
     case 'CS_DONE_INSPECTING':
       log('done inspecting...')
-      state.status              = C.APP_STATUS.NORMAL
+      state.status = C.APP_STATUS.NORMAL
 
       toggleInspectingBadge(false)
       setInspectorTabId(null, true, true)
       activateTab(state.tabIds.panel)
 
-      return getPanelTabIpc()
-      .then(panelIpc => {
+      return getPanelTabIpc().then(panelIpc => {
         return panelIpc.ask('INSPECT_RESULT', {
           xpath: args.xpath
         })
@@ -744,7 +770,7 @@ const onRequest = (cmd, args) => {
 
     case 'CS_RECORD_ADD_COMMAND': {
       const pullbackTimeout = 1000
-      let isFirst   = false
+      let isFirst = false
 
       if (state.status !== C.APP_STATUS.RECORDER) {
         return false
@@ -763,7 +789,9 @@ const onRequest = (cmd, args) => {
       // and strip Wait from any xxxAndWait command
       if (args.command === 'pullback') {
         state.pullback = true
-        setTimeout(() => { state.pullback = false }, pullbackTimeout * 2)
+        setTimeout(() => {
+          state.pullback = false
+        }, pullbackTimeout * 2)
         return false
       }
 
@@ -775,48 +803,50 @@ const onRequest = (cmd, args) => {
       }, 0)
 
       return delay(() => {}, pullbackTimeout)
-      .then(() => getPanelTabIpc())
-      .then(panelIpc => {
-        if (isFirst) {
-          panelIpc.ask('RECORD_ADD_COMMAND', {
-            command: 'open',
-            parameters: {
-              url: args.url
-            }
-          })
-        }
+        .then(() => getPanelTabIpc())
+        .then(panelIpc => {
+          if (isFirst) {
+            panelIpc.ask('RECORD_ADD_COMMAND', {
+              command: 'open',
+              parameters: {
+                url: args.url
+              }
+            })
+          }
 
-        // Note: remove AndWait from commands if we got a pullback
-        if (state.pullback) {
-          args.command = args.command.replace('AndWait', '')
-          state.pullback = false
-        }
+          // Note: remove AndWait from commands if we got a pullback
+          if (state.pullback) {
+            args.command = args.command.replace('AndWait', '')
+            state.pullback = false
+          }
 
-        return panelIpc.ask('RECORD_ADD_COMMAND', args)
-      })
-      .then(() => storage.get('config'))
-      .then(config => {
-        if (config.recordNotification) {
-          notifyRecordCommand(args)
-        }
-      })
-      .then(() => true)
+          return panelIpc.ask('RECORD_ADD_COMMAND', args)
+        })
+        .then(() => storage.get('config'))
+        .then(config => {
+          if (config.recordNotification) {
+            notifyRecordCommand(args)
+          }
+        })
+        .then(() => true)
     }
 
     case 'CS_CLOSE_OTHER_TABS': {
       const tabId = args.sender.tab.id
 
-      return Ext.tabs.get(tabId)
-      .then(tab => {
-        return Ext.tabs.query({ windowId: tab.windowId })
-        .then(tabs => tabs.filter(t => t.id !== tabId))
-        .then(tabs => Ext.tabs.remove(tabs.map(t => t.id)))
-      })
-      .then(() => true)
+      return Ext.tabs
+        .get(tabId)
+        .then(tab => {
+          return Ext.tabs
+            .query({ windowId: tab.windowId })
+            .then(tabs => tabs.filter(t => t.id !== tabId))
+            .then(tabs => Ext.tabs.remove(tabs.map(t => t.id)))
+        })
+        .then(() => true)
     }
 
     case 'CS_SELECT_WINDOW': {
-      const oldTablId       = args.sender.tab.id
+      const oldTablId = args.sender.tab.id
       const [type, locator] = splitIntoTwo('=', args.target)
 
       if (!locator) {
@@ -837,11 +867,10 @@ const onRequest = (cmd, args) => {
             throw new Error(`invalid tab offset, '${locator}'`)
           }
 
-          pQueryObj = Ext.tabs.get(state.tabIds.firstPlay)
-            .then(tab => ({
-              windowId: tab.windowId,
-              index: tab.index + offset
-            }))
+          pQueryObj = Ext.tabs.get(state.tabIds.firstPlay).then(tab => ({
+            windowId: tab.windowId,
+            index: tab.index + offset
+          }))
 
           break
         }
@@ -851,78 +880,78 @@ const onRequest = (cmd, args) => {
       }
 
       return pQueryObj
-      .then(queryObj => Ext.tabs.query(queryObj))
-      .then(tabs => {
-        if (tabs.length === 0) {
-          throw new Error(`failed to find the tab with locator '${args.target}'`)
-        }
-        return tabs[0]
-      })
-      .then(tab => {
-        log('selectWindow, got tab', tab)
-
-        return until('new tab creates ipc', () => {
-          return {
-            pass: state.ipcCache[tab.id],
-            result: state.ipcCache[tab.id]
+        .then(queryObj => Ext.tabs.query(queryObj))
+        .then(tabs => {
+          if (tabs.length === 0) {
+            throw new Error(
+              `failed to find the tab with locator '${args.target}'`
+            )
           }
+          return tabs[0]
         })
-        .then(ipc => {
-          log('selectWindow, got ipc', ipc)
+        .then(tab => {
+          log('selectWindow, got tab', tab)
 
-          return ipc.ask('DOM_READY', {})
-          .then(() => {
-            ipc.ask('SET_STATUS', {
-              status: C.CONTENT_SCRIPT_STATUS.PLAYING
+          return until('new tab creates ipc', () => {
+            return {
+              pass: state.ipcCache[tab.id],
+              result: state.ipcCache[tab.id]
+            }
+          })
+            .then(ipc => {
+              log('selectWindow, got ipc', ipc)
+
+              return ipc.ask('DOM_READY', {}).then(() => {
+                ipc.ask('SET_STATUS', {
+                  status: C.CONTENT_SCRIPT_STATUS.PLAYING
+                })
+
+                return true
+              })
             })
+            .then(() => {
+              // Note: set the original tab to NORMAL status
+              // only if the new tab is set to PLAYING status
+              log('selectWindow, set orignial to normal')
 
-            return true
-          })
+              state.ipcCache[oldTablId].ask('SET_STATUS', {
+                status: C.CONTENT_SCRIPT_STATUS.NORMAL
+              })
+            })
+            .then(() => {
+              state.tabIds.toPlay = tab.id
+              return activateTab(tab.id)
+            })
         })
-        .then(() => {
-          // Note: set the original tab to NORMAL status
-          // only if the new tab is set to PLAYING status
-          log('selectWindow, set orignial to normal')
-
-          state.ipcCache[oldTablId].ask('SET_STATUS', {
-            status: C.CONTENT_SCRIPT_STATUS.NORMAL
-          })
+        .catch(e => {
+          log.error(e.stack)
+          throw e
         })
-        .then(() => {
-          state.tabIds.toPlay = tab.id
-          return activateTab(tab.id)
-        })
-      })
-      .catch(e => {
-        log.error(e.stack)
-        throw e
-      })
     }
 
     case 'CS_CAPTURE_SCREENSHOT':
-      return activateTab(state.tabIds.toPlay)
-      .then(saveScreen)
+      return activateTab(state.tabIds.toPlay).then(saveScreen)
 
     case 'CS_TIMEOUT_STATUS':
-      return getPanelTabIpc()
-      .then(ipc => ipc.ask('TIMEOUT_STATUS', args))
+      return getPanelTabIpc().then(ipc => ipc.ask('TIMEOUT_STATUS', args))
 
     case 'CS_DELETE_ALL_COOKIES': {
       const { url } = args
 
-      return Ext.cookies.getAll({ url })
-      .then(cookies => {
-        const ps = cookies.map(c => Ext.cookies.remove({
-          url: `${url}${c.path}`,
-          name: c.name
-        }))
+      return Ext.cookies.getAll({ url }).then(cookies => {
+        const ps = cookies.map(c =>
+          Ext.cookies.remove({
+            url: `${url}${c.path}`,
+            name: c.name
+          })
+        )
 
         return Promise.all(ps)
       })
     }
 
     case 'CS_SET_COOKIES': {
-      const { name, value, domain, url } = args;
+      const { name, value, domain, url } = args
       return Ext.cookies.set({
         name,
         value,
@@ -964,12 +993,10 @@ const initOnInstalled = () => {
 }
 
 const initPlayTab = () => {
-  return Ext.windows.getCurrent()
-  .then(window => {
-    return Ext.tabs.query({ active: true, windowId: window.id })
-    .then(tabs => {
+  return Ext.windows.getCurrent().then(window => {
+    return Ext.tabs.query({ active: true, windowId: window.id }).then(tabs => {
       console.log('tabs', tabs)
-      if (!tabs || !tabs.length)  return false
+      if (!tabs || !tabs.length) return false
       state.tabIds.toPlay = tabs[0].id
       return true
     })
@@ -977,10 +1004,14 @@ const initPlayTab = () => {
 }
 
 const networkIntercept = () => {
-  Ext.webRequest.onHeadersReceived.addListener(details => {
-    const { url, responseHeaders } = details
-    return {responseHeaders: getHeaders(url, responseHeaders)}
-  }, { urls: ['<all_urls>'] }, ["blocking", "responseHeaders", "extraHeaders"]);
+  Ext.webRequest.onHeadersReceived.addListener(
+    details => {
+      const { url, responseHeaders } = details
+      return { responseHeaders: getHeaders(url, responseHeaders) }
+    },
+    { urls: ['<all_urls>'] },
+    ['blocking', 'responseHeaders', 'extraHeaders']
+  )
 }
 
 bindEvents()

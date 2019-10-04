@@ -221,7 +221,7 @@
 
         // clearfix
         &:after {
-          content: "";
+          content: '';
           display: table;
           clear: both;
         }
@@ -283,7 +283,7 @@
   max-height: none;
 }
 
-.custom-searchBox{
+.custom-searchBox {
   margin-bottom: 5px;
   display: flex;
   align-items: center;
@@ -300,7 +300,7 @@
 }
 
 .selected {
-    background: lightBlue
+  background: lightBlue;
 }
 
 .suiteContainer {

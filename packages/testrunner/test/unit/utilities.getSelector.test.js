@@ -1,11 +1,13 @@
-import {getSelector} from '../../src/utilities'
+import { getSelector } from '../../src/utilities'
 
 describe('getSelector', () => {
   it('should throw error for no parameters', () => {
-    expect(getSelector).toThrow('Cannot read property \'indexOf\' of undefined')
+    expect(getSelector).toThrow("Cannot read property 'indexOf' of undefined")
   })
   it('should throw error for no parameters', () => {
-    expect(getSelector.bind(null, 'invalidSelector')).toThrow('invalidSelector is not a valid selector')
+    expect(getSelector.bind(null, 'invalidSelector')).toThrow(
+      'invalidSelector is not a valid selector'
+    )
   })
   it('should get selector for implicit xpath', () => {
     expect(getSelector('//html/body')).toBe('//html/body')
@@ -14,7 +16,9 @@ describe('getSelector', () => {
     expect(getSelector('xpath=//html/body')).toBe('//html/body')
   })
   it('should get selector for automation-id', () => {
-    expect(getSelector('automation-id=testId')).toBe('[data-automation-id="testId"]')
+    expect(getSelector('automation-id=testId')).toBe(
+      '[data-automation-id="testId"]'
+    )
   })
   it('should get selector for automationid', () => {
     expect(getSelector('automationid=testId')).toBe('[automationid="testId"]')
@@ -23,10 +27,10 @@ describe('getSelector', () => {
     expect(getSelector('data-auto-sel=testId')).toBe('[data-auto-sel="testId"]')
   })
   it('should get selector for id', () => {
-    expect(getSelector('id=testId')).toBe('//*[@id=\"testId\"]')
+    expect(getSelector('id=testId')).toBe('//*[@id="testId"]')
   })
   it('should get selector for id and escape :', () => {
-    expect(getSelector('id=testId:1')).toBe('//*[@id=\"testId\\:1\"]')
+    expect(getSelector('id=testId:1')).toBe('//*[@id="testId\\:1"]')
   })
   it('should get selector for name', () => {
     expect(getSelector('name=testName')).toBe('[name="testName"]')
@@ -47,6 +51,6 @@ describe('getSelector', () => {
     expect(getSelector('index=1')).toBe('1')
   })
   it('should get selector for title', () => {
-    expect(getSelector('title=testId')).toBe('.//*[contains(@title ,\"testId\")]')
+    expect(getSelector('title=testId')).toBe('.//*[contains(@title ,"testId")]')
   })
 })

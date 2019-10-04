@@ -9,15 +9,17 @@ afterEach(() => {
 
 const getComponent = (props = {}) => {
   /* eslint-disable react/prop-types */
-  return <FolderBrowser
-    listDirectory={props.listDirectory || jest.fn()}
-    top={props.top || true}
-    folder={props.folder || ''}
-    contents={props.contents || []}
-    visible={props.visible || true}
-    closeModal={props.closeModal || jest.fn()}
-    selectFolder={props.selectFolder || jest.fn()}
-  />
+  return (
+    <FolderBrowser
+      listDirectory={props.listDirectory || jest.fn()}
+      top={props.top || true}
+      folder={props.folder || ''}
+      contents={props.contents || []}
+      visible={props.visible || true}
+      closeModal={props.closeModal || jest.fn()}
+      selectFolder={props.selectFolder || jest.fn()}
+    />
+  )
   /* eslint-enable react/prop-types */
 }
 

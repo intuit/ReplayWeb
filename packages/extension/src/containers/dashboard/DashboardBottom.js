@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators }  from 'redux'
+import { bindActionCreators } from 'redux'
 import * as actions from '../../actions'
 import DashboardBottom from '../../components/dashboard/DashboardBottom'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     status: state.app.status,
     logs: state.app.logs,
@@ -12,12 +12,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-
-  }
+const mapDispatchToProps = dispatch => {
+  return {}
 }
 export default connect(
   mapStateToProps,
-  dispatch => bindActionCreators({...actions}, dispatch)
+  dispatch => bindActionCreators({ ...actions }, dispatch)
 )(DashboardBottom)

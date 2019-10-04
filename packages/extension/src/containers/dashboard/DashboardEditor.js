@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators }  from 'redux'
+import { bindActionCreators } from 'redux'
 import * as actions from '../../actions'
 
 import DashboardEditor from '../../components/dashboard/DashboardEditor'
@@ -17,5 +17,5 @@ export default connect(
     selectedCmds: state.editor.selectedCmds,
     contextMenu: state.editor.contextMenu
   }),
-  dispatch => bindActionCreators({...actions}, dispatch)
+  dispatch => bindActionCreators({ ...actions }, dispatch)
 )(DashboardEditor)

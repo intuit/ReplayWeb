@@ -11,10 +11,10 @@ yarn add @replayweb/utils
 ## Usage details
 
 ```js
-import {doReplace} from '@replayweb/utils'
+import { doReplace } from '@replayweb/utils'
 
 doReplace(string) // returns a promise
-.then(replaced => console.log(replaced)) // replaced is the string with all replacements done
+  .then(replaced => console.log(replaced)) // replaced is the string with all replacements done
 ```
 
 See individual function information in the [docs](src/README.md).

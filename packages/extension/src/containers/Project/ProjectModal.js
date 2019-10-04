@@ -10,7 +10,7 @@ import {
 } from '../../actions'
 import ProjectModal from '../../components/Project/ProjectModal'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     visible: state.modals.projectSetup,
     testPath: state.projectSetup.testPath,
@@ -24,10 +24,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    createProject: (project) => dispatch(createProject(project)),
-    updateProject: (project) => dispatch(updateProject(project)),
+    createProject: project => dispatch(createProject(project)),
+    updateProject: project => dispatch(updateProject(project)),
     clearProjectSetup: () => dispatch(clearProjectSetup()),
     closeModal: () => dispatch(changeModalState('projectSetup', false)),
     checkForExistingConfig: path => {

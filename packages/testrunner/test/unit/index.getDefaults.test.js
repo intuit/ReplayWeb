@@ -2,7 +2,7 @@ import {
   getDefaults,
   getDefaultsVideoPlusAllure,
   __RewireAPI__ as getDefaultsRewire,
-  __RewireAPI__ as getDefaultsVideoPlusAllureRewire,
+  __RewireAPI__ as getDefaultsVideoPlusAllureRewire
 } from '../../src'
 
 describe('getDefaults', () => {
@@ -13,7 +13,10 @@ describe('getDefaults', () => {
   it('should return default config if no options provided', () => {
     const conf = getDefaults()
     expect(conf.seleniumArgs.version).toBe('3.141.59')
-    expect(conf.reporters[1][1]).toHaveProperty('outputDir', './target/surefire-reports')
+    expect(conf.reporters[1][1]).toHaveProperty(
+      'outputDir',
+      './target/surefire-reports'
+    )
     expect(conf.seleniumInstallArgs.drivers.chrome.version).toBe('74.0.3729.6')
     expect(conf.services).toEqual(['selenium-standalone'])
     expect(conf.capabilities).toHaveLength(1)
@@ -118,7 +121,10 @@ describe('getDefaults', () => {
   })
   it('should be able to execute onComplete for getDefaultsVideoPlusAllure() to remove removeTemporaryFiles', () => {
     const removeSpy = jest.fn()
-    getDefaultsVideoPlusAllureRewire.__Rewire__('removeTemporaryFiles', removeSpy)
+    getDefaultsVideoPlusAllureRewire.__Rewire__(
+      'removeTemporaryFiles',
+      removeSpy
+    )
     const conf = getDefaultsVideoPlusAllure()
     conf.onComplete()
     expect(conf.seleniumArgs.version).toBe('3.141.59')

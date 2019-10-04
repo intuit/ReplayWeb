@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal, Button, Icon, Table, Input } from 'antd'
 
 class AddFolder extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       path: '~',
@@ -11,24 +11,24 @@ class AddFolder extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.listDirectory(this.state.path)
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setState({
       loading: false
     })
   }
 
-  changeFolder (folder) {
+  changeFolder(folder) {
     this.setState({
       loading: true
     })
     this.props.listDirectory(folder)
   }
 
-  render () {
+  render() {
     const columns = [
       {
         title: this.props.folder,
@@ -42,7 +42,12 @@ class AddFolder extends React.Component {
               justifyContent: 'space-between',
               'align-items': 'center'
             }
-            return <span style={directoryStyle} key={record.name}><div>{record.name}</div><Icon type='right'/></span>
+            return (
+              <span style={directoryStyle} key={record.name}>
+                <div>{record.name}</div>
+                <Icon type="right" />
+              </span>
+            )
           } else {
             return <span key={record.name}>{record.name}</span>
           }
@@ -51,39 +56,63 @@ class AddFolder extends React.Component {
     ]
 
     // if we're in a subdirectory, add an up button so they can go up a folder
-    const datasource = this.props.top ? this.props.contents
+    const datasource = this.props.top
+      ? this.props.contents
       : [
-        {
-          name: <span><Icon type='arrow-up'/>Up</span>,
-          fullpath: this.props.folder.split('/').slice(0, this.props.folder.split('/').length - 1).join('/') || '~',
-          isDirectory: true
-        }
-      ].concat(this.props.contents)
+          {
+            name: (
+              <span>
+                <Icon type="arrow-up" />
+                Up
+              </span>
+            ),
+            fullpath:
+              this.props.folder
+                .split('/')
+                .slice(0, this.props.folder.split('/').length - 1)
+                .join('/') || '~',
+            isDirectory: true
+          }
+        ].concat(this.props.contents)
 
     return (
       <Modal
-        title='Choose Folder'
+        title="Choose Folder"
         visible={this.props.visible}
         onCancel={this.props.closeModal}
         onOk={this.props.selectFolder}
-        okText='Select'>
-        <Input.Group compact style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+        okText="Select"
+      >
+        <Input.Group
+          compact
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '10px'
+          }}
+        >
           <Input
-            addonBefore='Jump To'
-            onChange={(e) => this.setState({ path: e.target.value })}
-            onKeyDown={e => e.key === 'Enter' ? this.changeFolder(this.state.path) : undefined}
+            addonBefore="Jump To"
+            onChange={e => this.setState({ path: e.target.value })}
+            onKeyDown={e =>
+              e.key === 'Enter' ? this.changeFolder(this.state.path) : undefined
+            }
             value={this.state.path}
           />
-          <Button onClick={() => this.changeFolder(this.state.path)}><Icon type="arrow-right"/></Button>
+          <Button onClick={() => this.changeFolder(this.state.path)}>
+            <Icon type="arrow-right" />
+          </Button>
         </Input.Group>
         <Table
           loading={this.state.loading}
           dataSource={datasource}
           columns={columns}
           pagination={false}
-          size='small'
+          size="small"
           onRow={record => ({
-            onClick: () => record.isDirectory ? this.changeFolder(record.fullpath) : () => {}
+            onClick: () =>
+              record.isDirectory ? this.changeFolder(record.fullpath) : () => {}
           })}
         />
       </Modal>

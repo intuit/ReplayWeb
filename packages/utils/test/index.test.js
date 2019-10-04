@@ -19,63 +19,73 @@ import moment from 'moment'
 describe('String replacements', () => {
   it('should replace {todaysDate}', () => {
     const todaysDate = moment().format('MM/D/YYYY')
-    return doReplace('{todaysDate}')
-      .then(result => expect(result).toEqual(todaysDate))
+    return doReplace('{todaysDate}').then(result =>
+      expect(result).toEqual(todaysDate)
+    )
   })
   it('should not replace {potato}', () => {
-    return doReplace('{potato}')
-      .then(result => expect(result).toEqual('{potato}'))
+    return doReplace('{potato}').then(result =>
+      expect(result).toEqual('{potato}')
+    )
   })
   it('should replace {random}', () => {
-    return doReplace('{random}')
-      .then(result => expect(result).not.toEqual('{random}'))
+    return doReplace('{random}').then(result =>
+      expect(result).not.toEqual('{random}')
+    )
   })
   it('should replace {millis}', () => {
-    return doReplace('{millis}')
-      .then(result => expect(result).not.toEqual('{random}'))
+    return doReplace('{millis}').then(result =>
+      expect(result).not.toEqual('{random}')
+    )
   })
   it('should return a string with no braces', () => {
-    return doReplace('potatoes')
-      .then(result => expect(result).toEqual('potatoes'))
+    return doReplace('potatoes').then(result =>
+      expect(result).toEqual('potatoes')
+    )
   })
   it('should replace a static string from context', () => {
-    return doReplace('{potato}', {potato: 'potatoes'})
-      .then(result => expect(result).toEqual('potatoes'))
+    return doReplace('{potato}', { potato: 'potatoes' }).then(result =>
+      expect(result).toEqual('potatoes')
+    )
   })
   it('should replace a static string from context with special pattern', () => {
-    return doReplace('{potato}', {potato: 'potatoe$$'})
-      .then(result => expect(result).toEqual('potatoe$$'))
+    return doReplace('{potato}', { potato: 'potatoe$$' }).then(result =>
+      expect(result).toEqual('potatoe$$')
+    )
   })
   it('should replace a static string from nested context', () => {
-    return doReplace('{potato.type}', {potato: {type: 'pancakes'}})
-      .then(result => expect(result).toEqual('pancakes'))
+    return doReplace('{potato.type}', { potato: { type: 'pancakes' } }).then(
+      result => expect(result).toEqual('pancakes')
+    )
   })
   it('should replace a static string from nested context with array', () => {
-    return doReplace('{potato.type.0}', {potato: {type: ['pancakes']}})
-      .then(result => expect(result).toEqual('pancakes'))
+    return doReplace('{potato.type.0}', {
+      potato: { type: ['pancakes'] }
+    }).then(result => expect(result).toEqual('pancakes'))
   })
   it('should not replace a static string if no context', () => {
-    return doReplace('{potato}')
-      .then(result => expect(result).toEqual('{potato}'))
+    return doReplace('{potato}').then(result =>
+      expect(result).toEqual('{potato}')
+    )
   })
   it('should replace a string nested in a JSON string', () => {
     const todaysDate = moment().format('MM/D/YYYY')
-    return doReplace('{"test": "{todaysDate}"}')
-      .then(result => expect(result).toEqual(`{"test": "${todaysDate}"}`))
+    return doReplace('{"test": "{todaysDate}"}').then(result =>
+      expect(result).toEqual(`{"test": "${todaysDate}"}`)
+    )
   })
   it('should replace a string double nested braces in a JSON string', () => {
     const todaysDate = moment().format('MM/D/YYYY')
-    return doReplace('{"test": "{{t}sDate}"}', {'t': 'today'})
-      .then(result => expect(result).toEqual(`{"test": "${todaysDate}"}`))
+    return doReplace('{"test": "{{t}sDate}"}', { t: 'today' }).then(result =>
+      expect(result).toEqual(`{"test": "${todaysDate}"}`)
+    )
   })
   it('should ignore a json valid string that is not an object', () => {
-    return doReplace(1234)
-      .then(result => expect(result).toEqual(1234))
+    return doReplace(1234).then(result => expect(result).toEqual(1234))
   })
   it('should replace from environment', () => {
     process.env.TEST = 'a'
-    return doReplace('{TEST}')
-      .then(result => expect(result).toEqual('a'))
+    return doReplace('{TEST}').then(result => expect(result).toEqual('a'))
   })
 })
 
@@ -163,7 +173,9 @@ describe('Expand blocks testrunner', () => {
       }
     })
     // use map to add 'isBlock' property to expected output
-    const expected = baseCommands.concat(blocks[0].data.commands.map(c => Object.assign({}, c, {isBlock: true})))
+    const expected = baseCommands.concat(
+      blocks[0].data.commands.map(c => Object.assign({}, c, { isBlock: true }))
+    )
     expect(expandBlocks(testCommands, blocks)).toEqual(expected)
   })
   it('should expand nested blocks', () => {
@@ -214,8 +226,13 @@ describe('Expand blocks testrunner', () => {
       }
     ]
     // use map to add 'isBlock' property to expected output
-    const blockCommands = [testBlocks[0].data.commands[0], ...testBlocks[1].data.commands]
-    const expected = baseCommands.concat(blockCommands.map(c => Object.assign({}, c, {isBlock: true})))
+    const blockCommands = [
+      testBlocks[0].data.commands[0],
+      ...testBlocks[1].data.commands
+    ]
+    const expected = baseCommands.concat(
+      blockCommands.map(c => Object.assign({}, c, { isBlock: true }))
+    )
     expect(expandBlocks(testCommands, testBlocks)).toEqual(expected)
   })
   it('should error if an unknown block is asked for', () => {
@@ -225,7 +242,9 @@ describe('Expand blocks testrunner', () => {
         block: 'block2'
       }
     })
-    expect(expandBlocks.bind(null, testCommands, blocks)).toThrow('Block "block2" does not exist')
+    expect(expandBlocks.bind(null, testCommands, blocks)).toThrow(
+      'Block "block2" does not exist'
+    )
   })
 })
 
@@ -268,7 +287,9 @@ const divBuilder = (base = {}) => {
   const el = {
     tagName: 'div',
     nodeType: 1,
-    getAttribute: function (attr) { return this[attr] },
+    getAttribute: function(attr) {
+      return this[attr]
+    },
     classList: [],
     parentNode: {
       childNodes: []
@@ -305,25 +326,28 @@ describe('xpath', () => {
     expect(xpath(el)).toEqual('/html/body')
   })
   it('should climb up and find the nearest id', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      id: 'parent'
+    const el = divBuilder({
+      parentNode: divBuilder({
+        id: 'parent'
+      })
     })
-    })
-    expect(xpath(el)).toEqual('//*[@id=\"parent\"]/div')
+    expect(xpath(el)).toEqual('//*[@id="parent"]/div')
   })
   it('should climb up and find the nearest name', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      'name': 'parent'
+    const el = divBuilder({
+      parentNode: divBuilder({
+        name: 'parent'
+      })
     })
-    })
-    expect(xpath(el)).toEqual('//*[@name=\"parent\"]/div')
+    expect(xpath(el)).toEqual('//*[@name="parent"]/div')
   })
   it('should climb up and find the nearest data automation id', () => {
-    const el = divBuilder({parentNode: divBuilder({
-      'data-automation-id': 'parent'
+    const el = divBuilder({
+      parentNode: divBuilder({
+        'data-automation-id': 'parent'
+      })
     })
-    })
-    expect(xpath(el)).toEqual('//*[@data-automation-id=\"parent\"]/div')
+    expect(xpath(el)).toEqual('//*[@data-automation-id="parent"]/div')
   })
 })
 
@@ -336,7 +360,7 @@ describe('getLocator', () => {
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
       classList: [],
-      getAttribute: (attr) => {
+      getAttribute: attr => {
         switch (attr) {
           default:
             return null
@@ -350,11 +374,8 @@ describe('getLocator', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
-      getAttribute: (attr) => {
+      classList: ['class1', 'class2'],
+      getAttribute: attr => {
         switch (attr) {
           default:
             return null
@@ -363,18 +384,15 @@ describe('getLocator', () => {
       id: 'test'
     })
 
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     expect(getLocator(el)).toEqual('css=div.class1.class2')
   })
   it('should get locator for element with xpath css selector and name', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
-      getAttribute: (attr) => {
+      classList: ['class1', 'class2'],
+      getAttribute: attr => {
         switch (attr) {
           case 'name':
             return 'test'
@@ -384,67 +402,55 @@ describe('getLocator', () => {
       },
       id: 'test'
     })
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     expect(getLocator(el)).toEqual('name=test')
   })
   it('should get locator for element with xpath css selector, name and id', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
+      classList: ['class1', 'class2'],
       id: 'testId'
     })
 
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     expect(getLocator(el)).toEqual('id=testId')
   })
   it('should get locator for element with xpath css selector, name and automationid', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
+      classList: ['class1', 'class2'],
       automationid: 'testAutomationId',
       name: 'test'
     })
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     expect(getLocator(el)).toEqual('automationid=testAutomationId')
   })
   it('should get locator for element with xpath css selector, name, id, and data-automation-id', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
+      classList: ['class1', 'class2'],
       name: 'test',
       'data-automation-id': 'testAutoId',
       id: 'test'
     })
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     expect(getLocator(el)).toEqual('automation-id=testAutoId')
   })
   it('should get locator and options for element with xpath css selector, name, id, and data-automation-id', () => {
     const el = divBuilder({
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ],
+      classList: ['class1', 'class2'],
       tagName: 'div',
       nodeType: 1,
       id: 'testId',
       name: 'test',
       'data-automation-id': 'testAutoId'
     })
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     const expected = {
       target: 'automation-id=testAutoId',
       targetOptions: [
@@ -459,7 +465,7 @@ describe('getLocator', () => {
   })
   it('should get locator and options for element with xpath css selector, name, data-auto-sel, id, and data-automation-id', () => {
     const el = divBuilder({
-      getAttribute: function (attr) {
+      getAttribute: function(attr) {
         if (attr === 'data-automation-id') return 'testAutoId'
         if (attr === 'data-auto-sel') return 'testAutoSel'
         return this[attr]
@@ -468,13 +474,10 @@ describe('getLocator', () => {
       id: 'testId',
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ]
+      classList: ['class1', 'class2']
     })
     el.parentNode.childNodes.push(el) // add itself to child nodes of parent to replicate dom
-    global.document.querySelectorAll = (selector) => ([el])
+    global.document.querySelectorAll = selector => [el]
     const expected = {
       target: 'automation-id=testAutoId',
       targetOptions: [
@@ -496,15 +499,10 @@ describe('getLocator', () => {
       name: 'test',
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ]
+      classList: ['class1', 'class2']
     })
-    global.document.querySelectorAll = (selector) => ([el])
-    const ignorePatterns = [
-      'testId-.*'
-    ]
+    global.document.querySelectorAll = selector => [el]
+    const ignorePatterns = ['testId-.*']
     const expected = {
       target: 'automation-id=testAutoId',
       targetOptions: [
@@ -512,7 +510,7 @@ describe('getLocator', () => {
         'data-auto-sel=testAutoSel',
         'name=test',
         'css=div.class1.class2',
-        '//*[@data-automation-id=\"testAutoId\"]'
+        '//*[@data-automation-id="testAutoId"]'
       ]
     }
     expect(getLocator(el, true, ignorePatterns)).toEqual(expected)
@@ -521,7 +519,7 @@ describe('getLocator', () => {
   it('should get locator and options for element with xpath css selector, name, data-auto-sel, id, and data-automation-id and not ignore the ID strategy', () => {
     const random = Math.random()
     const el = divBuilder({
-      getAttribute: function (attr) {
+      getAttribute: function(attr) {
         if (attr === 'data-automation-id') return 'testAutoId'
         if (attr === 'data-auto-sel') return 'testAutoSel'
         return this[attr]
@@ -530,15 +528,10 @@ describe('getLocator', () => {
       name: 'test',
       innerText: 'Potato',
       textContent: '<div>Potato</div>',
-      classList: [
-        'class1',
-        'class2'
-      ]
+      classList: ['class1', 'class2']
     })
-    global.document.querySelectorAll = (selector) => ([el])
-    const ignorePatterns = [
-      'testId-.*'
-    ]
+    global.document.querySelectorAll = selector => [el]
+    const ignorePatterns = ['testId-.*']
     const expected = {
       target: 'automation-id=testAutoId',
       targetOptions: [
@@ -557,7 +550,7 @@ describe('getLocator', () => {
       innerText: 'Potato',
       textContent: '<a>Potato</a>',
       classList: [],
-      getAttribute: (attr) => {
+      getAttribute: attr => {
         switch (attr) {
           default:
             return null
@@ -576,8 +569,8 @@ describe('getLocator', () => {
       }
     }
     el.parentNode.childNodes.push(el) // add itself to child nodes of parent to replicate dom
-    global.document.querySelectorAll = (selector) => ([el])
-    global.document.getElementsByTagName = (tag) => ([el])
+    global.document.querySelectorAll = selector => [el]
+    global.document.getElementsByTagName = tag => [el]
     expect(getLocator(el)).toEqual('//*[@id="test"]')
   })
 })
@@ -605,7 +598,9 @@ describe('Regex Replace', () => {
     expect(regExpMatch('/(\\d+\\.)?\\d+$/', '200,000 400')).toEqual('400')
   })
   it('should find case senstive words ', () => {
-    expect(regExpMatch('/([A-Z])\\w+/', 'potato and Superman')).toEqual('Superman')
+    expect(regExpMatch('/([A-Z])\\w+/', 'potato and Superman')).toEqual(
+      'Superman'
+    )
   })
   it('should throw error if no match found ', () => {
     expect(regExpMatch.bind(null, '/\\d/', 'hello world')).toThrow('No match')
@@ -614,27 +609,35 @@ describe('Regex Replace', () => {
 
 describe('traverseJson', () => {
   it('should traverse to node speficied by property-chain', () => {
-    expect(traverseJson({a: {b: {c: 'test'}}}, ['a', 'b', 'c'])).toEqual('test')
+    expect(traverseJson({ a: { b: { c: 'test' } } }, ['a', 'b', 'c'])).toEqual(
+      'test'
+    )
   })
   it('should get original json if property-chain is empty', () => {
-    const json = {a: 'test'}
+    const json = { a: 'test' }
     expect(traverseJson(json, [])).toEqual(json)
   })
 })
 
 describe('filterJson', () => {
   it('should filter JSON given list of nodes to delete', () => {
-    expect(JSON.stringify(
-      filterJson({ apple: { type: 'pome', color: 'red' }, orange: { type: 'citrus', color: 'orange' } }, [['apple', 'type'], ['orange', 'color']])
-    )).toEqual(JSON.stringify(
-      { apple: { color: 'red' }, orange: { type: 'citrus' } }
-    ))
+    expect(
+      JSON.stringify(
+        filterJson(
+          {
+            apple: { type: 'pome', color: 'red' },
+            orange: { type: 'citrus', color: 'orange' }
+          },
+          [['apple', 'type'], ['orange', 'color']]
+        )
+      )
+    ).toEqual(
+      JSON.stringify({ apple: { color: 'red' }, orange: { type: 'citrus' } })
+    )
   })
   it('expect no change if property-chain is empty', () => {
-    const json = {a: 'test'}
-    expect(JSON.stringify(
-      filterJson(json, [])
-    )).toEqual(JSON.stringify(json))
+    const json = { a: 'test' }
+    expect(JSON.stringify(filterJson(json, []))).toEqual(JSON.stringify(json))
   })
   it('expect no change non object value is passed', () => {
     expect(filterJson('test', [])).toEqual('test')
@@ -643,9 +646,9 @@ describe('filterJson', () => {
 
 describe('cloneJson', () => {
   it('should clone JSON', () => {
-    expect(JSON.stringify(
-      cloneJson({a: 'test'})
-    )).toEqual(JSON.stringify({a: 'test'}))
+    expect(JSON.stringify(cloneJson({ a: 'test' }))).toEqual(
+      JSON.stringify({ a: 'test' })
+    )
   })
 })
 

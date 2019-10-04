@@ -1,13 +1,13 @@
-import isEqual from 'lodash.isequal';
-import { types } from '../actions/action_types';
-import { setIn, updateIn, pick, updateCmd, filtering } from '../common/utils';
-import { normalizeCommand } from '../models/test_case_model';
-import * as C from '../common/constant';
+import isEqual from 'lodash.isequal'
+import { types } from '../actions/action_types'
+import { setIn, updateIn, pick, updateCmd, filtering } from '../common/utils'
+import { normalizeCommand } from '../models/test_case_model'
+import * as C from '../common/constant'
 import { compose } from 'redux'
-import {newCommand} from '../common/commands'
+import { newCommand } from '../common/commands'
 import github from 'github-api'
 
-const T = types; // so that auto complete in webstorm doesn't go crazy
+const T = types // so that auto complete in webstorm doesn't go crazy
 
 const newTestCaseEditing = {
   commands: [newCommand],
@@ -18,7 +18,7 @@ const newTestCaseEditing = {
     isNewSave: true,
     selectedIndex: -1
   }
-};
+}
 const newBlockEditing = {
   commands: [newCommand],
   meta: {
@@ -27,7 +27,7 @@ const newBlockEditing = {
     isNewSave: true,
     selectedIndex: -1
   }
-};
+}
 
 const newSuiteEditing = {
   tests: [],
@@ -38,11 +38,12 @@ const newSuiteEditing = {
   }
 }
 
-const doCommandFilter = nextState => setIn(
-  ['editing', 'filterCommands'],
-  filtering(nextState.editing.commands, nextState.searchText),
-  nextState
-)
+const doCommandFilter = nextState =>
+  setIn(
+    ['editing', 'filterCommands'],
+    filtering(nextState.editing.commands, nextState.searchText),
+    nextState
+  )
 
 // * editor
 //    * testCases:          all test cases stored in indexedDB
@@ -93,21 +94,21 @@ const initialState = {
     isShown: false
   },
   status: C.EDITOR_STATUS.TESTS
-};
+}
 
-export {initialState}
+export { initialState }
 
 // Note: for update the `hasUnsaved` status in editing.meta
 export const updateHasUnSaved = state => {
-  const { status } = state;
-  const { meta, ...data } = state.editing;
-  const id = meta.src && meta.src.id;
-  if (!id) return state;
+  const { status } = state
+  const { meta, ...data } = state.editing
+  const id = meta.src && meta.src.id
+  if (!id) return state
 
-  const tc = state.testCases.find(tc => tc.id === id);
-  const block = state.blocks.find(block => block.id === id);
-  const suite = state.suites.find(suite => suite.id === id);
-  if (!block && !tc && !suite) return state;
+  const tc = state.testCases.find(tc => tc.id === id)
+  const block = state.blocks.find(block => block.id === id)
+  const suite = state.suites.find(suite => suite.id === id)
+  if (!block && !tc && !suite) return state
 
   switch (status) {
     case C.EDITOR_STATUS.TESTS:
@@ -115,45 +116,45 @@ export const updateHasUnSaved = state => {
         ['editing', 'meta', 'hasUnsaved', 'commands'],
         !isEqual(tc.data, data),
         state
-      );
+      )
     case C.EDITOR_STATUS.BLOCKS:
       return setIn(
         ['editing', 'meta', 'hasUnsaved', 'commands'],
         !isEqual(block.data, data),
         state
-      );
+      )
     case C.EDITOR_STATUS.SUITES:
       return setIn(
         ['editing', 'meta', 'hasUnsaved', 'tests'],
         !isEqual(suite.data, data),
         state
-      );
+      )
   }
-};
+}
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case T.APPEND_COMMAND:
-    const cmds = state.editing.commands
-    if ( cmds.length === 1 && cmds[0].command === "") {
-      return updateHasUnSaved(
-        compose(
-          doCommandFilter,
-          nextState => setIn(
-            ['editing', 'commands'], [action.data.command],
-            nextState
-          )
-        )(state)
-      )
-    } else {
-      return updateHasUnSaved(
-        compose(
-          doCommandFilter,
-          nextState => updateIn(
-            ['editing', 'commands'],
-            commands => [...commands, action.data.command],
-            nextState
-          ))(state)
+      const cmds = state.editing.commands
+      if (cmds.length === 1 && cmds[0].command === '') {
+        return updateHasUnSaved(
+          compose(
+            doCommandFilter,
+            nextState =>
+              setIn(['editing', 'commands'], [action.data.command], nextState)
+          )(state)
+        )
+      } else {
+        return updateHasUnSaved(
+          compose(
+            doCommandFilter,
+            nextState =>
+              updateIn(
+                ['editing', 'commands'],
+                commands => [...commands, action.data.command],
+                nextState
+              )
+          )(state)
         )
       }
 
@@ -161,376 +162,436 @@ export default function reducer(state = initialState, action) {
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => setIn(
-            ['editing', 'meta', 'selectedIndex'],
-            action.data.index + 1,
-            nextState
-          ),
-          nextState => updateIn(['editing', 'commands'], commands => {
-            const { index } = action.data;
-            commands.splice(index + 1, 0, commands[index]);
-            return [...commands];
-          },nextState)
+          nextState =>
+            setIn(
+              ['editing', 'meta', 'selectedIndex'],
+              action.data.index + 1,
+              nextState
+            ),
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              commands => {
+                const { index } = action.data
+                commands.splice(index + 1, 0, commands[index])
+                return [...commands]
+              },
+              nextState
+            )
         )(state)
-      );
+      )
     case T.REORDER_COMMAND:
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => setIn(
-            ['editing', 'meta', 'selectedIndex'],
-            action.data.newIndex,
-            nextState
-          ),
-          nextState => updateIn(['editing', 'commands'], commands => {
-            const {
-              oldIndex,
-              newIndex
-            } = action.data;
-            const commandsWithoutOld = [
-              ...commands.slice(0, oldIndex),
-              ...commands.slice(oldIndex + 1, commands.length)
-            ];
-            return [
-              ...commandsWithoutOld.slice(0, newIndex),
-              commands[oldIndex],
-              ...commandsWithoutOld.slice(newIndex, commandsWithoutOld.length)
-            ];
-          }, nextState)
+          nextState =>
+            setIn(
+              ['editing', 'meta', 'selectedIndex'],
+              action.data.newIndex,
+              nextState
+            ),
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              commands => {
+                const { oldIndex, newIndex } = action.data
+                const commandsWithoutOld = [
+                  ...commands.slice(0, oldIndex),
+                  ...commands.slice(oldIndex + 1, commands.length)
+                ]
+                return [
+                  ...commandsWithoutOld.slice(0, newIndex),
+                  commands[oldIndex],
+                  ...commandsWithoutOld.slice(
+                    newIndex,
+                    commandsWithoutOld.length
+                  )
+                ]
+              },
+              nextState
+            )
         )(state)
-      );
+      )
 
     case T.INSERT_COMMAND:
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => setIn(
-            ['editing', 'meta', 'selectedIndex'],
-            action.data.index,
-            nextState
-          ),
-          nextState => updateIn(['editing', 'commands'], commands => {
-            const {
-              index,
-              command
-            } = action.data;
-            commands.splice(index, 0, command);
-            return [...commands];
-          }, nextState)
+          nextState =>
+            setIn(
+              ['editing', 'meta', 'selectedIndex'],
+              action.data.index,
+              nextState
+            ),
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              commands => {
+                const { index, command } = action.data
+                commands.splice(index, 0, command)
+                return [...commands]
+              },
+              nextState
+            )
         )(state)
-      );
+      )
     case T.UPDATE_COMMAND:
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => setIn(
-            ['editing', 'commands', action.data.index],
-            {
-              command: action.data.command.command,
-              parameters: action.data.command.parameters
-            },
-            nextState
-          )
+          nextState =>
+            setIn(
+              ['editing', 'commands', action.data.index],
+              {
+                command: action.data.command.command,
+                parameters: action.data.command.parameters
+              },
+              nextState
+            )
         )(state)
-      );
+      )
     case T.REMOVE_COMMAND:
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-           nextState => updateIn(
-            ['editing', 'commands'],
-            commands => {
-              const { index, command } = action.data;
-              const newCmds = [...commands]
-              const cmds = state.editing.commands
-              if (cmds.length === 1) {
-                return [newCommand];
-              } else {
-                newCmds.splice(index, 1);
-                return [...newCmds];
-              }
-            },
-            nextState
-          )
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              commands => {
+                const { index, command } = action.data
+                const newCmds = [...commands]
+                const cmds = state.editing.commands
+                if (cmds.length === 1) {
+                  return [newCommand]
+                } else {
+                  newCmds.splice(index, 1)
+                  return [...newCmds]
+                }
+              },
+              nextState
+            )
         )(state)
-      );
+      )
     case T.SELECT_COMMAND:
       return compose(
         doCommandFilter,
-        nextState => setIn(
-          ['editing', 'meta', 'selectedIndex'],
-          action.data.forceClick ||
-            state.editing.meta.selectedIndex !== action.data.index ?
-            action.data.index : -1,
+        nextState =>
+          setIn(
+            ['editing', 'meta', 'selectedIndex'],
+            action.data.forceClick ||
+              state.editing.meta.selectedIndex !== action.data.index
+              ? action.data.index
+              : -1,
             nextState
           )
       )(state)
 
     case T.CUT_COMMAND: {
-      const commands = action.data.indices.map(
-        i => state.editing.commands[i]
-      );
+      const commands = action.data.indices.map(i => state.editing.commands[i])
       return updateHasUnSaved(
         compose(
           doCommandFilter,
           nextState => setIn(['clipboard', 'commands'], commands, nextState),
-          nextState => updateIn(['editing', 'commands'], commands =>
-            commands.filter((c, i) => action.data.indices.indexOf(i) === -1),
-            nextState
-          )
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              commands =>
+                commands.filter(
+                  (c, i) => action.data.indices.indexOf(i) === -1
+                ),
+              nextState
+            )
         )(state)
-      );
+      )
     }
 
     case T.COPY_COMMAND: {
-      const commands = action.data.indices.map(
-        i => state.editing.commands[i]
-      );
+      const commands = action.data.indices.map(i => state.editing.commands[i])
       return compose(
-          doCommandFilter,
+        doCommandFilter,
         nextState => setIn(['clipboard', 'commands'], commands, nextState)
       )(state)
     }
 
-    case T.PASTE_COMMAND:
-      {
-        const {
-          commands
-        } = state.clipboard;
+    case T.PASTE_COMMAND: {
+      const { commands } = state.clipboard
 
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => updateIn(
-            ['editing', 'commands'],
-            cmds => {
-              cmds.splice(action.data.index + 1, 0, ...commands);
-              return [...cmds];
-            },
-            nextState
-          )
+          nextState =>
+            updateIn(
+              ['editing', 'commands'],
+              cmds => {
+                cmds.splice(action.data.index + 1, 0, ...commands)
+                return [...cmds]
+              },
+              nextState
+            )
         )(state)
-      );
+      )
     }
 
     case T.NORMALIZE_COMMANDS:
       return compose(
         doCommandFilter,
-        nextState => updateIn(
-          ['editing', 'commands'],
-          cmds => cmds.map(normalizeCommand),
-          nextState,
-        )
+        nextState =>
+          updateIn(
+            ['editing', 'commands'],
+            cmds => cmds.map(normalizeCommand),
+            nextState
+          )
       )(state)
 
     case T.UPDATE_SELECTED_COMMAND: {
       return updateHasUnSaved(
         compose(
           doCommandFilter,
-          nextState => updateIn(
-            [ 'editing',
-              'commands',
-              state.editing.filterCommands[state.editing.meta.selectedIndex].index
-             ],
-                cmdObj => ({
-                  ...cmdObj,
-                  ...action.data,
-                  parameters: action.overwrite ? action.data.parameters : {
-                    ...cmdObj.parameters,
-                    ...action.data.parameters
-                  }
-                 }),
-                 nextState
-          ),
+          nextState =>
+            updateIn(
+              [
+                'editing',
+                'commands',
+                state.editing.filterCommands[state.editing.meta.selectedIndex]
+                  .index
+              ],
+              cmdObj => ({
+                ...cmdObj,
+                ...action.data,
+                parameters: action.overwrite
+                  ? action.data.parameters
+                  : {
+                      ...cmdObj.parameters,
+                      ...action.data.parameters
+                    }
+              }),
+              nextState
+            )
         )(state)
-      );
+      )
     }
 
     case T.ADD_SUITE_TEST:
-      return updateHasUnSaved(updateIn(['editing', 'tests'], tests => tests.concat(action.test), state))
+      return updateHasUnSaved(
+        updateIn(
+          ['editing', 'tests'],
+          tests => tests.concat(action.test),
+          state
+        )
+      )
     case T.REMOVE_SUITE_TEST:
-      return updateHasUnSaved(updateIn(['editing', 'tests'], tests => tests.filter(t => t !== action.test), state))
+      return updateHasUnSaved(
+        updateIn(
+          ['editing', 'tests'],
+          tests => tests.filter(t => t !== action.test),
+          state
+        )
+      )
 
     case T.SAVE_EDITING_AS_EXISTED:
       return compose(
         doCommandFilter,
         nextState => setIn(['editing', 'meta', 'hasUnsaved'], false, nextState),
         nextState => setIn(['testCases'], action.data, nextState)
-      )(state);
+      )(state)
 
     case T.SHARE_BLOCK:
-        return compose(
-          doCommandFilter,
-          nextState => setIn(['editing', 'meta', 'hasUnsaved'], false, nextState),
-          nextState => setIn(['shared'], true, nextState)
-        )(state);
-    
+      return compose(
+        doCommandFilter,
+        nextState => setIn(['editing', 'meta', 'hasUnsaved'], false, nextState),
+        nextState => setIn(['shared'], true, nextState)
+      )(state)
+
     case T.UPDATE_SHARE_LINKS:
-      const {shareLink} = action
+      const { shareLink } = action
       return compose(
         setIn(['editing', 'shareLink'], shareLink),
-        updateIn(['project', 'shareLinks'], links => links ? links.concat(shareLink) : [shareLink])
+        updateIn(['project', 'shareLinks'], links =>
+          links ? links.concat(shareLink) : [shareLink]
+        )
       )(state)
-        
+
     case T.SAVE_EDITING_AS_NEW:
-      const { list, testCase } = action.data;
+      const { list, testCase } = action.data
       return compose(
         doCommandFilter,
         nextState => setIn(['testCases'], list, nextState),
-        nextState => updateIn(['editing', 'meta'], meta => ({
-          ...meta,
-          hasUnsaved: false,
-          isNewSave: true,
-          src: pick(['id', 'name'], testCase)
-        }), nextState)
-      )(state);
+        nextState =>
+          updateIn(
+            ['editing', 'meta'],
+            meta => ({
+              ...meta,
+              hasUnsaved: false,
+              isNewSave: true,
+              src: pick(['id', 'name'], testCase)
+            }),
+            nextState
+          )
+      )(state)
 
     case T.SAVE_EDITING_BLOCK_AS_EXISTED:
       return compose(
         setIn(['editing', 'meta', 'hasUnsaved'], false),
         setIn(['blocks'], action.data)
-      )(state);
+      )(state)
 
     case T.SAVE_EDITING_BLOCK_AS_NEW:
-      const { list: blocksList, block } = action.data;
+      const { list: blocksList, block } = action.data
       return compose(
         doCommandFilter,
         nextState => setIn(['blocks'], blocksList, nextState),
-        nextState => updateIn(['editing', 'meta'], meta => ({
-          ...meta,
-          hasUnsaved: false,
-          isNewSave: true,
-          src: pick(['id', 'name'], block)
-        }), nextState)
-      )(state);
+        nextState =>
+          updateIn(
+            ['editing', 'meta'],
+            meta => ({
+              ...meta,
+              hasUnsaved: false,
+              isNewSave: true,
+              src: pick(['id', 'name'], block)
+            }),
+            nextState
+          )
+      )(state)
     case T.SAVE_EDITING_SUITE_AS_EXISTED:
       return compose(
         setIn(['editing', 'meta', 'hasUnsaved'], false),
         setIn(['suites'], action.data)
-      )(state);
+      )(state)
 
     case T.SAVE_EDITING_SUITE_AS_NEW:
-      const { list: suiteList, suite } = action.data;
+      const { list: suiteList, suite } = action.data
       return compose(
         nextState => setIn(['suites'], suiteList, nextState),
-        nextState => updateIn(['editing', 'meta'], meta => ({
-          ...meta,
-          hasUnsaved: false,
-          isNewSave: true,
-          src: pick(['id', 'name'], suite)
-        }), nextState)
-      )(state);
+        nextState =>
+          updateIn(
+            ['editing', 'meta'],
+            meta => ({
+              ...meta,
+              hasUnsaved: false,
+              isNewSave: true,
+              src: pick(['id', 'name'], suite)
+            }),
+            nextState
+          )
+      )(state)
 
     case T.SET_TEST_CASES:
       // need to check if current testcase is already in
-      const meta = state.editing.meta;
+      const meta = state.editing.meta
       if (action.data.length === 0 && state.status === C.EDITOR_STATUS.TESTS) {
         return compose(
           doCommandFilter,
-          nextState => setIn(
-            ['testCases'],
-            action.data,
-            nextState
-          ),
-          nextState => nextState.editing.commands.length !== 0 ?
-            nextState :
-            setIn(
-              ['editing'],
-              {...newTestCaseEditing},
-              nextState
-            )
+          nextState => setIn(['testCases'], action.data, nextState),
+          nextState =>
+            nextState.editing.commands.length !== 0
+              ? nextState
+              : setIn(['editing'], { ...newTestCaseEditing }, nextState)
         )(state)
       } else {
-        return setIn(['testCases'], action.data, state);
+        return setIn(['testCases'], action.data, state)
       }
 
     case T.SET_BLOCKS:
       // TODO: need to check if current block is already in
       // This doesn't required the same logic as SET_TEST_CASES..
       // since it will default to Test in case there is no Block
-      return setIn(['blocks'], action.data, state);
+      return setIn(['blocks'], action.data, state)
 
     case T.SET_SUITES:
-          return setIn(['suites'], action.data, state)
+      return setIn(['suites'], action.data, state)
 
     case T.SET_EDITING:
-      if (!action.data) return state;
-      return state.status === C.EDITOR_STATUS.SUITES ?
-        setIn(['editing'], action.data, state) :
-        updateHasUnSaved(
-          compose(
-            doCommandFilter,
-            nextState => setIn(['editing'], action.data, nextState),
-          )(state)
-        )
-
+      if (!action.data) return state
+      return state.status === C.EDITOR_STATUS.SUITES
+        ? setIn(['editing'], action.data, state)
+        : updateHasUnSaved(
+            compose(
+              doCommandFilter,
+              nextState => setIn(['editing'], action.data, nextState)
+            )(state)
+          )
 
     case T.EDIT_TEST_CASE: {
-      const { testCases } = state;
-      const tc = testCases.find(tc => tc.id === action.data);
+      const { testCases } = state
+      const tc = testCases.find(tc => tc.id === action.data)
 
-      if (!tc) return state;
-
-        return compose(
-          doCommandFilter,
-          nextState => setIn(['editing'], {
-          ...tc.data,
-          meta: {
-            selectedIndex: -1,
-            hasUnsaved: false,
-            isNewSave: nextState.editing.meta.isNewSave,
-            src: pick(['id', 'name'], tc)
-          }
-        }, nextState),
-        nextState => setIn(['status'], C.EDITOR_STATUS.TESTS, nextState)
-        )(state)
-    }
-    case T.EDIT_BLOCK: {
-      const { blocks } = state;
-      const block = blocks.find(({ id }) => id === action.data);
-
-      if (!block) return state;
+      if (!tc) return state
 
       return compose(
         doCommandFilter,
-        nextState => setIn(['editing'], {
-          ...block.data,
-          meta: {
-            selectedIndex: -1,
-            hasUnsaved: false,
-            isNewSave: nextState.editing.meta.isNewSave,
-            src: pick(['id', 'name'], block)
-          }
-        }, nextState),
+        nextState =>
+          setIn(
+            ['editing'],
+            {
+              ...tc.data,
+              meta: {
+                selectedIndex: -1,
+                hasUnsaved: false,
+                isNewSave: nextState.editing.meta.isNewSave,
+                src: pick(['id', 'name'], tc)
+              }
+            },
+            nextState
+          ),
+        nextState => setIn(['status'], C.EDITOR_STATUS.TESTS, nextState)
+      )(state)
+    }
+    case T.EDIT_BLOCK: {
+      const { blocks } = state
+      const block = blocks.find(({ id }) => id === action.data)
+
+      if (!block) return state
+
+      return compose(
+        doCommandFilter,
+        nextState =>
+          setIn(
+            ['editing'],
+            {
+              ...block.data,
+              meta: {
+                selectedIndex: -1,
+                hasUnsaved: false,
+                isNewSave: nextState.editing.meta.isNewSave,
+                src: pick(['id', 'name'], block)
+              }
+            },
+            nextState
+          ),
         nextState => setIn(['status'], C.EDITOR_STATUS.BLOCKS, nextState)
       )(state)
     }
     case T.EDIT_SUITE: {
-      const { suites } = state;
-      const suite = suites.find(({ id }) => id === action.data);
+      const { suites } = state
+      const suite = suites.find(({ id }) => id === action.data)
 
-      if (!suite) return state;
+      if (!suite) return state
 
       return compose(
-          nextState => setIn(['editing'], {
-          ...suite.data,
-          meta: {
-            hasUnsaved: false,
-            isNewSave: nextState.editing.meta.isNewSave,
-            src: pick(['id', 'name'], suite)
-          }
-        }, nextState),
+        nextState =>
+          setIn(
+            ['editing'],
+            {
+              ...suite.data,
+              meta: {
+                hasUnsaved: false,
+                isNewSave: nextState.editing.meta.isNewSave,
+                src: pick(['id', 'name'], suite)
+              }
+            },
+            nextState
+          ),
         nextState => setIn(['status'], C.EDITOR_STATUS.SUITES, nextState)
       )(state)
     }
 
     case T.UPDATE_TEST_CASE_STATUS: {
-      const { id, status } = action.data;
-      if (!id) return state;
+      const { id, status } = action.data
+      if (!id) return state
 
-      const { testCases } = state;
-      const index = testCases.findIndex(tc => tc.id === id);
-      if (index === -1) return state;
+      const { testCases } = state
+      const index = testCases.findIndex(tc => tc.id === id)
+      if (index === -1) return state
 
       return compose(
         doCommandFilter,
@@ -539,30 +600,35 @@ export default function reducer(state = initialState, action) {
     }
 
     case T.UPDATE_BLOCK_STATUS: {
-      const { id, status } = action.data;
-      if (!id) return state;
+      const { id, status } = action.data
+      if (!id) return state
 
-      const { blocks } = state;
-      const index = blocks.findIndex(tc => tc.id === id);
-      if (index === -1) return state;
+      const { blocks } = state
+      const index = blocks.findIndex(tc => tc.id === id)
+      if (index === -1) return state
 
-      return setIn(['blocks', index, 'status'], status, state);
+      return setIn(['blocks', index, 'status'], status, state)
     }
 
     case T.SET_EDITOR_STATUS:
-      return updateIn(['status'], () => action.data, state);
+      return updateIn(['status'], () => action.data, state)
 
     case T.RENAME_TEST_CASE:
       return compose(
-        updateIn(
-          ['suites'],
-          suites => suites.map(
-            suite => updateIn(
+        updateIn(['suites'], suites =>
+          suites.map(suite =>
+            updateIn(
               ['data', 'tests'],
               tests => {
                 const index = tests.indexOf(action.oldName)
                 // immutably replace the test name in the same place to minimize git diff
-                return index !== -1 ? [].concat(tests.slice(0, index), action.data, tests.slice(index + 1)) : tests
+                return index !== -1
+                  ? [].concat(
+                      tests.slice(0, index),
+                      action.data,
+                      tests.slice(index + 1)
+                    )
+                  : tests
               },
               suite
             )
@@ -576,29 +642,31 @@ export default function reducer(state = initialState, action) {
       return compose(
         setIn(['editing', 'meta', 'src', 'name'], action.data),
         setIn(['blocks'], action.blocks)
-      )(state);
+      )(state)
 
     case T.RENAME_SUITE:
       return compose(
         setIn(['editing', 'meta', 'src', 'name'], action.data),
         setIn(['suites'], action.suites)
-      )(state);
+      )(state)
 
     case T.REMOVE_CURRENT_TEST_CASE: {
-      const { id } = state.editing.meta.src;
-      const { selectedIndex } = state.editing.meta;
-      const candidates = state.testCases.filter(tc => tc.id !== id);
-      let lastIndex = state.testCases.findIndex(tc => tc.id === id);
-      let editing;
+      const { id } = state.editing.meta.src
+      const { selectedIndex } = state.editing.meta
+      const candidates = state.testCases.filter(tc => tc.id !== id)
+      let lastIndex = state.testCases.findIndex(tc => tc.id === id)
+      let editing
 
       if (candidates.length === 0) {
-        editing = { ...newTestCaseEditing };
+        editing = { ...newTestCaseEditing }
       } else {
         const index =
           lastIndex === -1
             ? 0
-            : lastIndex < candidates.length ? lastIndex : lastIndex - 1;
-        const tc = candidates[index];
+            : lastIndex < candidates.length
+            ? lastIndex
+            : lastIndex - 1
+        const tc = candidates[index]
 
         editing = {
           commands: [newCommand],
@@ -608,31 +676,33 @@ export default function reducer(state = initialState, action) {
             hasUnsaved: false,
             selectedIndex: index
           }
-        };
+        }
       }
       const newState = {
         ...state,
         editing,
         testCases: [...candidates]
-      };
+      }
       return doCommandFilter(newState)
     }
 
     case T.REMOVE_CURRENT_BLOCK: {
-      const { id } = state.editing.meta.src;
-      const { selectedIndex } = state.editing.meta;
-      const candidates = state.blocks.filter(block => block.id !== id);
-      let lastIndex = state.blocks.findIndex(block => block.id === id);
-      let editing;
+      const { id } = state.editing.meta.src
+      const { selectedIndex } = state.editing.meta
+      const candidates = state.blocks.filter(block => block.id !== id)
+      let lastIndex = state.blocks.findIndex(block => block.id === id)
+      let editing
 
       if (candidates.length === 0) {
-        editing = { ...newBlockEditing };
+        editing = { ...newBlockEditing }
       } else {
         const index =
           lastIndex === -1
             ? 0
-            : lastIndex < candidates.length ? lastIndex : lastIndex - 1;
-        const block = candidates[index];
+            : lastIndex < candidates.length
+            ? lastIndex
+            : lastIndex - 1
+        const block = candidates[index]
 
         editing = {
           ...block.data,
@@ -641,31 +711,33 @@ export default function reducer(state = initialState, action) {
             hasUnsaved: false,
             selectedIndex: index
           }
-        };
+        }
       }
       const newState = {
         ...state,
         editing,
         blocks: [...candidates]
-      };
+      }
 
       return doCommandFilter(newState)
     }
     case T.REMOVE_CURRENT_SUITE: {
-      const { id } = state.editing.meta.src;
-      const { selectedIndex } = state.editing.meta;
-      const candidates = state.suites.filter(block => block.id !== id);
-      let lastIndex = state.suites.findIndex(block => block.id === id);
-      let editing;
+      const { id } = state.editing.meta.src
+      const { selectedIndex } = state.editing.meta
+      const candidates = state.suites.filter(block => block.id !== id)
+      let lastIndex = state.suites.findIndex(block => block.id === id)
+      let editing
 
       if (candidates.length === 0) {
-        editing = { ...newSuiteEditing };
+        editing = { ...newSuiteEditing }
       } else {
         const index =
           lastIndex === -1
             ? 0
-            : lastIndex < candidates.length ? lastIndex : lastIndex - 1;
-        const suite = candidates[index];
+            : lastIndex < candidates.length
+            ? lastIndex
+            : lastIndex - 1
+        const suite = candidates[index]
 
         editing = {
           ...suite.data,
@@ -673,13 +745,13 @@ export default function reducer(state = initialState, action) {
             src: pick(['id', 'name'], suite),
             hasUnsaved: false
           }
-        };
+        }
       }
       const newState = {
         ...state,
         editing,
         suites: [...candidates]
-      };
+      }
 
       return newState
     }
@@ -704,42 +776,53 @@ export default function reducer(state = initialState, action) {
       )(state)
 
     case T.NEXT_TEST:
-      return setIn(['nextTest'], action.id, state);
+      return setIn(['nextTest'], action.id, state)
     case T.NEXT_BLOCK:
-      return setIn(['nextBlock'], action.id, state);
+      return setIn(['nextBlock'], action.id, state)
     case T.NEXT_SUITE:
-      return setIn(['nextSuite'], action.id, state);
+      return setIn(['nextSuite'], action.id, state)
     case T.SELECT_PROJECT:
       return compose(
         nextState => setIn(['searchText'], '', nextState),
         nextState => setIn(['project'], action.data, nextState)
       )(state)
     case T.LIST_PROJECTS:
-      return setIn(['projects'], action.data, state);
+      return setIn(['projects'], action.data, state)
     case T.SEARCH_WORD: {
-      return setIn(['searchText'], action.value, state);
+      return setIn(['searchText'], action.value, state)
     }
     case T.FILTER_COMMANDS: {
-        return setIn(['editing', 'filterCommands'], action.payload, state)
+      return setIn(['editing', 'filterCommands'], action.payload, state)
     }
     case T.MULTI_SELECT: {
-      return updateIn(['selectedCmds'],
-      selectedCmds => selectedCmds.includes(action.data.index)
-      ? selectedCmds.filter(i => i !== action.data.index) : [...selectedCmds, action.data.index],
-      state
-    )}
+      return updateIn(
+        ['selectedCmds'],
+        selectedCmds =>
+          selectedCmds.includes(action.data.index)
+            ? selectedCmds.filter(i => i !== action.data.index)
+            : [...selectedCmds, action.data.index],
+        state
+      )
+    }
     case T.GROUP_SELECT: {
       return compose(
-        updateIn(['selectedCmds'],
-        selectedCmds => {
-            const indexMin = Math.min(...selectedCmds)
-            const indexMax = Math.max(...selectedCmds)
-            const inbetween = state.editing.filterCommands.map((_, index) => index)
-            return inbetween.slice(indexMin,indexMax + 1)
+        updateIn(['selectedCmds'], selectedCmds => {
+          const indexMin = Math.min(...selectedCmds)
+          const indexMax = Math.max(...selectedCmds)
+          const inbetween = state.editing.filterCommands.map(
+            (_, index) => index
+          )
+          return inbetween.slice(indexMin, indexMax + 1)
         }),
-        updateIn(['selectedCmds'],selectedCmds => [...selectedCmds, action.data.index]),
-        updateIn(['selectedCmds'],selectedCmds => [...selectedCmds, state.editing.meta.selectedIndex] )
-    )(state)
+        updateIn(['selectedCmds'], selectedCmds => [
+          ...selectedCmds,
+          action.data.index
+        ]),
+        updateIn(['selectedCmds'], selectedCmds => [
+          ...selectedCmds,
+          state.editing.meta.selectedIndex
+        ])
+      )(state)
     }
     case T.EMPTY_ARRAY: {
       return setIn(['selectedCmds'], [], state)
@@ -755,8 +838,12 @@ export default function reducer(state = initialState, action) {
         contextMenu: action.data
       }
     case T.HIDE_CONTEXT_MENU:
-      return updateIn(['contextMenu'], ctx => ({...ctx, isShown: false}), state)
+      return updateIn(
+        ['contextMenu'],
+        ctx => ({ ...ctx, isShown: false }),
+        state
+      )
     default:
-      return state;
+      return state
   }
 }

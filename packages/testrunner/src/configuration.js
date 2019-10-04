@@ -8,7 +8,7 @@
  * @param {number} port The port to start selenium on
  * @returns {Object} A config object for @wdio/selenium-standalone-service
  */
-export function getSeleniumConfig (options = {}, port = 4444) {
+export function getSeleniumConfig(options = {}, port = 4444) {
   // Set default values to use latest version
   const {
     seleniumVersion = '3.141.59',
@@ -47,7 +47,7 @@ export function getSeleniumConfig (options = {}, port = 4444) {
  * @param {number} port The port to use locally
  * @returns {Object} An environment config
  */
-export function getEnvironment (port = 4444) {
+export function getEnvironment(port = 4444) {
   const environments = {
     local: {
       hostname: '127.0.0.1',
@@ -65,7 +65,7 @@ export function getEnvironment (port = 4444) {
  * @param {boolean} applitoolsWhether or not to add applitools to the services
  * @returns {Array} An array of strings with service names
  */
-export function getServices (selenium, applitools) {
+export function getServices(selenium, applitools) {
   return [
     selenium ? 'selenium-standalone' : false,
     applitools ? 'applitools' : false
@@ -78,7 +78,7 @@ export function getServices (selenium, applitools) {
  * @param {string} flag The string flag from the command line, comma separated names of capabilities to use for the test run
  * @returns {Array} Array of capability objects
  */
-export function getCapabilities (capabilities = {}, flag) {
+export function getCapabilities(capabilities = {}, flag) {
   const defaultCapabilities = {
     chrome: {
       browserName: 'chrome',
@@ -103,21 +103,24 @@ export function getCapabilities (capabilities = {}, flag) {
     ...defaultCapabilities,
     ...capabilities
   }
-  const caps = flag === undefined
-    ? [defaultCapabilities.chrome]
-    : flag.split(',').map(
-      cap => {
-        if (!allCapabilities[cap]) {
-          throw new Error(`Capability with name "${cap}" not found. Available options are: [${Object.keys(allCapabilities).join(',')}]`)
-        }
-        // Make sure all capabilities accept insecure certs for automation unless specified to be false
+  const caps =
+    flag === undefined
+      ? [defaultCapabilities.chrome]
+      : flag.split(',').map(cap => {
+          if (!allCapabilities[cap]) {
+            throw new Error(
+              `Capability with name "${cap}" not found. Available options are: [${Object.keys(
+                allCapabilities
+              ).join(',')}]`
+            )
+          }
+          // Make sure all capabilities accept insecure certs for automation unless specified to be false
 
-        const aic = allCapabilities[cap].acceptInsecureCerts !== false
-        return {
-          ...allCapabilities[cap],
-          acceptInsecureCerts: aic
-        }
-      }
-    )
+          const aic = allCapabilities[cap].acceptInsecureCerts !== false
+          return {
+            ...allCapabilities[cap],
+            acceptInsecureCerts: aic
+          }
+        })
   return caps
 }
