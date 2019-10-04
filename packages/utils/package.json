@@ -17,7 +17,7 @@
   "author": "Harris Borawski",
   "license": "AGPL",
   "publishConfig": {
-    "registry": "https://registry.npmjs.com",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {

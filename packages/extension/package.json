@@ -5,7 +5,7 @@
   "description": "Chrome extension for ReplayWeb",
   "main": "./dist/app/main.js",
   "publishConfig": {
-    "registry": "https://registry.npmjs.com",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "scripts": {
