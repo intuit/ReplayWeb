@@ -9,11 +9,11 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-      - add_lerna: yarn gobal add lerna
-      - bootstrap: lerna bootstrap
+      - run: yarn global add lerna
+      - run: $(yarn global bin)/lerna bootstrap
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - run: $(yarn global bin)/lerna run build
       - run: yarn test
-      - build: lerna run build
