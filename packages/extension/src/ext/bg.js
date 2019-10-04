@@ -1,5 +1,5 @@
 import Ext from '../common/web_extension'
-import { until, delay, setIn, pick, splitIntoTwo } from '../common/utils'
+import { until, delay, pick, splitIntoTwo } from '../common/utils'
 import { bgInit } from '../common/ipc/ipc_bg_cs'
 import * as C from '../common/constant'
 import log from '../common/log'
@@ -158,12 +158,6 @@ const togglePlayingBadge = (isPlaying, options) => {
     ...(options || {}),
     clear: !isPlaying
   })
-}
-
-const isUpgradeViewed = () => {
-  return Ext.storage.local
-    .get('upgrade_not_viewed')
-    .then(obj => obj.upgrade_not_viewed !== 'not_viewed')
 }
 
 const notifyRecordCommand = command => {
@@ -586,7 +580,6 @@ const onRequest = (cmd, args) => {
         })
       }
 
-      const timer = null
       const timeout = args.command.extra.timeoutElement * 1000
 
       const runCommandWithRetry = retry(runCommand, {

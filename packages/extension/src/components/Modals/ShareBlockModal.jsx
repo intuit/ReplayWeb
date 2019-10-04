@@ -46,7 +46,7 @@ export default class ShareBlockModal extends React.Component {
         <br />
         <br />
         You cannot reshare imported blocks. If you would like to publish the
-        changes you've made, duplicate this block and then share it
+        changes you&apos;ve made, duplicate this block and then share it
         <br />
         <br />
       </span>
@@ -216,7 +216,7 @@ export default class ShareBlockModal extends React.Component {
     }
     return (
       <Modal
-        title={parts['title'] || 'Share'}
+        title={parts.title || 'Share'}
         visible={this.props.visible}
         className="share-block-modal"
         onCancel={this.props.closeModal}

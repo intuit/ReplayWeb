@@ -154,10 +154,10 @@ describe('substitution builder', () => {
       var ar = [[['a', 'A'], ['b', 'B'], ['a', 'A']], [['a', 'A']]]
       var cleaned = removeDupeReplacements(ar)
       expect(
-        cleaned.length == 2 &&
-          cleaned[0].length == 2 &&
-          cleaned[0][0][0] == 'a' &&
-          cleaned[0][1][0] == 'b'
+        cleaned.length === 2 &&
+          cleaned[0].length === 2 &&
+          cleaned[0][0][0] === 'a' &&
+          cleaned[0][1][0] === 'b'
       ).toEqual(true)
     })
   })

@@ -1,4 +1,3 @@
-import log from './log'
 import { getLocator, xpath, domText } from '@replayweb/utils'
 /*
  * Basic tool function
@@ -426,6 +425,16 @@ var showMaskOver = function(mask, el) {
 }
 
 export default {
+  trim,
+  flatten,
+  sum,
+  last,
+  intersect,
+  deepEqual,
+  clientWidth,
+  clientHeight,
+  removeChildren,
+  inDomList,
   setStyle,
   selector,
   xpath,

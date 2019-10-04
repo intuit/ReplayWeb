@@ -313,7 +313,7 @@ class CommandTable extends React.Component {
           }
           const content = this.state.replaced[index].map(replacement => {
             return (
-              <p>
+              <p key={replacement[0]}>
                 <strong>{replacement[0]}</strong>
                 <span> replaced with </span>
                 <strong>{replacement[1]}</strong>
@@ -321,7 +321,7 @@ class CommandTable extends React.Component {
             )
           })
 
-          if (content.length == 0) return <span></span>
+          if (content.length === 0) return <span></span>
 
           return (
             <Popover content={content} title="Substitutions">

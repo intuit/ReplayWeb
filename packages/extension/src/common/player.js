@@ -1,6 +1,6 @@
 import ee from 'event-emitter'
 import Ext from './web_extension'
-import { pick, delay } from './utils'
+import { delay } from './utils'
 
 export const MODE = {
   STRAIGHT: 'STRAIGHT',
@@ -91,6 +91,7 @@ export class Player {
 
     this.__setState(state || {})
   }
+
   preprocess(options) {
     if (!this.__preprocessors || this.__preprocessors.length === 0) {
       return
@@ -149,7 +150,7 @@ export class Player {
       )
     }
 
-    const { startIndex, startUrl, resources, title, extra } = config
+    const { startIndex, resources, title, extra } = config
     const processedResult = this.preprocess({ resources, config })
     const endIndex = config.endIndex || resources.length - 1
     const basicState = {
@@ -264,7 +265,7 @@ export class Player {
 
   // kicks of the promise chain to play
   __go() {
-    const { resources, nextIndex, preDelay } = this.state
+    const { preDelay } = this.state
     const pre =
       preDelay > 0 ? this.__delay(() => undefined, preDelay) : Promise.resolve()
 
@@ -337,7 +338,7 @@ export class Player {
   }
 
   __shouldContinue() {
-    const { status, mode, nextIndex, startIndex, endIndex } = this.state
+    const { status, nextIndex, startIndex, endIndex } = this.state
     let ret
 
     if (

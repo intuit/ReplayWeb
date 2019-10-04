@@ -1,24 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import {
-  Menu,
-  Input,
-  Form,
-  Select,
-  message,
-  Tabs,
-  Button,
-  Modal,
-  Tooltip,
-  Icon
-} from 'antd'
+import { Form, Select, Button, Modal, Tooltip } from 'antd'
 
-import inspector from '../../common/inspector'
-import { getPlayer } from '../../common/player'
-import csIpc from '../../common/ipc/ipc_cs'
-import * as actions from '../../actions'
 import * as C from '../../common/constant'
 
 import allCommands, { newCommand } from '../../common/commands'
@@ -91,14 +74,16 @@ class CommandOptions extends React.Component {
         }
       } else {
         return Promise.reject(
-          'ERROR: CommandOption: Unable to find ID for block name: ' + name
+          new Error(
+            'ERROR: CommandOption: Unable to find ID for block name: ' + name
+          )
         )
       }
     })
   }
 
   render() {
-    const { status, editing } = this.props
+    const { editing } = this.props
     const { filterCommands, meta } = editing
     const { selectedIndex } = meta
 

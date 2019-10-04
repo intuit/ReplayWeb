@@ -1,7 +1,6 @@
-import { initialState } from reducer from '../../src/reducers/files'
+import reducer, { initialState } from '../../src/reducers/files'
 
 import { types } from '../../src/actions/action_types'
-import * as C from '../../src/common/constant'
 
 describe('files reducer', () => {
   it('should do nothing if invalid action', () => {

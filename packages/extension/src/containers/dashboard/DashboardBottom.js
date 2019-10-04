@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../actions'
@@ -12,9 +11,6 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {}
-}
 export default connect(
   mapStateToProps,
   dispatch => bindActionCreators({ ...actions }, dispatch)

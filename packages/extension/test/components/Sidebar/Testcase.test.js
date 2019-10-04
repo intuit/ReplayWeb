@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { cleanup, render } from '@testing-library/react'
 import Testcase from '../../../src/components/Sidebar/Testcase.jsx'
 
 afterEach(cleanup)

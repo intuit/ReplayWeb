@@ -51,11 +51,10 @@ describe('runInParallelAllRegions', () => {
   })
   describe('runInParallelAllRegions', () => {
     it('should throw error if no json tests found', () => {
-      let contents = ''
       runInParallelAllRegionsRewire.__Rewire__('fs', {
         existsSync: path => true,
         mkdtempSync: () => '/test/.replay-tests-123',
-        writeFileSync: (path, cont) => (contents = cont)
+        writeFileSync: (path, cont) => {}
       })
       runInParallelAllRegionsRewire.__Rewire__(
         'getJsonTestFiles',
@@ -71,11 +70,10 @@ describe('runInParallelAllRegions', () => {
       ).toThrow('No test files found')
     })
     it('should throw error if loginBlocks path is undefined', () => {
-      let contents = ''
       runInParallelAllRegionsRewire.__Rewire__('fs', {
         existsSync: path => true,
         mkdtempSync: () => '/test/.replay-tests-123',
-        writeFileSync: (path, cont) => (contents = cont),
+        writeFileSync: (path, cont) => {},
         readFileSync: path => '{"key": "value"}'
       })
       runInParallelAllRegionsRewire.__Rewire__(
@@ -91,11 +89,10 @@ describe('runInParallelAllRegions', () => {
       )
     })
     it('should throw error if loginBlocks does not exist', () => {
-      let contents = ''
       runInParallelAllRegionsRewire.__Rewire__('fs', {
         existsSync: path => false,
         mkdtempSync: () => '/test/.replay-tests-123',
-        writeFileSync: (path, cont) => (contents = cont),
+        writeFileSync: (path, cont) => {},
         readFileSync: path => '{"key": "value"}'
       })
       runInParallelAllRegionsRewire.__Rewire__(
@@ -115,11 +112,10 @@ describe('runInParallelAllRegions', () => {
       )
     })
     it('should throw error if no login blocks', () => {
-      let contents = ''
       runInParallelAllRegionsRewire.__Rewire__('fs', {
         existsSync: path => true,
         mkdtempSync: () => '/test/.replay-tests-123',
-        writeFileSync: (path, cont) => (contents = cont),
+        writeFileSync: (path, cont) => {},
         readFileSync: path => '{"key": "value"}'
       })
       runInParallelAllRegionsRewire.__Rewire__(

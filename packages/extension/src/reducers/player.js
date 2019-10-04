@@ -1,5 +1,5 @@
 import { types } from '../actions/action_types'
-import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils'
+import { setIn, updateIn } from '../common/utils'
 import * as C from '../common/constant'
 
 const T = types // so that auto complete in webstorm doesn't go crazy

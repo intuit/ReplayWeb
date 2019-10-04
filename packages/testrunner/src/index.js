@@ -137,7 +137,7 @@ export function removeTemporaryFiles() {
  + * @returns {Array<String>} - If directory exists, then returns an array of full path names to all JSON files found. Otherwise, returns an empty array.
  + */
 export function getJsonFiles(dir, callback) {
-  const filesList = new Array()
+  const filesList = []
   fs.readdirSync(dir).forEach(f => {
     const dirEntry = path.join(dir, f)
     if (fs.statSync(dirEntry).isDirectory()) {

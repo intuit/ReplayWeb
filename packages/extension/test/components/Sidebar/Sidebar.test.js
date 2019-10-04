@@ -101,7 +101,7 @@ describe('Sidebar', () => {
       { id: 2, name: 'Test Case b' },
       { id: 3, name: 'Test Case a' }
     ]
-    const { container, getByText, getAllByText } = renderSidebar({ testCases })
+    const { getByText, getAllByText } = renderSidebar({ testCases })
     expect(getByText('Test Case a')).not.toBeNull()
     expect(getByText('Test Case b')).not.toBeNull()
     expect(getByText('Test Case c')).not.toBeNull()
@@ -118,7 +118,7 @@ describe('Sidebar', () => {
     ]
     const project = { id: 2, name: 'Project 2' }
     const selectProject = jest.fn()
-    const { container, getAllByText, getByText, queryByText } = renderSidebar({
+    const { getAllByText, getByText, queryByText } = renderSidebar({
       projects,
       project,
       selectProject

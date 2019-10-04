@@ -60,7 +60,6 @@ describe('ShareBlockModal', () => {
     const { queryByText, getByTestId, queryByTestId, rerender } = render(
       <ShareBlockModal
         visible={true}
-        blockShareConfig={{}}
         blockShareConfigError={false}
         blockShareConfigErrorMessage=""
         blockShareConfig={{}}
@@ -76,7 +75,6 @@ describe('ShareBlockModal', () => {
     rerender(
       <ShareBlockModal
         visible={true}
-        blockShareConfig={{}}
         blockShareConfigError={false}
         blockShareConfigErrorMessage=""
         blockShareConfig={{}}
@@ -155,7 +153,6 @@ describe('ShareBlockModal', () => {
     const { queryByText, getByTestId, queryByTestId, rerender } = render(
       <ShareBlockModal
         visible={true}
-        blockShareConfig={{}}
         blockShareConfigError={false}
         blockShareConfigErrorMessage=""
         blockShareConfig={{}}
@@ -171,7 +168,6 @@ describe('ShareBlockModal', () => {
     rerender(
       <ShareBlockModal
         visible={true}
-        blockShareConfig={{}}
         blockShareConfigError={false}
         blockShareConfigErrorMessage=""
         blockShareConfig={{}}

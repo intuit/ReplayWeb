@@ -18,7 +18,6 @@ import {
   selectProject,
   __RewireAPI__ as projectRewire
 } from '../../src/actions/project'
-import * as C from '../../src/common/constant'
 jest.mock('../../src/actions/editor')
 jest.mock('../../src/actions/filesystem')
 jest.mock('../../src/actions/utilities')

@@ -62,7 +62,7 @@ export async function findLocalImages(image) {
 export async function startOrchestrator(port) {
   const localImages = await findLocalImages(imageName(true))
   if (localImages.length === 0) {
-    const pull = await pullImage(imageName())
+    await pullImage(imageName())
   }
   const container = await docker.createContainer({
     Image: imageName(localImages.length > 0),
@@ -79,5 +79,5 @@ export async function startOrchestrator(port) {
       }
     }
   })
-  return await container.start()
+  return container.start()
 }

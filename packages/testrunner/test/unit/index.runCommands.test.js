@@ -153,6 +153,7 @@ describe('runCommands', () => {
     runCommandsRewire.__Rewire__('makeHooks', () => hooks)
     runCommandsRewire.__ResetDependency__('runCommand')
     runCommandsRewire.__Rewire__('runCommand', c =>
+      // eslint-disable-next-line  prefer-promise-reject-errors
       Promise.reject('runCommand failed')
     )
     const testDef = {

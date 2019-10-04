@@ -1,5 +1,7 @@
+/* global chrome */
+
 import { log as splunkLog } from '@replayweb/utils'
-import github from 'github-api'
+import Github from 'github-api'
 
 const repos = ['BLOCK_STORE'].reduce((prev, cur) => {
   prev[cur] = cur
@@ -51,7 +53,7 @@ export function logMessage(message) {
  */
 export function getGithubRepoFromBlockShareConfig(config) {
   const githubAuth = getGithubAuthFromBlockShareConfig(config)
-  const gh = new github(githubAuth, config.blockStore.github_api_url)
+  const gh = new Github(githubAuth, config.blockStore.github_api_url)
   return gh.getRepo(config.blockStore.repoUsername, config.blockStore.repo)
 }
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {

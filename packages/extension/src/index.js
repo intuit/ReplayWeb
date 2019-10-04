@@ -32,7 +32,6 @@ import {
   addScreenshot,
   startPlaying,
   stopPlaying,
-  readBlockShareConfig,
   updateTestCasePlayStatus,
   updateBlockPlayStatus,
   addPlayerErrorCommandIndex,
@@ -66,7 +65,7 @@ const store = createStore(
 )
 
 const rootEl = document.getElementById('root')
-const render = Component =>
+const render = Component => {
   ReactDOM.render(
     <LocaleProvider locale={enUS}>
       <Provider store={store}>
@@ -75,6 +74,7 @@ const render = Component =>
     </LocaleProvider>,
     rootEl
   )
+}
 
 // Note: listen to any db changes and restore all data from db to redux store
 // All test cases are stored in indexeddb (dexie)
@@ -282,14 +282,11 @@ const bindPlayer = () => {
           )
         }
 
-        let hasError = false
-
         if (result && result.log) {
           if (result.log.info) store.dispatch(addLog('info', result.log.info))
           if (result.log.error) {
             store.dispatch(addPlayerErrorCommandIndex(state.nextIndex))
             store.dispatch(addLog('error', result.log.error))
-            hasError = true
           }
         }
 
@@ -484,13 +481,14 @@ const bindIpcEvent = () => {
   if (!csIpc) return
   csIpc.onAsk((cmd, args) => {
     switch (cmd) {
-      case 'INSPECT_RESULT':
+      case 'INSPECT_RESULT': {
         store.dispatch(doneInspecting())
         const { inspectTarget } = store.getState().editor
         store.dispatch(
           updateSelectedCommand({ parameters: { [inspectTarget]: args.xpath } })
         )
         return true
+      }
 
       case 'RECORD_ADD_COMMAND':
         if (

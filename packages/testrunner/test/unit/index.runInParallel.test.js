@@ -3,7 +3,6 @@ import {
   getAllBlockContents,
   getJsonTestFiles,
   getJsonFiles,
-  log,
   __RewireAPI__ as runInParallelRewire
 } from '../../src'
 
@@ -124,7 +123,7 @@ describe('runInParallel', () => {
           }
         })
       })
-      const subDirs = new Array()
+      const subDirs = []
       const files = getJsonFiles('./testPath', subDir => {
         subDirs.push(subDir)
       })
@@ -236,10 +235,9 @@ describe('runInParallel', () => {
   })
   describe('runInParallel', () => {
     it('should throw error if no json tests found', () => {
-      let contents = ''
       runInParallelRewire.__Rewire__('fs', {
         mkdtempSync: () => '/test/.replay-tests-123',
-        writeFileSync: (path, cont) => (contents = cont)
+        writeFileSync: (path, cont) => {}
       })
       runInParallelRewire.__Rewire__('getJsonTestFiles', testsPath => [])
       expect(runInParallel.bind(null, './tests')).toThrow('No test files found')

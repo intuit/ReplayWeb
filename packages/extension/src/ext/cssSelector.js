@@ -19,24 +19,21 @@ const mapDOM = (element, json) => {
     if (nodeList != null) {
       if (nodeList.length) {
         object.children = []
-        for (var i = 0; i < nodeList.length; i++) {
-          if (nodeList[i].nodeType == 3) {
+        for (let i = 0; i < nodeList.length; i++) {
+          if (nodeList[i].nodeType === 3) {
             const nodeValue = nodeList[i].nodeValue.trim()
             if (nodeValue && object.data.nn !== 'script')
               object.text = nodeValue
           } else {
             object.children.push({})
-            treeHTML(
-              nodeList[i],
-              object.children[object.children.length - 1]
-            )
+            treeHTML(nodeList[i], object.children[object.children.length - 1])
           }
         }
       }
     }
     if (element.attributes != null) {
       if (element.attributes.length) {
-        for (var i = 0; i < element.attributes.length; i++) {
+        for (let i = 0; i < element.attributes.length; i++) {
           const attrName = element.attributes[i].nodeName
           const attrValue = element.attributes[i].nodeValue
           if (attrName === 'class') {

@@ -10,7 +10,6 @@ import {
 } from '../../actions'
 import NewBlockModal from '../../components/Modals/NewBlockModal'
 import * as C from '../../common/constant'
-import github from 'github-api'
 const mapStateToProps = state => {
   return {
     visible: state.modals.newBlockModal,

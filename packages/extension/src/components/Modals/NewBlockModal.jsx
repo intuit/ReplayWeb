@@ -1,12 +1,7 @@
 import React from 'react'
-import { Modal, Button, Input, message, Menu, Alert } from 'antd'
+import { Modal, Button, Input, Menu, Alert } from 'antd'
 import MenuItem from 'antd/lib/menu/MenuItem'
-import {
-  allRepos,
-  getGithubRepoFromBlockShareConfig
-} from '../../actions/utilities'
-
-const R = allRepos
+import { getGithubRepoFromBlockShareConfig } from '../../actions/utilities'
 
 export default class NewBlockModal extends React.Component {
   constructor(props) {
@@ -21,7 +16,8 @@ export default class NewBlockModal extends React.Component {
   }
 
   onCancel = i => {
-    changeModalState('newBlockModal', false)
+    // TODO: where is this code?
+    // changeModalState('newBlockModal', false)
   }
 
   readGithubReposIfNecessary = () => {

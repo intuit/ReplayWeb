@@ -2,11 +2,10 @@ import {
   validatedBlockShareConfig,
   getBlockShareConfig,
   getGithubRepoFromBlockShareConfig,
-  nativeMessage,
   __RewireAPI__ as utilitiesRewire
 } from '../../src/actions/utilities'
 
-import github from 'github-api'
+import Github from 'github-api'
 
 const A_VALID_BLOCK_SHARE_CONFIG = {
   blockStore: {
@@ -179,7 +178,7 @@ describe('action utilities', () => {
   })
 
   it('should get valid github object from a valid config', () => {
-    const gh = new github(
+    const gh = new Github(
       {
         username: A_VALID_BLOCK_SHARE_CONFIG.blockStore.authUsername,
         token: A_VALID_BLOCK_SHARE_CONFIG.blockStore.authToken

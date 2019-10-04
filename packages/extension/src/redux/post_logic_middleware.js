@@ -2,7 +2,7 @@
 // after the action dispatched and state updated
 export default function postLogicMiddleWare(extra) {
   return ({ dispatch, getState }) => next => action => {
-    const { post, ...rest } = action
+    const { post } = action
 
     if (post && typeof post === 'function') {
       setTimeout(() => {

@@ -1,6 +1,5 @@
 import { types as T } from '../actions/action_types'
-import { setIn, updateIn, compose, pick, updateCmd } from '../common/utils'
-import { normalizeCommand } from '../models/test_case_model'
+import { updateIn } from '../common/utils'
 import * as C from '../common/constant'
 
 // * editor

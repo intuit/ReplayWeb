@@ -1,11 +1,10 @@
 import isEqual from 'lodash.isequal'
 import { types } from '../actions/action_types'
-import { setIn, updateIn, pick, updateCmd, filtering } from '../common/utils'
+import { setIn, updateIn, pick, filtering } from '../common/utils'
 import { normalizeCommand } from '../models/test_case_model'
 import * as C from '../common/constant'
 import { compose } from 'redux'
 import { newCommand } from '../common/commands'
-import github from 'github-api'
 
 const T = types // so that auto complete in webstorm doesn't go crazy
 
@@ -134,7 +133,7 @@ export const updateHasUnSaved = state => {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case T.APPEND_COMMAND:
+    case T.APPEND_COMMAND: {
       const cmds = state.editing.commands
       if (cmds.length === 1 && cmds[0].command === '') {
         return updateHasUnSaved(
@@ -157,6 +156,7 @@ export default function reducer(state = initialState, action) {
           )(state)
         )
       }
+    }
 
     case T.DUPLICATE_COMMAND:
       return updateHasUnSaved(
@@ -180,6 +180,7 @@ export default function reducer(state = initialState, action) {
             )
         )(state)
       )
+
     case T.REORDER_COMMAND:
       return updateHasUnSaved(
         compose(
@@ -258,7 +259,7 @@ export default function reducer(state = initialState, action) {
             updateIn(
               ['editing', 'commands'],
               commands => {
-                const { index, command } = action.data
+                const { index } = action.data
                 const newCmds = [...commands]
                 const cmds = state.editing.commands
                 if (cmds.length === 1) {
@@ -379,6 +380,7 @@ export default function reducer(state = initialState, action) {
           state
         )
       )
+
     case T.REMOVE_SUITE_TEST:
       return updateHasUnSaved(
         updateIn(
@@ -402,7 +404,7 @@ export default function reducer(state = initialState, action) {
         nextState => setIn(['shared'], true, nextState)
       )(state)
 
-    case T.UPDATE_SHARE_LINKS:
+    case T.UPDATE_SHARE_LINKS: {
       const { shareLink } = action
       return compose(
         setIn(['editing', 'shareLink'], shareLink),
@@ -410,8 +412,9 @@ export default function reducer(state = initialState, action) {
           links ? links.concat(shareLink) : [shareLink]
         )
       )(state)
+    }
 
-    case T.SAVE_EDITING_AS_NEW:
+    case T.SAVE_EDITING_AS_NEW: {
       const { list, testCase } = action.data
       return compose(
         doCommandFilter,
@@ -428,6 +431,7 @@ export default function reducer(state = initialState, action) {
             nextState
           )
       )(state)
+    }
 
     case T.SAVE_EDITING_BLOCK_AS_EXISTED:
       return compose(
@@ -435,7 +439,7 @@ export default function reducer(state = initialState, action) {
         setIn(['blocks'], action.data)
       )(state)
 
-    case T.SAVE_EDITING_BLOCK_AS_NEW:
+    case T.SAVE_EDITING_BLOCK_AS_NEW: {
       const { list: blocksList, block } = action.data
       return compose(
         doCommandFilter,
@@ -452,13 +456,15 @@ export default function reducer(state = initialState, action) {
             nextState
           )
       )(state)
+    }
+
     case T.SAVE_EDITING_SUITE_AS_EXISTED:
       return compose(
         setIn(['editing', 'meta', 'hasUnsaved'], false),
         setIn(['suites'], action.data)
       )(state)
 
-    case T.SAVE_EDITING_SUITE_AS_NEW:
+    case T.SAVE_EDITING_SUITE_AS_NEW: {
       const { list: suiteList, suite } = action.data
       return compose(
         nextState => setIn(['suites'], suiteList, nextState),
@@ -474,10 +480,10 @@ export default function reducer(state = initialState, action) {
             nextState
           )
       )(state)
+    }
 
     case T.SET_TEST_CASES:
       // need to check if current testcase is already in
-      const meta = state.editing.meta
       if (action.data.length === 0 && state.status === C.EDITOR_STATUS.TESTS) {
         return compose(
           doCommandFilter,
@@ -652,7 +658,6 @@ export default function reducer(state = initialState, action) {
 
     case T.REMOVE_CURRENT_TEST_CASE: {
       const { id } = state.editing.meta.src
-      const { selectedIndex } = state.editing.meta
       const candidates = state.testCases.filter(tc => tc.id !== id)
       const lastIndex = state.testCases.findIndex(tc => tc.id === id)
       let editing
@@ -688,7 +693,6 @@ export default function reducer(state = initialState, action) {
 
     case T.REMOVE_CURRENT_BLOCK: {
       const { id } = state.editing.meta.src
-      const { selectedIndex } = state.editing.meta
       const candidates = state.blocks.filter(block => block.id !== id)
       const lastIndex = state.blocks.findIndex(block => block.id === id)
       let editing
@@ -723,7 +727,6 @@ export default function reducer(state = initialState, action) {
     }
     case T.REMOVE_CURRENT_SUITE: {
       const { id } = state.editing.meta.src
-      const { selectedIndex } = state.editing.meta
       const candidates = state.suites.filter(block => block.id !== id)
       const lastIndex = state.suites.findIndex(block => block.id === id)
       let editing

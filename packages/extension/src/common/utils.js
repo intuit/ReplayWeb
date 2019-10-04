@@ -81,9 +81,7 @@ export const range = (start, end, step = 1) => {
 // create a curry version of the passed in function
 export const partial = fn => {
   const len = fn.length
-  let arbitary
-
-  arbitary = (curArgs, leftArgCnt) => (...args) => {
+  const arbitary = (curArgs, leftArgCnt) => (...args) => {
     if (args.length >= leftArgCnt) {
       return fn.apply(null, curArgs.concat(args))
     }

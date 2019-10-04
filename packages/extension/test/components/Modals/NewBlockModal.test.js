@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('NewBlockModal', () => {
   it('disables block importing on invalid blockShareConfig', () => {
-    const { getByText, getByTestId } = render(
+    const { getByText } = render(
       <NewBlockModal
         visible={true}
         blockShareConfig={{}}

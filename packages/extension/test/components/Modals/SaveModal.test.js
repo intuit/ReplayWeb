@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import {
-  default as SaveModal,
+import SaveModal, {
   SaveBlockModal,
   SaveMultiSelectModal,
   SaveTestCaseModal,

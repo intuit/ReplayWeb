@@ -2,7 +2,6 @@ import { type3, types as T } from './action_types'
 import { until, filtering } from '../common/utils'
 import csIpc from '../common/ipc/ipc_cs'
 import storage from '../common/storage'
-import log from '../common/log'
 import { nativeMessage, logMessage, getBlockShareConfig } from './utilities'
 
 const saveConfig = (function() {

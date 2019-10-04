@@ -18,8 +18,8 @@ export function log(message, verbose = false) {
  */
 export function tryRequire(packageName, parameters) {
   try {
-    const pack = require(packageName)
-    return new pack(parameters)
+    const Pack = require(packageName)
+    return new Pack(parameters)
   } catch (e) {
     throw new Error(
       `Could not find plugin: "${packageName}", did you forget to install it? -- Actual error: ${e}`
@@ -135,7 +135,7 @@ export function getSelector(str) {
         return `[automationid="${value}"]`
 
       case 'id':
-        return `//*[@id=\"${value.replace(':', '\\:')}\"]`
+        return `//*[@id="${value.replace(':', '\\:')}"]`
 
       case 'title':
         return `.//*[contains(@${method} ,"${value}")]`

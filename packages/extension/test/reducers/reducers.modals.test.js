@@ -1,7 +1,6 @@
-import { initialState } from reducer from '../../src/reducers/modals'
+import reducer, { initialState } from '../../src/reducers/modals'
 
 import { types } from '../../src/actions/action_types'
-import * as C from '../../src/common/constant'
 
 describe('modals reducer', () => {
   ;[
@@ -27,7 +26,6 @@ describe('modals reducer', () => {
       expect(reducer(initialState, action)).toEqual(expected)
     })
     it(`should close ${m} modal`, () => {
-      const init = Object.assign({}, initialState, { [m]: true })
       const action = {
         type: types.MODAL_STATE,
         modal: m,

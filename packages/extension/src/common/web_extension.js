@@ -1,4 +1,4 @@
-/* global chrome browser */
+/* global chrome */
 
 // Note: it's an adapter for both chrome and web extension API
 // chrome and web extension API have almost the same API signatures

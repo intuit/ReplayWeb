@@ -38,13 +38,6 @@ export async function runCommand(
     context,
     browser
   )
-  const tools = {
-    getSelector,
-    getAndWaitForElement,
-    implicitWait,
-    context,
-    hooks
-  }
 
   switch (command) {
     case 'assertAttribute': {
@@ -273,7 +266,7 @@ export async function runCommand(
     case 'deleteAllCookies':
       return browser.deleteCookies()
 
-    case 'dragAndDropToObject':
+    case 'dragAndDropToObject': {
       const { startTarget, endTarget } = finalParameters
       return Promise.all([
         getAndWaitForElement(
@@ -291,6 +284,7 @@ export async function runCommand(
           hooks
         )
       ]).then(([el, _]) => el.dragAndDrop(getSelector(endTarget)))
+    }
 
     case 'http': {
       const { url, method = 'GET', body, headers = {}, key } = finalParameters

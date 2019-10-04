@@ -37,11 +37,11 @@ class Dashboard extends React.Component {
           {viewLog}
         </div>
         <div className="online-help">
-          <a href={C.urlHomePage} target="_blank">
+          <a href={C.urlHomePage} target="_blank" rel="noopener noreferrer">
             Documentation
           </a>
           <span> - </span>
-          <a href={C.urlReleases} target="_blank">
+          <a href={C.urlReleases} target="_blank" rel="noopener noreferrer">
             Release Notes
           </a>
         </div>

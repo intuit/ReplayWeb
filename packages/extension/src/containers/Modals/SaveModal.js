@@ -7,15 +7,11 @@ import {
   saveEditingBlockAsNew,
   saveEditingAsNew,
   saveEditingSuiteAsNew,
-  setNextTest,
-  setNextBlock,
-  setNextSuite,
   selectProject,
   editNext,
   clearNext
 } from '../../actions'
 import SaveModal from '../../components/Modals/SaveModal'
-import * as C from '../../common/constant'
 const mapStateToProps = state => {
   return {
     visible: state.modals.save,

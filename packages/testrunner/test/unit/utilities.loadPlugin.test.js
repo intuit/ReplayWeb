@@ -11,13 +11,13 @@ describe('loadPlugin', () => {
   it('should load a string plugin definition', () => {
     const mock = jest.fn()
     utilitiesRewire.__Rewire__('tryRequire', mock)
-    const plugin = loadPlugin('testplugin')
+    loadPlugin('testplugin')
     expect(mock).toHaveBeenCalledWith('testplugin', {})
   })
   it('should load a array plugin definition', () => {
     const mock = jest.fn()
     utilitiesRewire.__Rewire__('tryRequire', mock)
-    const plugin = loadPlugin(['testplugin', { option: 'value' }])
+    loadPlugin(['testplugin', { option: 'value' }])
     expect(mock).toHaveBeenCalledWith('testplugin', { option: 'value' })
   })
   it('should throw an error for an invalid plugin definition', () => {

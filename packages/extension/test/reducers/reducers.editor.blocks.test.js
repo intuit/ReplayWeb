@@ -1,7 +1,6 @@
-import { initialState } from reducer from '../../src/reducers/editor'
+import reducer, { initialState } from '../../src/reducers/editor'
 
 import { types } from '../../src/actions/action_types'
-import * as C from '../../src/common/constant'
 import { newCommand } from '../../src/common/commands'
 
 describe('editor reducer', () => {

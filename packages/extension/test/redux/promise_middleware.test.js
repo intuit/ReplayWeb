@@ -8,7 +8,7 @@ describe('promiseMiddleWare', () => {
       types: [1, 2, 3],
       foo: 'bar'
     }
-    const resp = promiseMiddleWare()({})(next)(action)
+    promiseMiddleWare()({})(next)(action)
     expect(next).toHaveBeenCalledWith(action)
   })
 
@@ -21,7 +21,7 @@ describe('promiseMiddleWare', () => {
       types: [1, 2, 3],
       foo: 'bar'
     }
-    const resp = promiseMiddleWare()({})(next)(action)
+    promiseMiddleWare()({})(next)(action)
     expect(next).toHaveBeenCalledTimes(1)
     expect(next).toHaveBeenCalledWith({ foo: 'bar', type: 1 })
     expect(promise).toHaveBeenCalledTimes(1)

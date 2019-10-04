@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, Icon, Tooltip } from 'antd'
 import { getPlayer } from '../../common/player'
-import PlayMenu from '../../containers/dashboard/PlayMenu'
 
 const ResumeButton = props => {
   const resume = () => {

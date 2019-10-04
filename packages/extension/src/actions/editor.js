@@ -1,5 +1,5 @@
 import { type3, types as T } from './action_types'
-import { pick, on, map, updateIn, setIn } from '../common/utils'
+import { pick, updateIn, setIn } from '../common/utils'
 import csIpc from '../common/ipc/ipc_cs'
 import storage from '../common/storage'
 import testCaseModel, { normalizeCommand } from '../models/test_case_model'
@@ -573,16 +573,14 @@ export function editNext() {
         : state.editor.nextBlock !== null
         ? C.EDITOR_STATUS.BLOCKS
         : C.EDITOR_STATUS.TESTS
+
     switch (type) {
       case C.EDITOR_STATUS.TESTS:
         return dispatch(editNextTest())
-        break
       case C.EDITOR_STATUS.BLOCKS:
         return dispatch(editNextBlock())
-        break
       case C.EDITOR_STATUS.SUITES:
         return dispatch(editNextSuite())
-        break
     }
   }
 }
@@ -1081,7 +1079,6 @@ export function renameSuite(name) {
   return (dispatch, getState) => {
     const state = getState()
     const id = state.editor.editing.meta.src.id
-    const oldName = state.editor.editing.meta.src.name
     const suite = state.editor.suites.find(suite => suite.id === id)
     const sameName = state.editor.suites.find(
       suite => suite.id !== id && suite.name === name
@@ -1158,7 +1155,7 @@ export function removeCurrentSuite() {
   return (dispatch, getState) => {
     const state = getState()
     const id = state.editor.editing.meta.src.id
-    const name = state.editor.editing.meta.src.name
+
     return suiteModel
       .remove(id)
       .then(() => {
@@ -1185,13 +1182,10 @@ export function duplicate(newName) {
     switch (getState().editor.status) {
       case C.EDITOR_STATUS.TESTS:
         return dispatch(duplicateTestCase(newName))
-        break
       case C.EDITOR_STATUS.BLOCKS:
         return dispatch(duplicateBlock(newName))
-        break
       case C.EDITOR_STATUS.SUITES:
         return dispatch(duplicateSuite(newName))
-        break
     }
   }
 }

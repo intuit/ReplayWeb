@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { changeModalState } from '../../actions'
 import PlayMenu from '../../components/dashboard/PlayMenu'
 const mapStateToProps = state => {

@@ -1,3 +1,5 @@
+/* eslint-disable prefer-promise-reject-errors */
+
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {

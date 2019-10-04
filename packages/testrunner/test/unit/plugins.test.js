@@ -14,7 +14,7 @@ describe('plugins', () => {
   it('should apply plugins if they load', () => {
     const mock = jest.fn()
     rewireAPI.__Rewire__('loadPlugin', () => ({ apply: mock }))
-    const hooks = makeHooks(['test'])
+    makeHooks(['test'])
     expect(mock).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,10 +1,5 @@
 import { connect } from 'react-redux'
-import {
-  addTestToSuite,
-  removeTestFromSuite,
-  createSuite,
-  updateSuite
-} from '../../actions'
+import { addTestToSuite, removeTestFromSuite } from '../../actions'
 
 import SuiteEditor from '../../components/dashboard/SuiteEditor'
 

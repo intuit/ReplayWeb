@@ -4,7 +4,6 @@ import log from './log'
 import dragMock from './drag_mock'
 import inspector from './inspector'
 import {
-  assignABTest,
   regExpMatch,
   replaceAllFields,
   traverseJson,
@@ -680,7 +679,7 @@ export const run = async (commandObject, csIpc, helpers) => {
       })
     }
 
-    case 'open':
+    case 'open': {
       const { url } = finalParameters
       return until('document.body', () => {
         return {
@@ -691,6 +690,7 @@ export const run = async (commandObject, csIpc, helpers) => {
         window.location.href = url
         return true
       })
+    }
 
     case 'pause': {
       const { millis } = finalParameters

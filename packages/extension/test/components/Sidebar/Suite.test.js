@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { cleanup, render } from '@testing-library/react'
 import Suite from '../../../src/components/Sidebar/Suite.jsx'
 
 afterEach(cleanup)

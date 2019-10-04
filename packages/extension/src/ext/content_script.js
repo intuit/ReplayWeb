@@ -2,11 +2,10 @@ import csIpc from '../common/ipc/ipc_cs'
 import { postMessage, onMessage } from '../common/ipc/cs_postmessage'
 import inspector from '../common/inspector'
 import * as C from '../common/constant'
-import { setIn, updateIn, until } from '../common/utils'
+import { updateIn, until } from '../common/utils'
 import { run, getElementByLocator } from '../common/command_runner'
 import log from '../common/log'
 import { getSelector } from './cssSelector'
-import { message } from 'antd'
 import storage from '../common/storage'
 
 const MASK_CLICK_FADE_TIMEOUT = 2000
@@ -326,10 +325,6 @@ const onDragDrop = (function() {
       case 'drop': {
         if (!dragStart) return
         const tmp = inspector.getLocator(e.target, true)
-        const drop = {
-          value: tmp.target,
-          valueOptions: tmp.targetOptions
-        }
 
         reportCommand({
           command: 'dragAndDropToObject',
@@ -467,7 +462,7 @@ const bindIPCListener = () => {
 
       case 'FIND_DOM': {
         try {
-          const $el = getElementByLocator(args.locator)
+          getElementByLocator(args.locator)
           return true
         } catch (e) {
           return false
@@ -635,23 +630,23 @@ const hackAlertConfirmPrompt = (doc = document) => {
   s.parentNode.removeChild(s)
 }
 
-const restoreAlertConfirmPrompt = () => {
-  const script = `
-    if (window.oldAlert)    window.alert = window.oldAlert
-    if (window.oldConfirm)  window.confirm = window.oldConfirm
-    if (window.oldPrompt)   window.prompt = window.oldPrompt
-  `
-  const s = document.constructor.prototype.createElement.call(
-    document,
-    'script'
-  )
+// const restoreAlertConfirmPrompt = () => {
+//   const script = `
+//     if (window.oldAlert)    window.alert = window.oldAlert
+//     if (window.oldConfirm)  window.confirm = window.oldConfirm
+//     if (window.oldPrompt)   window.prompt = window.oldPrompt
+//   `
+//   const s = document.constructor.prototype.createElement.call(
+//     document,
+//     'script'
+//   )
 
-  s.setAttribute('type', 'text/javascript')
-  s.text = script
+//   s.setAttribute('type', 'text/javascript')
+//   s.text = script
 
-  document.documentElement.appendChild(s)
-  s.parentNode.removeChild(s)
-}
+//   document.documentElement.appendChild(s)
+//   s.parentNode.removeChild(s)
+// }
 
 const init = () => {
   // ** comment these two lines out for test **

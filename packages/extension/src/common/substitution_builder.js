@@ -14,6 +14,7 @@ export const getValuesFromCommands = commands => {
 export const pullValuesToBeReplaced = values => {
   if (!values) return []
   return values.map(value =>
+    // eslint-disable-next-line no-useless-escape
     value ? [value, getAllMatches(/\{([\w|\.]*?)\}/g, value)] : null
   )
 }
@@ -24,7 +25,6 @@ const getFormattedValues = subs => {
 // Builds up context one [command] at a time, recursivly traverses blocks
 export const buildContext = (blocks, context, command) => {
   if (!command) {
-    
   } else if (command.command === 'setContext') {
     context[command.parameters.key] = command.parameters.value
   } else if (command.command === 'runBlock') {
@@ -60,10 +60,10 @@ export function isEquivState(n, o) {
   // {random} -> 345 is functionally equal to {random} -> 999
   // {toy} -> Ball is not functionally equal to {toy} -> Block , because that means toy was redefined and we should rerender
 
-  if (Boolean(n) != Boolean(o)) return false
+  if (Boolean(n) !== Boolean(o)) return false
   if (!n && !o) return true
   // They both are defined
-  if (n.length != o.length) return false
+  if (n.length !== o.length) return false
   // Both equal size
   let isEquiv = true
   for (var index in n) {
@@ -71,8 +71,9 @@ export function isEquivState(n, o) {
       isEquiv = isEquivState(n[index], o[index]) && isEquiv
       continue
     }
+    // eslint-disable-next-line eqeqeq
     if (n[index] == o[index]) continue
-    if (n[0] == '{ssn}' || n[0] == '{random}' || n[0] == '{millis}') continue
+    if (n[0] === '{ssn}' || n[0] === '{random}' || n[0] === '{millis}') continue
 
     isEquiv = false
     break
@@ -93,7 +94,7 @@ export const updateSubstitutions = async (commands, blocks) => {
   const toBeReplaced = getFormattedValues(arOfSubs)
 
   const context = {}
-  return await Promise.all(
+  return Promise.all(
     toBeReplaced.map(function(singleRowOfSubs, index) {
       try {
         buildContext(blocks, context, commands[index])
@@ -122,6 +123,7 @@ export const updateSubstitutions = async (commands, blocks) => {
             toBeReplaced[valueIndex][subIndex][0],
             subValue
           ]
+          // eslint-disable-next-line eqeqeq
           if (tempFormatted[0] != tempFormatted[1]) return tempFormatted
         })
       }

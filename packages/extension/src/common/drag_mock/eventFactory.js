@@ -12,7 +12,7 @@ var dataTransferEvents = [
 
 function mergeInto(destObj, srcObj) {
   for (var key in srcObj) {
-    if (!srcObj.hasOwnProperty(key)) {
+    if (!srcObj[key]) {
       continue
     } // ignore inherited properties
 

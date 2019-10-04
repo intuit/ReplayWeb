@@ -8,7 +8,6 @@ import Testcase from './Testcase'
 import Block from './Block'
 import Suite from './Suite'
 
-const { Sider } = Layout
 const SubMenu = Menu.SubMenu
 
 class Sidebar extends React.Component {
@@ -165,7 +164,6 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const isEditingUntitled = !this.props.editing.meta.src
     const {
       testCases,
       project,
