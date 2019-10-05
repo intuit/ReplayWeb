@@ -7,6 +7,7 @@
 
 [![CircleCI](https://circleci.com/gh/intuit/ReplayWeb.svg?style=svg)](https://circleci.com/gh/intuit/ReplayWeb)
 [![Auto Release](https://img.shields.io/badge/release-auto.svg?colorA=888888&colorB=9B065A&label=auto)](https://github.com/intuit/auto)
+[![Code Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square&logo=producthunt)](https://github.com/prettier/prettier)
 
 ReplayWeb is a all-in-one toolbox that allows developers to focus on writing and maintaining application code, not test code. It is comprised of a Chrome extension that you install in your Chrome browser that allows you to record test scripts and saved and played back later. Once you have recorded scripts you can play them back from within the extension or on the command line. The command line execution uses the ReplayWeb Test Runner to automatically convert tests to WebDriverIO scripts that can be played back across different browsers.
 
