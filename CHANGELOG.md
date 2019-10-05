@@ -1,3 +1,21 @@
+# v1.0.0 (Fri Oct 04 2019)
+
+#### 💥  Breaking Change
+
+- Add code style badge [#12](https://github.com/intuit/ReplayWeb/pull/12) ([@Celeo](https://github.com/Celeo))
+
+#### 📝  Documentation
+
+- Add README badges [#11](https://github.com/intuit/ReplayWeb/pull/11) ([@Celeo](https://github.com/Celeo))
+- `@replayweb/host`
+  - Update README with correct setup links [#10](https://github.com/intuit/ReplayWeb/pull/10) ([@Celeo](https://github.com/Celeo))
+
+#### Authors: 1
+
+- Matt Boulanger ([@Celeo](https://github.com/Celeo))
+
+---
+
 # v0.1.3 (Fri Oct 04 2019)
 
 #### 🐛  Bug Fix
