@@ -1,7 +1,7 @@
 {
   "name": "@replayweb/extension",
   "private": true,
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "Chrome extension for ReplayWeb",
   "main": "./dist/app/main.js",
   "publishConfig": {
