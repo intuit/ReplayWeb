@@ -600,11 +600,14 @@ describe('Regex Replace', () => {
   it('should find case senstive words ', () => {
     expect(regExpMatch('/([A-Z])\\w+/', 'potato and Superman')).toEqual('Superman')
   })
+  it('should throw error if no match found ', () => {
+    expect(regExpMatch.bind(null, '/\\d/', 'hello world')).toThrow('No match')
+  })
   it('should fail if exact format of date does not match and year should be 4 digit number', () => {
     expect(regExpMatch('\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d', 'My number is 415-555-4242.')).toEqual('415-555-4242')
   })
-  it('should be equal to null because (^ indicates starting letter) starting letter is b in regex and f in text', () => {
-    expect(regExpMatch('^b\\w+', 'foobar')).toEqual(null)
+  it('should fail if returns anything except null or undefined because (^ indicates starting letter) starting letter is b in regex and f in text', () => {
+    expect(regExpMatch('^b\\w+', 'foobar')).toEqual('')
   })
   it('should find a string with b', () => {
     expect(regExpMatch('b\\w+', 'foobar')).toEqual('bar')
