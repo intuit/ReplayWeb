@@ -603,16 +603,16 @@ describe('Regex Replace', () => {
   it('should throw error if no match found ', () => {
     expect(regExpMatch.bind(null, '/\\d/', 'hello world')).toThrow('No match')
   })
-  it('should fail if exact format of date does not match and year should be 4 digit number', () => {
+  it('should find a date with the specific format', () => {
     expect(regExpMatch('/\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d/', 'My number is 415-555-4242.')).toEqual('415-555-4242')
   })
-  it('should fail if returns anything except null or undefined because (^ indicates starting letter) starting letter is b in regex and f in text', () => {
+  it('should throw "no match" because starting letter is b in regex and f in text', () => {
     expect(regExpMatch.bind(null,'/^b\\w+/', 'foobar')).toThrow('No match')
   })
   it('should find a string with b', () => {
     expect(regExpMatch('/b\\w+/', 'foobar')).toEqual('bar')
   })
-  it('should fail if space is included in the matching text', () => {
+  it('should find a word starting with one or more word characters and has "@" and ending with one or more word characters', () => {
     expect(regExpMatch('/\\w+@\\w+/', 'shashank is awesone yes@yes Cool! ')).toEqual('yes@yes')
   })
 })
