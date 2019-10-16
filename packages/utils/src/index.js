@@ -54,11 +54,11 @@ async function resolveMatches(string, defaults, context) {
         .reduce((acc, cv) => acc[cv], context)
       if (process && process.env && process.env[match[1]]) {
         return { old: match[0], new: process.env[match[1]] }
+      } else if (currentContext[parts[parts.length - 1]]) {
+        return { old: match[0], new: currentContext[parts[parts.length - 1]] }
       } else if (defaults[match[1]]) {
         const result = await defaults[match[1]].action()
         return { old: match[0], new: result }
-      } else if (currentContext[parts[parts.length - 1]]) {
-        return { old: match[0], new: currentContext[parts[parts.length - 1]] }
       }
     })
   )
