@@ -23,6 +23,11 @@ describe('String replacements', () => {
       expect(result).toEqual(todaysDate)
     )
   })
+  it('should replace todaysDate from context instead of defaults', () => {
+    return doReplace('{todaysDate}', { todaysDate: '01/01/2019' }).then(result =>
+      expect(result).toEqual('01/01/2019')
+    )
+  })
   it('should not replace {potato}', () => {
     return doReplace('{potato}').then(result =>
       expect(result).toEqual('{potato}')
@@ -35,7 +40,7 @@ describe('String replacements', () => {
   })
   it('should replace {millis}', () => {
     return doReplace('{millis}').then(result =>
-      expect(result).not.toEqual('{random}')
+      expect(result).not.toEqual('{millis}')
     )
   })
   it('should return a string with no braces', () => {
@@ -62,11 +67,6 @@ describe('String replacements', () => {
     return doReplace('{potato.type.0}', {
       potato: { type: ['pancakes'] }
     }).then(result => expect(result).toEqual('pancakes'))
-  })
-  it('should not replace a static string if no context', () => {
-    return doReplace('{potato}').then(result =>
-      expect(result).toEqual('{potato}')
-    )
   })
   it('should replace a string nested in a JSON string', () => {
     const todaysDate = moment().format('MM/D/YYYY')
