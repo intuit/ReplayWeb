@@ -613,7 +613,7 @@ describe('Regex Replace', () => {
     expect(regExpMatch('/b\\w+/', 'foobar')).toEqual('bar')
   })
   it('should find a word that starts with one or more word characters, has "@" and ends with one or more word characters', () => {
-    expect(regExpMatch('/\\w+@\\w+/', ' any string such as abc@gmail ')).toEqual('abc@gmail')
+    expect(regExpMatch('/\\w+@\\w+/', ' any string such as abc@gmail  ')).toEqual('abc@gmail')
   })
 })
 
