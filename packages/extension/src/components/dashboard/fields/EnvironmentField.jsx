@@ -6,7 +6,7 @@ class EnvironmentField extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      rawValue: ''
+      rawValue: this.getValue(this.props.selectedCmd.parameters)
     }
   }
 
@@ -16,7 +16,7 @@ class EnvironmentField extends React.Component {
       .join(',')
   }
 
-  updateParameters(e) {
+  updateParameters = (e) => {
     this.setState({ rawValue: e.target.value }, () => {
       if (this.state.rawValue.includes('=')) {
         const pairs = this.state.rawValue.split(',').map(split => {
@@ -36,12 +36,6 @@ class EnvironmentField extends React.Component {
       } else if (this.state.rawValue === '') {
         this.props.updateSelectedCommand({ parameters: {} }, true)
       }
-    })
-  }
-
-  componentWillMount() {
-    this.setState({
-      rawValue: this.getValue(this.props.selectedCmd.parameters)
     })
   }
 
