@@ -599,12 +599,22 @@ describe('Regex Replace', () => {
     expect(regExpMatch('/(\\d+\\.)?\\d+$/', '200,000 400')).toEqual('400')
   })
   it('should find case senstive words ', () => {
-    expect(regExpMatch('/([A-Z])\\w+/', 'potato and Superman')).toEqual(
-      'Superman'
-    )
+    expect(regExpMatch('/([A-Z])\\w+/', 'potato and Superman')).toEqual('Superman')
   })
   it('should throw error if no match found ', () => {
     expect(regExpMatch.bind(null, '/\\d/', 'hello world')).toThrow('No match')
+  })
+  it('should find a date with the specific format', () => {
+    expect(regExpMatch('/\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d/', 'My number is 415-555-4242.')).toEqual('415-555-4242')
+  })
+  it('should throw "no match" because starting letter is b in regex and f in text', () => {
+    expect(regExpMatch.bind(null,'/^b\\w+/', 'foobar')).toThrow('No match')
+  })
+  it('should find a string with b', () => {
+    expect(regExpMatch('/b\\w+/', 'foobar')).toEqual('bar')
+  })
+  it('should find a word that starts with one or more word characters, has "@" and ends with one or more word characters', () => {
+    expect(regExpMatch('/\\w+@\\w+/', ' any string such as abc@gmail ')).toEqual('abc@gmail')
   })
 })
 
