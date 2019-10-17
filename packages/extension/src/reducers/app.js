@@ -31,7 +31,8 @@ const initialState = {
   blockShareConfig: {},
   blockShareConfigError: true,
   blockShareConfigErrorMessage: 'Config not read yet',
-  userName: null
+  userName: null,
+  plugins: {}
 }
 
 export { initialState }
@@ -89,6 +90,18 @@ export default function reducer(state = initialState, action) {
         blockShareConfig: {},
         blockShareConfigError: true,
         blockShareConfigErrorMessage: action.err.toString()
+      }
+
+    case T.LOAD_PLUGINS_SUCCESS:
+      return {
+        ...state,
+        plugins: action.data
+      }
+
+    case T.LOAD_PLUGINS_FAIL:
+      return {
+        ...state,
+        plugins: {}
       }
 
     case T.ADD_LOGS:

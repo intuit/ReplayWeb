@@ -12,7 +12,8 @@ const promiseTypes = [
   'STOP_RECORDING',
   'START_INSPECTING',
   'STOP_INSPECTING',
-  'READ_BLOCK_SHARE_CONFIG'
+  'READ_BLOCK_SHARE_CONFIG',
+  'LOAD_PLUGINS'
 ].reduce((prev, cur) => {
   make3(cur).forEach(key => {
     prev[key] = key

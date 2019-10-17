@@ -2,7 +2,7 @@ import { type3, types as T } from './action_types'
 import { until, filtering } from '../common/utils'
 import csIpc from '../common/ipc/ipc_cs'
 import storage from '../common/storage'
-import { nativeMessage, logMessage, getBlockShareConfig } from './utilities'
+import { nativeMessage, logMessage, getBlockShareConfig, loadAllPlugins } from './utilities'
 
 const saveConfig = (function() {
   let lastSize = {}
@@ -219,5 +219,12 @@ export function groupSelect(index) {
 export function removeSelected() {
   return {
     type: T.EMPTY_ARRAY
+  }
+}
+
+export function loadPlugins() {
+  return {
+    types: type3('LOAD_PLUGINS'),
+    promise: () => loadAllPlugins()
   }
 }

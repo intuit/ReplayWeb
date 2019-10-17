@@ -1,6 +1,5 @@
-/* global chrome */
-
 import { log as splunkLog } from '@replayweb/utils'
+import doLoadAllPlugins from '@replayweb/plugin_manager'
 import Github from 'github-api'
 
 const repos = ['BLOCK_STORE'].reduce((prev, cur) => {
@@ -15,7 +14,7 @@ const repos = ['BLOCK_STORE'].reduce((prev, cur) => {
  */
 export function nativeMessage(payload) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendNativeMessage(
+    global.chrome.runtime.sendNativeMessage(
       'com.intuit.replayweb',
       payload,
       response => {
@@ -82,6 +81,31 @@ export function getBlockShareConfig() {
     },
     () => Promise.reject(new Error(BLOCK_SHARE_CONFIG_FILE_ERROR))
   )
+}
+
+/**
+ * Return the plugin configuration from the file on the disk.
+ * @returns {Promise} the configuration
+ */
+export function loadAllPlugins() {
+  const FILE_PATH = '~/.replay/plugins_config.json'
+  return nativeMessage({
+    type: 'readFile',
+    filepath: FILE_PATH
+  })
+    .then(
+      response => {
+        if (!('data' in response)) {
+          return Promise.reject(
+            new Error('Internal error - Could not read plugins config at ' + FILE_PATH)
+          )
+        }
+        return response.data
+      },
+      () => Promise.reject(new Error('Invalid plugins config at ' + FILE_PATH))
+    )
+    .then(data => doLoadAllPlugins(data.urls))
+    .then(plugins => Promise.resolve(plugins))
 }
 
 function getGithubAuthFromBlockShareConfig(config) {
