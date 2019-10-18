@@ -2,7 +2,8 @@ import {
   validatedBlockShareConfig,
   getBlockShareConfig,
   getGithubRepoFromBlockShareConfig,
-  __RewireAPI__ as utilitiesRewire
+  __RewireAPI__ as utilitiesRewire,
+  nativeMessage,
 } from '../../src/actions/utilities'
 
 import Github from 'github-api'
@@ -237,6 +238,46 @@ describe('action utilities', () => {
           'Block share config must be present and a valid JSON file at ~/.replay/block_share_config.json'
         )
       )
+    })
+  })
+
+  describe('nativeMessage', () => {
+      afterEach(() => {
+        jest.clearAllMocks()
+      })
+
+    it('nativeMessage should call chrome.runtime.sendNativeMessage with correct params and return Promise which resolves if response.success is true', async () => {
+        const sendNativeMessageMock = jest.fn().mockImplementation((arg1, arg2, responseHandler) => {
+            responseHandler({success: true, data: 'mock_success_data'})
+        })
+        const chromeMock = {
+            runtime: {
+                sendNativeMessage: sendNativeMessageMock
+            }
+        }
+        global.chrome = chromeMock
+        const messageRequest = nativeMessage('mockPayload')
+        expect(sendNativeMessageMock).toHaveBeenCalled()
+        expect(sendNativeMessageMock.mock.calls[0][0]).toEqual("com.intuit.replayweb")
+        expect(sendNativeMessageMock.mock.calls[0][1]).toEqual("mockPayload")
+        await expect(messageRequest).resolves.toEqual('mock_success_data')
+    })
+
+    it('nativeMessage should return Promise which rejects if response success is not true', async () => {
+        const sendNativeMessageMock = jest.fn().mockImplementation((arg1, arg2, responseHandler) => {
+            responseHandler({success: false, data: 'mock_failure_data'})
+        })
+        const chromeMock = {
+            runtime: {
+                sendNativeMessage: sendNativeMessageMock
+            }
+        }
+        global.chrome = chromeMock
+        const messageRequest = nativeMessage('mockPayload')
+        expect(sendNativeMessageMock).toHaveBeenCalled()
+        expect(sendNativeMessageMock.mock.calls[0][0]).toEqual("com.intuit.replayweb")
+        expect(sendNativeMessageMock.mock.calls[0][1]).toEqual("mockPayload")
+        await expect(messageRequest).rejects.toEqual('mock_failure_data')
     })
   })
 })
