@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import EnvironmentField from './EnvironmentField'
-import OneField from './OneField'
+import OneField from '../../../containers/dashboard/fields/OneField'
 
 const CommandField = props => {
   switch (props.selectedCmd && props.selectedCmd.command) {

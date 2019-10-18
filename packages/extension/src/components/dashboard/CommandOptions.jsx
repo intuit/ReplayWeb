@@ -11,8 +11,7 @@ import CommandDoc from './CommandDoc'
 
 const builtInCommandNames = allCommands
   .map(c => c.name)
-  .slice()
-  .sort() // slice to make copy
+  .slice() // slice to make copy
 
 const defaultDataSource = [newCommand]
 
@@ -95,6 +94,8 @@ class CommandOptions extends React.Component {
     const selectedCmd = dataSource[selectedIndex]
     const isCmdEditable = isPlayerStopped && !!selectedCmd
 
+    const allCommandNames = [ ...builtInCommandNames, Object.keys(this.props.commandPlugins) ].sort()
+
     return (
       <div className="form-group fields-wrapper">
         <Form>
@@ -115,7 +116,7 @@ class CommandOptions extends React.Component {
               }
               style={{ width: '60%', marginRight: '5px' }}
             >
-              {builtInCommandNames.map(cmd => (
+              {allCommandNames.map(cmd => (
                 <Select.Option value={cmd} key={cmd}>
                   {cmd}
                 </Select.Option>

@@ -5,10 +5,14 @@ import { commandsMap } from '../../../common/commands'
 import CommandButtons from './CommandButtons'
 
 const OneField = props => {
+  const allCommandsMap = { ...commandsMap, ... props.commandPlugins }
   const params =
     props.selectedCmd &&
-    commandsMap[props.selectedCmd.command] &&
-    commandsMap[props.selectedCmd.command].parameters
+    allCommandsMap[props.selectedCmd.command] &&
+    (
+      allCommandsMap[props.selectedCmd.command].parameters ||
+      allCommandsMap[props.selectedCmd.command].meta.parameters
+    )
   const updateParameter = (name, value) =>
     props.updateSelectedCommand({ parameters: { [name]: value } })
   return (
@@ -125,7 +129,8 @@ const OneField = props => {
 OneField.propTypes = {
   updateSelectedCommand: PropTypes.func,
   isCmdEditable: PropTypes.bool,
-  selectedCmd: PropTypes.object
+  selectedCmd: PropTypes.object,
+  commandPlugins: PropTypes.object.isRequired
 }
 
 export default OneField
