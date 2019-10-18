@@ -350,6 +350,38 @@ describe('xpath', () => {
     })
     expect(xpath(el)).toEqual('//*[@data-automation-id="parent"]/div')
   })
+  it('should process ignore pattern', () => {
+    let el = divBuilder({
+      parentNode: divBuilder({
+        'data-automation-id': 'ignoreThis'
+      })
+    })
+    expect(xpath(el, null, null, [/IGNORETHIS/i])).toEqual('/html/div/div')
+
+    el = divBuilder({
+      automationid: 'testAutomationId',
+    })
+    expect(xpath(el, null, null, [/automation/i])).toEqual('/html/div')
+
+    el = divBuilder({
+      id: 'id',
+    })
+    expect(xpath(el, null, null, [/id/i])).toEqual('/html/div')
+
+    el = divBuilder({
+      "data-auto-sel": 'auto sel',
+    })
+    expect(xpath(el, null, null, [/auto-sel/i])).toEqual('/html/div')
+  })
+  it('should handle given cur node', () => {
+    const parent = divBuilder({
+      name: 'parent'
+    })
+    const el = divBuilder({
+      parentNode: parent
+    })
+    expect(xpath(el, parent, null)).toEqual('//*[@name="parent"]/')
+  })
 })
 
 describe('getLocator', () => {
