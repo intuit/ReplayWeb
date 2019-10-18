@@ -1,6 +1,17 @@
 import React from 'react'
-import { cleanup, render, fireEvent } from '@testing-library/react'
+import { cleanup, render, fireEvent, act } from '@testing-library/react'
 import DuplicateModal from '../../../src/components/Modals/DuplicateModal.jsx'
+import { message } from 'antd'
+
+jest.mock('antd', () => {
+  return {
+    ...(jest.requireActual('antd')),
+    message: {
+      success: jest.fn(),
+      error: jest.fn()
+    }
+  }
+})
 
 afterEach(() => {
   cleanup()
@@ -36,5 +47,46 @@ describe('DuplicateModal', () => {
 
     expect(input.value).toEqual('duplicate me')
   })
+
+  describe('onDuplicate', () => {
+    let mockProps
+
+    beforeEach(() => {
+      mockProps = {
+        src: 'test',
+        visible: true,
+        duplicate: jest.fn().mockResolvedValue({}),
+        closeModal: jest.fn()
+      }
+    })
+
+    const renderModalAndClose = (props) => {
+      const {getByText} = render(getComponent(props))
+      const modalOk = getByText("Save")
+
+      return act(async () => {
+        fireEvent.click(modalOk)
+      })
+    }
+
+    it('should close the modal on success', async () => {
+      await renderModalAndClose(mockProps)
+
+      expect(mockProps.duplicate).toHaveBeenCalled()
+      expect(message.success).toHaveBeenCalledWith('successfully duplicated!', 1.5)
+      expect(mockProps.closeModal).toHaveBeenCalled()
+    })
+
+    it('should log error message on failure', async () => {
+      const errorMessage = 'error error'
+      mockProps.duplicate = jest.fn().mockRejectedValue({message: errorMessage})
+
+      await renderModalAndClose(mockProps)
+
+      expect(mockProps.duplicate).toHaveBeenCalled()
+      expect(message.error).toHaveBeenCalledWith(errorMessage, 1.5)
+    })
+  })
+
   // TODO more tests ...
 })
