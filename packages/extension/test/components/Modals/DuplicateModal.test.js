@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, render, fireEvent } from '@testing-library/react'
 import DuplicateModal from '../../../src/components/Modals/DuplicateModal.jsx'
 
 afterEach(() => {
@@ -27,5 +27,14 @@ describe('DuplicateModal', () => {
     expect(container.querySelector('input')).toBeNull()
   })
 
+  it('should call our duplicate function upon clicking the enter key', async () => {
+    const mockProps = { type: 'test', visible: true }
+    const { getByPlaceholderText } = render(getComponent(mockProps))
+    const input = getByPlaceholderText(`${mockProps.type} name`)
+
+    fireEvent.change(input, { target: { value: 'duplicate me' }})
+
+    expect(input.value).toEqual('duplicate me')
+  })
   // TODO more tests ...
 })
