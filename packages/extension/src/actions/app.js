@@ -56,6 +56,13 @@ export function readBlockShareConfig() {
   }
 }
 
+export function loadCommandPlugins() {
+  return {
+    types: type3('LOAD_COMMAND_PLUGINS'),
+    promise: () => loadAllPlugins()
+  }
+}
+
 export function addLog(type, text) {
   return {
     type: T.ADD_LOGS,
@@ -219,12 +226,5 @@ export function groupSelect(index) {
 export function removeSelected() {
   return {
     type: T.EMPTY_ARRAY
-  }
-}
-
-export function loadPlugins() {
-  return {
-    types: type3('LOAD_PLUGINS'),
-    promise: () => loadAllPlugins()
   }
 }

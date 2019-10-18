@@ -13,7 +13,8 @@ export default connect(
     player: state.player,
     config: state.app.config,
     selectedCmds: state.editor.selectedCmds,
-    selectedCommand: state.editor.editing.meta.selectedIndex
+    selectedCommand: state.editor.editing.meta.selectedIndex,
+    commandPlugins: state.app.commandPlugins
   }),
   dispatch => bindActionCreators({ ...actions }, dispatch)
 )(CommandOptions)

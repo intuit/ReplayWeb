@@ -97,7 +97,7 @@ export function loadAllPlugins() {
       response => {
         if (!('data' in response)) {
           return Promise.reject(
-            new Error('Internal error - Could not read plugins config at ' + FILE_PATH)
+            new Error('Could not read plugins config at ' + FILE_PATH)
           )
         }
         return response.data

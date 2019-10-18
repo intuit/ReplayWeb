@@ -32,7 +32,7 @@ const initialState = {
   blockShareConfigError: true,
   blockShareConfigErrorMessage: 'Config not read yet',
   userName: null,
-  plugins: {}
+  commandPlugins: {}
 }
 
 export { initialState }
@@ -92,16 +92,23 @@ export default function reducer(state = initialState, action) {
         blockShareConfigErrorMessage: action.err.toString()
       }
 
-    case T.LOAD_PLUGINS_SUCCESS:
+    case T.LOAD_COMMAND_PLUGINS_SUCCESS:
+      // console.log('>> LOAD_COMMAND_PLUGINS_SUCCESS:', action.data)
+      // const newState = {
+      //   ...state,
+      //   commandPlugins: action.data
+      // }
+      // console.log(state)
+      // console.log(newState)
       return {
         ...state,
-        plugins: action.data
+        commandPlugins: action.data
       }
 
-    case T.LOAD_PLUGINS_FAIL:
+    case T.LOAD_COMMAND_PLUGINS_FAIL:
       return {
         ...state,
-        plugins: {}
+        commandPlugins: {}
       }
 
     case T.ADD_LOGS:

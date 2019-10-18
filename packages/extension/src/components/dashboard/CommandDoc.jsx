@@ -5,6 +5,7 @@ import allCommands from '../../common/commands'
 // export default class CommandDoc extends React.Component {
 const CommandDoc = props => {
   const [searchText, setSearchText] = useState('')
+  // TODO add commands from plugins
   const availableCommands = allCommands.slice().sort((a, b) => {
     if (a.name.toLowerCase() === b.name.toLowerCase()) {
       return 0

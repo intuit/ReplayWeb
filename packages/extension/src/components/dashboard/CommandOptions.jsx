@@ -9,7 +9,7 @@ import allCommands, { newCommand } from '../../common/commands'
 import CommandField from '../../containers/dashboard/fields/CommandField'
 import CommandDoc from './CommandDoc'
 
-const availableCommands = allCommands
+const builtInCommandNames = allCommands
   .map(c => c.name)
   .slice()
   .sort() // slice to make copy
@@ -115,7 +115,7 @@ class CommandOptions extends React.Component {
               }
               style={{ width: '60%', marginRight: '5px' }}
             >
-              {availableCommands.map(cmd => (
+              {builtInCommandNames.map(cmd => (
                 <Select.Option value={cmd} key={cmd}>
                   {cmd}
                 </Select.Option>
@@ -186,7 +186,8 @@ CommandOptions.propTypes = {
   setNextBlock: PropTypes.func,
   changeModalState: PropTypes.func,
   editBlock: PropTypes.func,
-  player: PropTypes.object.isRequired
+  player: PropTypes.object.isRequired,
+  commandPlugins: PropTypes.object.isRequired
 }
 
 export default CommandOptions
