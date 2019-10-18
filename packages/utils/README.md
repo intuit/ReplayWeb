@@ -23,7 +23,7 @@ See individual function information in the [docs](src/README.md).
 
 #### System Requirements
 
-- [NodeJS](https://nodejs.org/en/) 8+
+- [NodeJS](https://nodejs.org/en/) 10+
 
 ### QuickStart
 

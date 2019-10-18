@@ -12,7 +12,8 @@ import {
   setLocalStorage,
   getLocalStorage,
   setSessionStorage,
-  getSessionStorage
+  getSessionStorage,
+  log
 } from '../src/index.js'
 import moment from 'moment'
 
@@ -705,5 +706,15 @@ describe('setSessionStorage', () => {
   it('should set an item in session storage', () => {
     setSessionStorage('test', 'testValue')
     expect(getSessionStorage('test')).toEqual('testValue')
+  })
+})
+
+describe('test log params function', () => {
+  it('should return a promise which resolves with status 202', () => {
+    const params = {a: "test"}
+    const result = log(params)
+    result.then(res => {
+      expect(res.status).toEqual(202)
+    })
   })
 })
