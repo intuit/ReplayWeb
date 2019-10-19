@@ -271,9 +271,40 @@ const bindPlayer = () => {
             command: command.command,
             parameters: finalParameters,
             context: store.getState().player.context,
-            extra: command.extra
+            extra: command.extra,
+
+            /*
+              I can do 2 important things at this point:
+                - Communicate with the background process
+                - Access data from the redux store
+
+              Unfortunately, I cannot send complex data through to the background
+              process, only serializable data. This means that I can send a list
+              of the command names that have been implemented by command plugins,
+              but I cannot send a the plugin's run function along to the background:
+              it'll just be stripped from the message leaving the 'meta' section.
+
+              This is unfortunate because it'd be simpler to just send the command
+              plugins over all at once and then have the background process run_command
+              code look up non-built-in commands in that object. With this limitation,
+              my next area of investigation is to send the list of commands from plugins
+              over to the background process, and see if I can get the background process
+              to send an event back to the main app when it encounters a command from the
+              plugins so that this process can run the command. It's a pretty big guess,
+              as the background process is what, I think, has access to all of the actual
+              page-interacting features. If I'm unable to access the page from this process
+              and unable to access the store's data from the background process, the next
+              investigation will be loading plugins in the main extension for use in the UI
+              and ALSO loading them in the background script so that they can actually be
+              used.
+            */
+
+            loadedPluginNames: Object.keys(store.getState().app.commandPlugins),
+            loadedPlugins: store.getState().app.commandPlugins
           }
-          // TODO matt
+          // TODO matt index.js player ask ipc to run_command
+          console.log('>> index.js player ask ipc to run_command')
+          console.log('>> loaded plugins:', store.getState().app.commandPlugins)
           return csIpc.ask('PANEL_RUN_COMMAND', { command: com })
         })
       },
