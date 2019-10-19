@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Table, Input, Icon } from 'antd'
-import allCommands from '../../common/commands'
+import builtInCommands from '../../common/commands'
 
 const CommandDoc = props => {
   const [searchText, setSearchText] = useState('')
-  // TODO matt add commands from plugins
-  const availableCommands = allCommands.slice().sort((a, b) => {
+  const allCommands = builtInCommands.slice()
+  Object.values(props.commandPlugins).forEach((plugin) => {
+    allCommands.push(plugin.meta)
+  })
+  const availableCommands = allCommands.sort((a, b) => {
     if (a.name.toLowerCase() === b.name.toLowerCase()) {
       return 0
     } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
@@ -54,6 +58,8 @@ const CommandDoc = props => {
   )
 }
 
-CommandDoc.propTypes = {}
+CommandDoc.propTypes = {
+  commandPlugins: PropTypes.object.isRequired
+}
 
 export default CommandDoc

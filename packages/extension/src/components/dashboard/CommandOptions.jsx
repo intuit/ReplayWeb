@@ -7,7 +7,7 @@ import * as C from '../../common/constant'
 import allCommands, { newCommand } from '../../common/commands'
 
 import CommandField from '../../containers/dashboard/fields/CommandField'
-import CommandDoc from './CommandDoc'
+import CommandDoc from '../../containers/dashboard/CommandDoc'
 
 const builtInCommandNames = allCommands
   .map(c => c.name)
