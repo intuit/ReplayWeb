@@ -8,7 +8,7 @@ import './styles/app.scss'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { Layout } from 'antd'
-import { readBlockShareConfig, loadCommandPlugins } from './actions/app'
+import { readBlockShareConfig } from './actions/app'
 import { connect } from 'react-redux'
 
 export class App extends Component {
@@ -27,13 +27,11 @@ export class App extends Component {
   componentDidMount() {
     console.log('READING Block Share config from file system')
     this.props.readBlockShareConfig()
-    this.props.loadCommandPlugins()
   }
 }
 
 App.propTypes = {
-  readBlockShareConfig: PropTypes.func.isRequired,
-  loadCommandPlugins: PropTypes.func.isRequired
+  readBlockShareConfig: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {
@@ -42,8 +40,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    readBlockShareConfig: () => dispatch(readBlockShareConfig()),
-    loadCommandPlugins: () => dispatch(loadCommandPlugins())
+    readBlockShareConfig: () => dispatch(readBlockShareConfig())
   }
 }
 

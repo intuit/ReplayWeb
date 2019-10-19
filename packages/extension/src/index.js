@@ -43,7 +43,8 @@ import {
   setContext,
   clearContext,
   getUser,
-  reloadProjectFiles
+  reloadProjectFiles,
+  loadCommandPlugins
 } from './actions'
 import { setEditorStatus } from './actions/editor'
 import { nativeMessage } from './actions/utilities'
@@ -272,6 +273,7 @@ const bindPlayer = () => {
             context: store.getState().player.context,
             extra: command.extra
           }
+          // TODO matt
           return csIpc.ask('PANEL_RUN_COMMAND', { command: com })
         })
       },
@@ -580,6 +582,10 @@ const updateNativeHost = () => {
     .catch(e => console.error(`Error Updating Native Host: ${e}`))
 }
 
+const loadPluginsFromConfig = () => {
+  store.dispatch(loadCommandPlugins())
+}
+
 bindDB()
 bindPlayer()
 bindIpcEvent()
@@ -588,6 +594,7 @@ restoreStatus()
 restoreEditing()
 restoreConfig()
 updateNativeHost()
+loadPluginsFromConfig()
 
 // register the tab ID with the background script
 if (csIpc && csIpc.ask) csIpc.ask('I_AM_PANEL', {})
