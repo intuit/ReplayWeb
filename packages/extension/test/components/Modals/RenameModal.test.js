@@ -42,10 +42,12 @@ describe('RenameModal', () => {
     getByText('Save')
   })
 
-  it('should change rename on input change', () => {
+  it('should change rename on input change', async () => {
     const { getByPlaceholderText } = render(getComponent())
     const input = getByPlaceholderText('test case name')
-    fireEvent.change(input, { target: { value: 'new name' }})
+    await act(async () => {
+      fireEvent.change(input, { target: { value: 'new name' }})
+    })
     expect(input.value).toEqual('new name')
   })
 
