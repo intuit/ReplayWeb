@@ -41,7 +41,7 @@ yarn add -D @wdio/cli @wdio/local-runner @wdio/junit-reporter @wdio/mocha-framew
 or
 
 ```sh
-yarn add -D @wdio/cli @wdio/local-runner @wdio/junit-reporter @wdio/mocha-framework @wdio/selenium-standalone-service @wdio/spec-reporter webdriverio chai
+npm install -D @wdio/cli @wdio/local-runner @wdio/junit-reporter @wdio/mocha-framework @wdio/selenium-standalone-service @wdio/spec-reporter webdriverio chai
 ```
 
 #### Optional Peer Dependencies

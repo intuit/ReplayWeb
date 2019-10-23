@@ -8,6 +8,9 @@ class DuplicateModal extends React.Component {
     this.state = {
       duplicateName: this.props.src ? `${this.props.src.name}_new` : ''
     }
+    this.onChange = this.onChange.bind(this)
+    this.onDuplicate = this.onDuplicate.bind(this)
+    this.onCancel = this.onCancel.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
