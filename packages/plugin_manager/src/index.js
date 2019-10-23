@@ -5,9 +5,12 @@ export const setupRegister = (plugins) => (plugin) => {
   plugins[plugin.meta.name] = plugin
 }
 
+export const downloadUrl = (url) => {
+  return fetch(url).then(res => res.text())
+}
+
 export const loadUrl = (url, register) => {
-  return fetch(url)
-    .then(res => res.text())
+  return downloadUrl(url)
     .then(text => vm.runInNewContext(text, { register }))
 }
 

@@ -344,6 +344,8 @@ const onRequest = (cmd, args) => {
       return true
 
     case 'PANEL_START_RECORDING':
+      // TODO matt bg.js listener start recording
+      console.log('>> bg PANEL_START_RECORDING')
       log('Start to record...')
       state.status = C.APP_STATUS.RECORDER
       toggleRecordingBadge(true)
@@ -406,6 +408,7 @@ const onRequest = (cmd, args) => {
     }
 
     case 'PANEL_RUN_COMMAND': {
+      console.log('>> RECEIVED PANEL_RUN_COMMAND:', args)
       const runCommand = (args, retryInfo) => {
         return getPlayTabIpc().then(ipc => {
           let gotHeartBeat = false
@@ -514,8 +517,10 @@ const onRequest = (cmd, args) => {
 
           return ipc
             .ask('DOM_READY', {})
-            .then(() =>
-              ipc.ask('RUN_COMMAND', {
+            .then(() => {
+              // TODO matt dom ready -> ipc run_command
+              console.log('>> dom_ready ask run_command')
+              return ipc.ask('RUN_COMMAND', {
                 command: {
                   ...args.command,
                   extra: {
@@ -524,7 +529,7 @@ const onRequest = (cmd, args) => {
                   }
                 }
               })
-            )
+            })
             .then(wait)
         })
       }

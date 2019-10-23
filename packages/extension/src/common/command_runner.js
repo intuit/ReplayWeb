@@ -248,6 +248,8 @@ export const fetchTable = tableElementLocator => {
 }
 
 export const run = async (commandObject, csIpc, helpers) => {
+  // TODO matt command_runner
+  console.log('>> command_runner::run')
   const { command, parameters, extra, context } = commandObject
   const delayWithTimeoutStatus = (type, timeout, promise) => {
     return new Promise((resolve, reject) => {
@@ -815,6 +817,8 @@ export const run = async (commandObject, csIpc, helpers) => {
     }
 
     default:
+      // TODO need to check if any of the loaded command plugins support this command name
+
       throw new Error(`Command ${command} not supported yet`)
   }
 }

@@ -8,6 +8,41 @@ import log from '../common/log'
 import { getSelector } from './cssSelector'
 import storage from '../common/storage'
 
+console.log('>> CONTENT_SCRIPT TOP LEVEL INIT')
+// TODO cannot use: does not persist
+// console.log('>>', typeof window.foobar)
+// if (window.foobar === undefined) {
+//   console.log('>> window.foobar is not set, setting it to 123')
+//   window.foobar = 123
+// } else {
+//   console.log(`>> window.foobar = ${window.foobar}`)
+// }
+
+// TODO cannot use: does not persist
+// console.log('>> sessionStorage item is', window.sessionStorage.getItem('foobar'))
+// if (!window.sessionStorage.getItem('foobar')) {
+//   console.log('>> setting sessionStorage item')
+//   window.sessionStorage.setItem('foobar', 123)
+// } else {
+//   console.log('>> sessionStorage item is already set')
+// }
+
+// NOTE: this works (I think) but is sandboxed from other parts of the extension
+console.log('>> localstorage item is', window.localStorage.getItem('foobar'))
+if (!window.localStorage.getItem('foobar')) {
+  console.log('>> setting localstorage item')
+  window.localStorage.setItem('foobar', 123)
+} else {
+  console.log('>> localstorage item is already set')
+}
+
+// TODO this doesn't work because it blocks and doesn't (?) return
+// console.log('>> 1')
+// global.chrome.storage.local.setItem('foobar', 123)
+// console.log('>> 2')
+// console.log('>> HERE', global.chrome.storage.local.getItem('foobar'))
+// console.log('>> 3')
+
 const MASK_CLICK_FADE_TIMEOUT = 2000
 const oops =
   process.env.NODE_ENV === 'production' ? () => {} : e => log.error(e.stack)
@@ -288,7 +323,7 @@ const getDtmSelector = async e => {
   const postData = getSelector()
   const dtmResponse = await csIpc.ask('PANEL_GET_SELECTOR', { body: postData })
   if (dtmResponse.state === 'fail') {
-    console.error(
+    console.log(
       `error while fetching dtm selector--falling back to default getLocator function: ${JSON.stringify(
         dtmResponse
       )}`
@@ -447,6 +482,10 @@ const bindIPCListener = () => {
         return waitForDomReady(true)
 
       case 'RUN_COMMAND':
+        // TODO matt content_script.js listener run_command
+        // TODO matt note that this shows up in the console for the tab that's opened
+        //    by the extension when running the test
+        console.log('>> content_script.js listener run_command')
         return runCommand(args.command)
           .catch(e => {
             log.error(e.stack)
@@ -669,6 +708,8 @@ const runCommand = command => {
   if (state.playingFrame === window || command.command === 'open') {
     // Note: both top and inner frames could run commands here
     // So must use superCsIpc instead of csIpc
+    // TODO matt this is where the command is actually ran
+    console.log('>> actually running the command')
     const ret = run(command, superCsIpc, {
       highlightDom,
       hackAlertConfirmPrompt
@@ -713,6 +754,7 @@ const runCommand = command => {
   } else {
     // log('passing command to frame...', state.playingFrame, '...', window.location.href)
     // Note: pass on the command if our window is not the current playing one
+    console.log('>> passing run command to other')
     return postMessage(state.playingFrame, window, {
       action: 'RUN_COMMAND',
       data: command

@@ -39,6 +39,8 @@ export function startRecording() {
   return {
     types: type3('START_RECORDING'),
     promise: () => {
+      // TODO matt redux action to start recording
+      console.log('>> redux action to start recording')
       return csIpc.ask('PANEL_START_RECORDING', {})
     }
   }
