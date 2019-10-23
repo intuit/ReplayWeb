@@ -9,6 +9,9 @@ class RenameModal extends React.Component {
     this.state = {
       rename: ''
     }
+    this.onChange = this.onChange.bind(this)
+    this.onRename = this.onRename.bind(this)
+    this.onCancel = this.onCancel.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
