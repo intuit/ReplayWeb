@@ -93,4 +93,12 @@ describe('DuplicateModal', () => {
     expect(closeModalSpy).toHaveBeenCalled()
     duplicateMock.reset()
   })
+  it('test componentWillReceiveProps', async () => {
+    const wrapper = shallow(getComponent({
+      visible: true
+    }))
+    expect(wrapper.find('Modal')).not.toBeNull()
+    wrapper.setProps({src: {name: "name"}})
+    expect(wrapper.state("duplicateName")).toEqual("name_new")
+  })
 })
