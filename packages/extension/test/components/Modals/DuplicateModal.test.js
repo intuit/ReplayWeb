@@ -1,4 +1,6 @@
 import React from 'react'
+import {shallow} from "enzyme"
+import sinon from "sinon"
 import { cleanup, render } from '@testing-library/react'
 import DuplicateModal from '../../../src/components/Modals/DuplicateModal.jsx'
 
@@ -61,17 +63,34 @@ describe('DuplicateModal', () => {
     wrapper.instance().onChange(e)
     expect(wrapper.state("duplicateName")).toEqual("test")
   })
-  it('test onDuplicate resolves successfully', () => {
+  it('test onDuplicate when duplicate rejects successfully', async () => {
     const closeModalSpy = jest.fn()
-    const duplicateMock = jest.fn()
+    const duplicateMock = sinon.stub().rejects("error")
     const wrapper = shallow(getComponent({
       visible: true,
       closeModal: closeModalSpy,
       duplicate: duplicateMock
     }))
     expect(wrapper.find('Modal')).not.toBeNull()
+
     wrapper.instance().onDuplicate()
-    expect(wrapper.state("duplicateName")).toEqual("")
+    await Promise.resolve()
+    expect(closeModalSpy).not.toHaveBeenCalled()
+    duplicateMock.reset()
+  })
+  it('test onDuplicate resolves successfully', async () => {
+    const closeModalSpy = jest.fn()
+    const duplicateMock = sinon.stub().resolves("true")
+    const wrapper = shallow(getComponent({
+      visible: true,
+      closeModal: closeModalSpy,
+      duplicate: duplicateMock
+    }))
+    expect(wrapper.find('Modal')).not.toBeNull()
+
+    wrapper.instance().onDuplicate()
+    await Promise.resolve()
     expect(closeModalSpy).toHaveBeenCalled()
+    duplicateMock.reset()
   })
 })
