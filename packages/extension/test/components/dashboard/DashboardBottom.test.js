@@ -22,23 +22,6 @@ const getComponent = (props = {}) => {
 }
 
 
-
-const props = {
-    logs: [{
-        type: 'info',
-        text: 'test-name'
-    },
-        {
-            type: 'error',
-            text: 'test-name'
-        }],
-    screenshots: [{
-        url: 'test.com',
-        createTime: '1571879106',
-        name: 'test-name'
-    }]
-
-}
 describe('DashboardBottom', () => {
   it('renders', () => {
     const { getByText } = render(getComponent())
@@ -46,19 +29,42 @@ describe('DashboardBottom', () => {
     getByText('Screenshots')
     getByText('Clear')
   })
-  it('componentWillReceiveProps-logs', () => {
+  it('componentWillReceiveProps - logs size is equal', () => {
+      const props = {
+          logs: [{
+              type: 'info',
+              text: 'test-name'
+          }]
+      }
       const component = shallow(getComponent(props))
-      const logs = ['test']
+      const logs = [
+          {
+              type: 'error',
+              text: 'test-name'
+          }]
       component.setProps({logs})
   })
-    it('componentWillReceiveProps-logs', () => {
+    it('componentWillReceiveProps - logs size increased', () => {
+        const props = {
+            logs: [{
+                type: 'info',
+                text: 'test-name'
+            }]
+        }
         const component = shallow(getComponent(props))
-        const logs = ['test','rest']
+        const logs = [{
+            type: 'info',
+            text: 'test-name'
+        },
+            {
+                type: 'error',
+                text: 'test-name'
+            }]
         component.setProps({logs})
     })
   it('Clear screenshots', () => {
       const mockClick = jest.fn()
-      const mockProps = {
+      const props = {
           screenshots: [{
               url: 'test.com',
               createTime: '1571879106',
@@ -67,7 +73,7 @@ describe('DashboardBottom', () => {
           clearScreenshots: mockClick
 
       }
-      const wrapper = shallow(getComponent(mockProps))
+      const wrapper = shallow(getComponent(props))
       wrapper.setState({activeTabForLogScreenshot: 'Screenshots'})
       expect(wrapper.find('li').length).toBe(1)
       wrapper.find('Button').simulate('click')
@@ -97,7 +103,6 @@ describe('DashboardBottom', () => {
            }]
        }
        const wrapper = shallow(getComponent(props))
-       console.log(wrapper.debug())
        wrapper.find('Tabs').simulate('change','Screenshots')
        expect(wrapper.state('activeTabForLogScreenshot')).toBe('Screenshots')
 
@@ -116,7 +121,6 @@ describe('DashboardBottom', () => {
 
         }
         const wrapper = shallow(getComponent(props))
-        console.log(wrapper.debug())
         wrapper.find('Select').simulate('change','Info')
         expect(wrapper.find('Select').props().value).toBe('Info')
     })
