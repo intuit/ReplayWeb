@@ -14,7 +14,7 @@ class SuiteEditor extends React.Component {
       this.props.selectedTests.map((t, i) => ({ name: t, key: i }))
     return (
       <div className="suiteContainer">
-        <Table bordered dataSource={unusedTests} pagination={false}>
+        <Table bordered dataSource={unusedTests} pagination={false} test-id={"allTests"}>
           <Column
             title="All Tests"
             dataIndex="name"
@@ -32,7 +32,7 @@ class SuiteEditor extends React.Component {
             }}
           />
         </Table>
-        <Table bordered dataSource={selectedTests} pagination={false}>
+        <Table bordered dataSource={selectedTests} pagination={false} test-id="testsInSuite">
           <Column
             title={`Tests in suite: ${this.props.name}` || 'New Suite'}
             dataIndex="name"
