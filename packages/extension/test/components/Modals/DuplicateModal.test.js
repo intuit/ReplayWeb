@@ -1,4 +1,5 @@
 import React from 'react'
+import {shallow} from "enzyme"
 import { cleanup, render, fireEvent, act } from '@testing-library/react'
 import DuplicateModal from '../../../src/components/Modals/DuplicateModal.jsx'
 import { message } from 'antd'
@@ -33,11 +34,53 @@ const getComponent = (props = {}) => {
 }
 
 describe('DuplicateModal', () => {
-  it('renders', () => {
+  it('does not render', () => {
     const { container } = render(getComponent())
     expect(container.querySelector('input')).toBeNull()
   })
-
+  it('renders when visible is true', () => {
+    const wrapper = shallow(getComponent({visible: true}))
+    expect(wrapper.find('Modal')).not.toBeNull()
+  })
+  it('test onCancel', () => {
+    const closeModalSpy = jest.fn()
+    const wrapper = shallow(getComponent({
+      visible: true,
+      closeModal: closeModalSpy
+    }))
+    expect(wrapper.find('Modal')).not.toBeNull()
+    wrapper.instance().onCancel()
+    expect(wrapper.state("duplicateName")).toEqual("")
+    expect(closeModalSpy).toHaveBeenCalled()
+  })
+  it('test onCancel', () => {
+    const closeModalSpy = jest.fn()
+    const wrapper = shallow(getComponent({
+      visible: true,
+      closeModal: closeModalSpy
+    }))
+    expect(wrapper.find('Modal')).not.toBeNull()
+    wrapper.instance().onCancel()
+    expect(wrapper.state("duplicateName")).toEqual("")
+    expect(closeModalSpy).toHaveBeenCalled()
+  })
+  it('test onChange', () => {
+    const wrapper = shallow(getComponent({
+      visible: true
+    }))
+    const e = { target: { value: "test"}}
+    expect(wrapper.find('Modal')).not.toBeNull()
+    wrapper.instance().onChange(e)
+    expect(wrapper.state("duplicateName")).toEqual("test")
+  })
+  it('test componentWillReceiveProps', async () => {
+    const wrapper = shallow(getComponent({
+      visible: true
+    }))
+    expect(wrapper.find('Modal')).not.toBeNull()
+    wrapper.setProps({src: {name: "name"}})
+    expect(wrapper.state("duplicateName")).toEqual("name_new")
+  })
   it('should call our duplicate function upon clicking the enter key', async () => {
     const mockProps = { type: 'test', visible: true }
     const { getByPlaceholderText } = render(getComponent(mockProps))
