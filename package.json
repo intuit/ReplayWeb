@@ -76,8 +76,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "dependencies": {
-    "sinon": "^7.5.0"
   }
 }
