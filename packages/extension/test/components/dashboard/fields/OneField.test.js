@@ -7,20 +7,20 @@ jest.mock('../../../../src/components/dashboard/fields/CommandButtons', () => {
   return function() {
     return <p>CommandButtons</p>
   }
-});
+})
 
 afterEach(() => {
-  cleanup();
+  cleanup()
   jest.clearAllMocks()
-});
+})
 
 const getComponent = (props = {}) => (
   <OneField
-  updateSelectedCommand={props.updateSelectedCommand || jest.fn()}
-  isCmdEditable={props.isCmdEditable || false}
-  selectedCmd={props.selectedCmd || { parameters: {}}}
+    updateSelectedCommand={props.updateSelectedCommand || jest.fn()}
+    isCmdEditable={props.isCmdEditable || false}
+    selectedCmd={props.selectedCmd || { parameters: {}}}
   />
-);
+)
 
 describe('OneField', () => {
   it('renders', () => {
@@ -28,10 +28,10 @@ describe('OneField', () => {
     expect(
       queryByText('This parameter needs to be configured manually in the JSON.')
     ).toBeNull()
-  });
+  })
 
   it('renders an object', () => {
-    const { getByText, debug } = render(
+    const { getByText } = render(
     <OneField
     isCmdEditable={true}
     selectedCmd={{
@@ -41,20 +41,20 @@ describe('OneField', () => {
     />
   )
     getByText('This parameter needs to be configured manually in the JSON.')
-  });
+  })
 
   it('text input renders', () => {
-    const {container, debug} = render(getComponent({ isCmdEditable: true,
+    const { container } = render(getComponent({ isCmdEditable: true,
       selectedCmd:{
         command: 'assertJsonInContext',
             parameters: {}
     }
-      }));
+      }))
     expect(container.querySelector('input').disabled).toEqual(false)
-  });
+  })
 
   it('checkbox renders', () => {
-    const {container, debug} = render(
+    const { container } = render(
         getComponent({isCmdEditable: true,
       selectedCmd: {
         command: 'assertCheckboxState',
@@ -65,25 +65,26 @@ describe('OneField', () => {
           description: 'Whether the given checkbox should be checked or not',
           example: false}}}))
 
-    const checkbox = container.querySelectorAll('input')[1];
-    expect(checkbox.disabled).toEqual(false);
-    expect(checkbox.className).toEqual('ant-checkbox-input');
-    expect(checkbox.checked).toEqual(false);
-    expect(checkbox.value).toEqual('');
-  });
+    const checkbox = container.querySelectorAll('input')[1]
+    expect(checkbox.disabled).toEqual(false)
+    expect(checkbox.className).toEqual('ant-checkbox-input')
+    expect(checkbox.checked).toEqual(false)
+    expect(checkbox.value).toEqual('')
+  })
 
   it('select renders', () => {
-    const {container, debug} = render(
+    const { container } = render(
         getComponent({isCmdEditable: true,
           selectedCmd: {
             command: 'runBlock',
             parameters: {
               }}}))
-    const checkbox = container.querySelector('input');
-    expect(checkbox.disabled).toEqual(false);
+    const checkbox = container.querySelector('input')
+    expect(checkbox.disabled).toEqual(false)
     expect(checkbox.className).toEqual('ant-select-search__field')
-    expect(checkbox.value).toEqual('');
+    expect(checkbox.value).toEqual('')
   })
+
   // TODO more tests ...
 
 })
