@@ -40,7 +40,6 @@ describe('OneField', () => {
     }}
     />
   )
-    // console.log(debug())
     getByText('This parameter needs to be configured manually in the JSON.')
   });
 
@@ -80,7 +79,6 @@ describe('OneField', () => {
             command: 'runBlock',
             parameters: {
               }}}))
-    console.log(debug())
     const checkbox = container.querySelector('input');
     expect(checkbox.disabled).toEqual(false);
     expect(checkbox.className).toEqual('ant-select-search__field')
