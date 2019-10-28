@@ -1,4 +1,21 @@
-import { removeArrayItem } from '../../src/common/utils'
+import {
+  asyncUntil,
+  uid,
+  pick,
+  filtering,
+  removeArrayItem
+} from '../../src/common/utils'
+
+describe('asyncUntil', () => {
+  it('should return error if expired', () => {
+    try {
+      asyncUntil('name', 'check', 1000, 1, 'test error message')
+      expect(true).toBe(false)
+    } catch (err) {
+      expect(err.toString()).toMatch("test error message")
+    }
+  })
+})
 
 describe('utils', () => {
   it('should immutably remove the first item from an array', () => {
@@ -15,5 +32,33 @@ describe('utils', () => {
     const array = ['a', 'b', 'c', 'd']
     expect(removeArrayItem(array, 'e')).toEqual(['a', 'b', 'c', 'd'])
     expect(array).toEqual(['a', 'b', 'c', 'd'])
+  })
+})
+
+describe('pick', () => {
+  it('should return the passed in object with only certains keys', () => {
+    const keys = ['a', 'b', 'c']
+    const obj = {'a':'1', 'b':'2', 'c':'3', 'd':'4'}
+    expect(pick(keys, obj)).toEqual({'a':'1', 'b':'2', 'c':'3'})
+    expect(keys).toEqual(['a', 'b', 'c'])
+  })
+  it('should return same object if it has the same keys', () => {
+    const keys = ['a', 'b', 'c']
+    const obj = {'a':'1', 'b':'2', 'c':'3'}
+    expect(pick(keys, obj)).toEqual({'a':'1', 'b':'2', 'c':'3'})
+    expect(keys).toEqual(['a', 'b', 'c'])
+  })
+})
+
+describe('uid', () => {
+  it('should product a new uid', () => {
+    expect(uid()).toContain('.')
+  })
+})
+
+describe('filtering', () => {
+  const commands = ['commands', 'morecommands']
+  it('should filter commands with regex', () => {
+    expect(filtering(commands, '')).toBeTruthy()
   })
 })
