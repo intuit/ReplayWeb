@@ -1,10 +1,22 @@
 import {
+  until,
   asyncUntil,
   uid,
   pick,
   filtering,
   removeArrayItem
 } from '../../src/common/utils'
+
+describe('until', () => {
+  it.only('should return error if expired', async() => {
+    try {
+      await until('name', () => ({pass: true, result: ''}), 1, -1, 'test error message')
+      expect(true).toBe(false)
+    } catch (err) {
+      expect(err.toString()).toMatch("test error message")
+    }
+  })
+})
 
 describe('asyncUntil', () => {
   it('should return error if expired', () => {
