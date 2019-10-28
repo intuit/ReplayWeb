@@ -17,7 +17,7 @@ describe('asyncUntil', () => {
   })
 })
 
-describe('utils', () => {
+describe('removeArrayItem', () => {
   it('should immutably remove the first item from an array', () => {
     const array = ['a', 'b', 'c', 'd']
     expect(removeArrayItem(array, 'a')).toEqual(['b', 'c', 'd'])
@@ -46,6 +46,12 @@ describe('pick', () => {
     const keys = ['a', 'b', 'c']
     const obj = {'a':'1', 'b':'2', 'c':'3'}
     expect(pick(keys, obj)).toEqual({'a':'1', 'b':'2', 'c':'3'})
+    expect(keys).toEqual(['a', 'b', 'c'])
+  })
+  it('should return empty object if an empty object is passed in', () => {
+    const keys = ['a', 'b', 'c']
+    const obj = {}
+    expect(pick(keys, obj)).toEqual({})
     expect(keys).toEqual(['a', 'b', 'c'])
   })
 })
