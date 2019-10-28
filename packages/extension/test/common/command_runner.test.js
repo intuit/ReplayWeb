@@ -65,7 +65,96 @@ describe('command_runner', () => {
         document.getElementById = oldGetElementById
       })
 
-      // TODO more tests ...
+      it('for name', () => {
+        const oldGetElementsByName = document.getElementsByName
+        document.getElementsByName = () => {
+          return [true]
+        }
+        const res = getElementByLocator('name=test')
+        expect(res).toBe(true)
+        document.getElementsByName = oldGetElementsByName
+      })
+
+      it('for identifier', () => {
+        const oldGetElementsByName = document.getElementsByName
+        document.getElementsByName = () => {
+          return [true]
+        }
+        const oldGetElementById = document.getElementById
+        document.getElementById = () => {
+          return false
+        }
+        const res = getElementByLocator('identifier=test')
+        expect(res).toBe(true)
+        document.getElementsByName = oldGetElementsByName
+        document.getElementById = oldGetElementById
+      })
+
+      it('for automation-id', () => {
+        const oldquerySelector = document.querySelector
+        document.querySelector = () => {
+          return true
+        }
+        const res = getElementByLocator('automation-id=test')
+        expect(res).toBe(true)
+        document.querySelector = oldquerySelector
+      })
+
+      it('for automationid', () => {
+        const oldquerySelector = document.querySelector
+        document.querySelector = () => {
+          return true
+        }
+        const res = getElementByLocator('automationid=test')
+        expect(res).toBe(true)
+        document.querySelector = oldquerySelector
+      })
+
+      it('for data-auto-sel', () => {
+        const oldquerySelector = document.querySelector
+        document.querySelector = () => {
+          return true
+        }
+        const res = getElementByLocator('data-auto-sel=test')
+        expect(res).toBe(true)
+        document.querySelector = oldquerySelector
+      })
+
+      it('for link', () => {
+        runnerRewire.__Rewire__('domText', () => 'test')
+        const oldgetElementsByTagName = document.getElementsByTagName
+        document.getElementsByTagName = () => {
+          return ['test']
+        }
+        const res = getElementByLocator('link=test')
+        expect(res).toBe('test')
+        document.getElementsByTagName = oldgetElementsByTagName
+      })
+
+      it('for css', () => {
+        const oldquerySelector = document.querySelector
+        document.querySelector = () => {
+          return true
+        }
+        const res = getElementByLocator('css=test')
+        expect(res).toBe(true)
+        document.querySelector = oldquerySelector
+      })
+
+      it('for xpath', () => {
+        runnerRewire.__Rewire__('getElementByXPath', () => true)
+        const res = getElementByLocator('xpath=test')
+        expect(res).toBe(true)
+      })
+
+      it('for default', () => {
+        try {
+        getElementByLocator('test=test')
+        expect(true).toBe(false)
+        } catch (err) {
+        expect(err.toString()).toMatch(/Error: getElementByLocator: unsupported locator method, test/)
+          }
+      })
     })
   })
 
