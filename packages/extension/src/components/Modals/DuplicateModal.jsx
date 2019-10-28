@@ -70,7 +70,7 @@ class DuplicateModal extends React.Component {
 }
 
 DuplicateModal.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.object.isRequired,
   duplicate: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
