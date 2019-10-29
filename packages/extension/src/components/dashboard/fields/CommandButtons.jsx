@@ -46,6 +46,7 @@ const CommandButtons = props => {
             }
           >
             <Button
+              data-testid={'toggleInspectButton'}
               disabled={!props.isCmdEditable}
               onClick={onToggleInspect.bind(null, props.name)}
               icon={
@@ -61,6 +62,7 @@ const CommandButtons = props => {
         {props.canTarget ? (
           <Tooltip title="Highlight on page">
             <Button
+              data-testid={'onClickFindButton'}
               disabled={!props.isCmdEditable}
               onClick={onClickFind.bind(null, props.value)}
               icon="eye-o"
