@@ -1,6 +1,6 @@
 {
   "name": "@replayweb/host",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Native Host for ReplayWeb extension",
   "main": "index.js",
   "scripts": {
