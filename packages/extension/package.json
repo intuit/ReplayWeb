@@ -13,7 +13,7 @@
     "build:dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules --config webpack.config.js",
     "clean": "rm -r dist/",
     "version": "node extension/manifestUpdater.js && git add extension/manifest.json",
-    "package": "crx pack dist/ext -o dist/replayui.crx",
+    "package": "crx pack dist/ext --crx-version 3 -o dist/replayui.crx",
     "test": "BABEL_ENV=test jest --coverage",
     "test:watch": "BABEL_ENV=test jest --watch"
   },
