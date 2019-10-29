@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const name = 'replay-utils'
 module.exports = {
   target: 'node',
+  mode: 'production',
   entry: path.join(__dirname, 'src', 'index.js'),
   resolve: {
     extensions: ['.js']

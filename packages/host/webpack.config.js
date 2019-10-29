@@ -5,6 +5,7 @@ const PermissionsPlugin = require('webpack-permissions-plugin')
 
 module.exports = {
   target: 'node',
+  mode: 'production',
   entry: './src/index.js',
   resolve: {
     extensions: ['.js', '.jsx']
