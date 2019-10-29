@@ -62,7 +62,7 @@ describe('CommandButtons', () => {
       stopInspecting: mockStopInspecting,
       isCmdEditable: true
     }))
-    const toggleButton = queryByTestId('toggleIns)pectButton')
+    const toggleButton = queryByTestId('toggleInspectButton')
     fireEvent.click(toggleButton)
     expect(mockSetInspectingTarget).toHaveBeenCalledTimes(1)
     expect(mockStopInspecting).toHaveBeenCalledTimes(1)
