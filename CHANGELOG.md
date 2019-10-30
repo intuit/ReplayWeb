@@ -1,3 +1,23 @@
+# v1.0.2 (Wed Oct 30 2019)
+
+#### 🐛  Bug Fix
+
+- test: add async tests for suite extentions [#39](https://github.com/intuit/ReplayWeb/pull/39) (timothy_searcy@intuit.com [@Celeo](https://github.com/Celeo))
+- `@replayweb/host`, `@replayweb/utils`
+  - chore: added mode property flag to webpack config [#41](https://github.com/intuit/ReplayWeb/pull/41) (katie_banbrook@intuit.com [@Celeo](https://github.com/Celeo))
+
+#### 📝  Documentation
+
+- chore: updating the README [#40](https://github.com/intuit/ReplayWeb/pull/40) ([@Celeo](https://github.com/Celeo))
+
+#### Authors: 3
+
+- Matt Boulanger ([@Celeo](https://github.com/Celeo))
+- Timothy Searcy (timothy_searcy@intuit.com)
+- kbanbrook (katie_banbrook@intuit.com)
+
+---
+
 # v1.0.1 (Tue Oct 29 2019)
 
 #### 🐛  Bug Fix
