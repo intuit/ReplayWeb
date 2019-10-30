@@ -1,6 +1,6 @@
 {
   "name": "@replayweb/utils",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Common utilities for ReplayWeb and the ReplayWeb Test Runner",
   "main": "lib/index.js",
   "files": [
