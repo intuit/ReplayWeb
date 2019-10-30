@@ -30,7 +30,7 @@ ReplayWeb is a all-in-one toolbox that allows developers to focus on writing and
    - Personal Access Token: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup.sh | bash`
    - SSH Keys: `curl -L https://raw.githubusercontent.com/intuit/replayweb/master/packages/host/src/static/setup-ssh.sh | bash`
 
-For additional details see the [readme](packages/extension/README.md) for the Chrome Extension
+For additional details see the [readme](packages/extension/README.md) for the Chrome Extension.
 
 ### Installing the Test Runner
 
