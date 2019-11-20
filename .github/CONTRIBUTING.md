@@ -17,6 +17,8 @@ Before starting work, please check the [issues](https://github.com/intuit/replay
 ## Development flow
 
 1. Fork the repo
+1. Install the dependencies - run `yarn`
+1. Build your packages - run `yarn build` 
 1. Optional: create a branch to work off of
 1. Write the code
 1. Update/write tests:

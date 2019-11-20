@@ -1,6 +1,11 @@
 import React from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { shallow } from 'enzyme'
+import { cleanup} from '@testing-library/react'
 import FolderBrowser from '../../../src/components/Project/FolderBrowser.jsx'
+
+beforeEach(() => {
+  global.browser = {}
+})
 
 afterEach(() => {
   cleanup()
@@ -25,13 +30,27 @@ const getComponent = (props = {}) => {
 
 describe('FolderBrowser', () => {
   it('renders', () => {
-    const { getByText } = render(getComponent())
-    getByText('Choose Folder')
-    getByText('Jump To')
-    getByText('No data')
-    getByText('Cancel')
-    getByText('Select')
+    const wrapper = shallow(getComponent())
+    expect(wrapper.find('Choose Folder')).not.toBeNull()
+    expect(wrapper.find('Jump To')).not.toBeNull()
+    expect(wrapper.find('No data')).not.toBeNull()
+    expect(wrapper.find('Cancel')).not.toBeNull()
+    expect(wrapper.find('Select')).not.toBeNull()
+    expect(wrapper.find('Modal')).not.toBeNull()
+    expect(wrapper.find('Button')).not.toBeNull()
+    expect(wrapper.find('Icon')).not.toBeNull()
+    expect(wrapper.find('Input')).not.toBeNull()
+    expect(wrapper.find('Table')).not.toBeNull()
   })
 
   // TODO more tests ...
+  it('changeFolder', () => {
+    const listDirectory = jest.fn()
+    const folder = {}
+    const wrapper = shallow(getComponent({folder, listDirectory}))
+    const instance = wrapper.instance()
+    instance.changeFolder(folder)
+    expect(listDirectory).toHaveBeenCalledWith(folder)
+    expect(wrapper.state('loading')).toEqual(true)
+  })
 })
